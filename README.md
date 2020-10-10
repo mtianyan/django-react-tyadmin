@@ -174,19 +174,19 @@ if xxx:
 ## demo项目快速上手
 
 
-### 初始化项目(推荐使用cookiecutter)
+### 1. 初始化项目(推荐使用cookiecutter)
 
 ```
 cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
 ```
 
-### 安装tyadmin-api-cli
+### 2. 安装tyadmin-api-cli
 
 ```
 pip install tyadmin-api-cli
 ```
 
-### 注册tyadmin-api-cli
+### 3. 注册tyadmin-api-cli
 
 ```
 INSTALLED_APPS = [
@@ -194,19 +194,19 @@ INSTALLED_APPS = [
 ]
 ```
 
-### 初始化 后端app 及 前端项目
+### 4. 初始化 后端app 及 前端项目
 
 ```
 python manage.py init_admin
 ```
 
-### 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
+### 5. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
 
 ```
 python manage.py gen_all
 ```
 
-### 注册生成出的app
+### 6. 注册生成出的app
 
 ```
 INSTALLED_APPS = [
@@ -216,13 +216,13 @@ INSTALLED_APPS = [
 ]
 ```
 
-### 注册路由
+### 7. 注册路由
 
 ```
     path('api/xadmin/v1/', include('tyadmin_api.urls')),
 ```
 
-### 运行后端项目，运行前端项目
+### 8. 运行后端项目，运行前端项目
 
 ```
 python manage.py makemigrations
