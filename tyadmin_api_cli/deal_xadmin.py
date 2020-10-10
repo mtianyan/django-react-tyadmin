@@ -1,4 +1,4 @@
-from xadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.utils import init_django_env
 
 
 def migration_from_xadmin(project_name_settings):

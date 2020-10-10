@@ -1,0 +1,4 @@
+include *.js
+include *.jsx
+include *.json
+include *.svg

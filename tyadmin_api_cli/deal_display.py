@@ -1,4 +1,4 @@
-from xadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.utils import init_django_env
 
 
 def gen_table_display(project_name_settings, list_display, focus_model):

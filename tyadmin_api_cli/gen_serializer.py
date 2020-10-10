@@ -1,6 +1,8 @@
 import os
-from xadmin_api_cli.contants import MAIN_DISPLAY
-from xadmin_api_cli.utils import init_django_env
+
+
+from tyadmin_api_cli.contants import MAIN_DISPLAY
+from tyadmin_api_cli.utils import init_django_env
 #  获取当前文件的路径，以及路径的父级文件夹名
 from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerField, CharField, ImageField
 
@@ -8,10 +10,11 @@ from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerFie
 def gen_serializer(project_name_settings):
     init_django_env(project_name_settings)
     import django
+    from django.conf import settings
     model_list = []
     model_fk_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
     for one in django.apps.apps.get_models():
         columns = []
         model_name = one._meta.model.__name__
@@ -33,7 +36,7 @@ def gen_serializer(project_name_settings):
             model_list.append(model_name)
     # status_text = serializers.CharField(source="status.text", read_only=True)
     print(model_fk_dict)
-    app_name = "xadmin_api"
+    app_name = "tyadmin_api"
     serializers_txt = f"""
 from rest_framework import serializers
 $model_import占位$
@@ -60,10 +63,10 @@ class {model}Serializer(serializers.ModelSerializer):
         fields = "__all__"
         """
     #
-    if os.path.exists('../xadmin_api/auto_serializers.py'):
+    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py'):
         print("已存在serializers跳过")
     else:
-        with open('../xadmin_api/auto_serializers.py', 'w') as fw:
+        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py', 'w') as fw:
             fw.write(serializers_txt)
 
 

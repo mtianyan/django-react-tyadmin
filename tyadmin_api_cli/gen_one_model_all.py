@@ -1,4 +1,4 @@
-from xadmin_api_cli.utils import get_lower_case_name
+from tyadmin_api_cli.utils import get_lower_case_name
 
 
 def gen_one_all(name):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from xadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
+from tyadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
 
 
 class TyAdminSysLogSerializer(serializers.ModelSerializer):

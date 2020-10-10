@@ -1,8 +1,8 @@
 from django.urls import re_path, include, path
 from rest_framework.routers import DefaultRouter
 
-from xadmin_api.views import LoginView, CurrentUserView, CaptchaView, UserSendCaptchaView, DashBoardView, UploadView, MenuView
-from xadmin_api.views import TyAdminSysLogViewSet, TyAdminEmailVerifyRecordViewSet
+from tyadmin_api.views import LoginView, CurrentUserView, CaptchaView, UserSendCaptchaView, DashBoardView, UploadView, MenuView
+from tyadmin_api.views import TyAdminSysLogViewSet, TyAdminEmailVerifyRecordViewSet
 
 router = DefaultRouter(trailing_slash=False)
 router.register('ty_admin_sys_log/?', TyAdminSysLogViewSet)
@@ -19,5 +19,5 @@ urlpatterns = [
     path('upload', UploadView.as_view(), name="rich_upload"),
     path('sys/menu', MenuView.as_view(), name="rich_upload"),
     path('dashboard', DashBoardView.as_view(), name="rich_upload"),
-    path('', include('xadmin_api.auto_url'))
+    path('', include('tyadmin_api.auto_url'))
 ]

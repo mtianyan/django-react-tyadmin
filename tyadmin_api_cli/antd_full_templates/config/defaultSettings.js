@@ -10,7 +10,7 @@ const proSettings = {
   menu: {
     locale: true,
   },
-  title: 'Online Mooc',
+  title: 'TyAdmin',
   pwa: false,
   iconfontUrl: '',
 };

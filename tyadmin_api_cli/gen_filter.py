@@ -1,21 +1,22 @@
 import os
 
+
 from django.db.models import DateTimeField, ForeignKey, ImageField, FileField
 
-from xadmin_api_cli.contants import MAIN_DISPLAY
-from xadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.contants import MAIN_DISPLAY
+from tyadmin_api_cli.utils import init_django_env
 
 
 def gen_filter(project_name_settings):
     init_django_env(project_name_settings)
     import django
-
+    from django.conf import settings
     model_list = []
     model_pic_dict = {}
     model_fk_dict = {}
     model_date_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
     for one in django.apps.apps.get_models():
         columns = []
         model_name = one._meta.model.__name__
@@ -45,10 +46,10 @@ def gen_filter(project_name_settings):
             model_fk_dict[model_name] = fk_field_list
             model_date_dict[model_name] = date_field_list
             model_list.append(model_name)
-    app_name = "xadmin_api"
+    app_name = "tyadmin_api"
     filters_txt = f"""
 from django_filters import rest_framework as filters
-from xadmin_api.custom import DateFromToRangeFilter
+from tyadmin_api.custom import DateFromToRangeFilter
 $model_import占位$
         """
     model_import_rows = []
@@ -76,10 +77,10 @@ class {model}Filter(filters.FilterSet):
         exclude = [{",".join(img_field_l)}]
     """
 
-    if os.path.exists('../xadmin_api/auto_filters.py'):
+    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py'):
         print("已存在filters.py跳过")
     else:
-        with open('../xadmin_api/auto_filters.py', 'w') as fw:
+        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py', 'w') as fw:
             fw.write(filters_txt)
 
 

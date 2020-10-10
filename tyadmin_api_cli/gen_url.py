@@ -1,15 +1,16 @@
 import os
 
-from xadmin_api_cli.utils import init_django_env, get_lower_case_name
+from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
 
 
 def gen_url(project_name_settings):
     init_django_env(project_name_settings)
     import django
+    from django.conf import settings
     model_list = []
     model_fk_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
     for one in django.apps.apps.get_models():
         columns = []
         model_name = one._meta.model.__name__
@@ -18,7 +19,7 @@ def gen_url(project_name_settings):
         if app_label not in sys_label:
             model_list.append(model_name)
 
-    url_txt = f"""from xadmin_api import auto_views
+    url_txt = f"""from tyadmin_api import auto_views
 from django.urls import re_path, include, path
 from rest_framework.routers import DefaultRouter
     
@@ -36,10 +37,10 @@ urlpatterns = [
     ]
     """
 
-    if os.path.exists('../xadmin_api/auto_url.py'):
+    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py'):
         print("已存在urls跳过")
     else:
-        with open('../xadmin_api/auto_url.py', 'w') as fw:
+        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py', 'w') as fw:
             fw.write(url_txt)
 
 

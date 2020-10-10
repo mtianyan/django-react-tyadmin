@@ -2,10 +2,10 @@ import django
 from django.shortcuts import render
 from django.views import View
 
-from xadmin_api.custom import XadminViewSet
-from xadmin_api.filters import TyAdminSysLogFilter, TyAdminEmailVerifyRecordFilter
-from xadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
-from xadmin_api.serializers import TyAdminSysLogSerializer, TyAdminEmailVerifyRecordSerializer
+from tyadmin_api.custom import XadminViewSet
+from tyadmin_api.filters import TyAdminSysLogFilter, TyAdminEmailVerifyRecordFilter
+from tyadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
+from tyadmin_api.serializers import TyAdminSysLogSerializer, TyAdminEmailVerifyRecordSerializer
 
 
 class TyAdminSysLogViewSet(XadminViewSet):
@@ -35,9 +35,9 @@ from rest_framework import views, status, serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
-from xadmin_api.custom import MtyCustomExecView
+from tyadmin_api.custom import MtyCustomExecView
 
-from xadmin_api.utils import send_email, save_uploaded_file, gen_file_name, log_save
+from tyadmin_api.utils import send_email, save_uploaded_file, gen_file_name, log_save
 
 
 class RichUploadSerializer(serializers.Serializer):
@@ -62,7 +62,7 @@ SysUser = get_user_model()
 
 class DashBoardView(views.APIView):
     def get(self, request, *args, **kwargs):
-        data_json = os.path.join(settings.BASE_DIR, 'xadmin_api/dashboard.json')
+        data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/dashboard.json')
         with open(data_json) as fr:
             content = fr.read()
         return JsonResponse(json.loads(content))
@@ -70,7 +70,7 @@ class DashBoardView(views.APIView):
 
 class MenuView(views.APIView):
     def get(self, request, *args, **kwargs):
-        data_json = os.path.join(settings.BASE_DIR, 'xadmin_api/menu.json')
+        data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/menu.json')
         with open(data_json) as fr:
             content = fr.read()
         import demjson
@@ -83,7 +83,7 @@ class MenuView(views.APIView):
 
 class DashBoardView(views.APIView):
     def get(self, request, *args, **kwargs):
-        sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+        sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
         count_dict = {}
         for one in django.apps.apps.get_models():
             app_label = one._meta.app_label

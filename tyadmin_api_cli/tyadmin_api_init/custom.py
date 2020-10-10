@@ -13,8 +13,8 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.viewsets import ViewSetMixin
 
-from xadmin_api.utils import log_save
-from xadmin_api.pagination import CustomPageNumberPagination
+from tyadmin_api.utils import log_save
+from tyadmin_api.pagination import CustomPageNumberPagination
 from django_filters import rest_framework as filters, RangeFilter
 from django_filters.fields import DateRangeField
 from django_filters.widgets import RangeWidget

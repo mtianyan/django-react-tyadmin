@@ -1,18 +1,18 @@
 import os
-
 from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerField, CharField, ImageField, TextField
 
-from xadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.utils import init_django_env
 
 
 def gen_view(project_name_settings):
     init_django_env(project_name_settings)
     import django
+    from django.conf import settings
     model_list = []
-    app_name = "xadmin_api"
+    app_name = "tyadmin_api"
     model_search_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
     for one in django.apps.apps.get_models():
 
         model_name = one._meta.model.__name__
@@ -36,11 +36,11 @@ def gen_view(project_name_settings):
     serializers_list = [one + "Serializer" for one in model_list]
     filters_list = [one + "Filter" for one in model_list]
     viewset_txt = f"""
-    from rest_framework import viewsets
-    from xadmin_api.custom import XadminViewSet
-    $model_import占位$
-    from {app_name}.auto_serializers import {", ".join(serializers_list)}
-    from {app_name}.auto_filters import {", ".join(filters_list)}
+from rest_framework import viewsets
+from tyadmin_api.custom import XadminViewSet
+$model_import占位$
+from {app_name}.auto_serializers import {", ".join(serializers_list)}
+from {app_name}.auto_filters import {", ".join(filters_list)}
     """
     model_import_rows = []
     print(app_model_import_dict)
@@ -51,16 +51,16 @@ def gen_view(project_name_settings):
     for model_name in model_list:
         viewset_txt += f"""
     
-    class {model_name}ViewSet(XadminViewSet):
-            serializer_class = {model_name}Serializer
-            queryset = {model_name}.objects.all()
-            filter_class = {model_name}Filter
-            search_fields = [{",".join(model_search_dict[model_name])}]
+class {model_name}ViewSet(XadminViewSet):
+        serializer_class = {model_name}Serializer
+        queryset = {model_name}.objects.all()
+        filter_class = {model_name}Filter
+        search_fields = [{",".join(model_search_dict[model_name])}]
         """
-    if os.path.exists('../xadmin_api/auto_views.py'):
+    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
         print("已存在views跳过")
     else:
-        with open('../xadmin_api/auto_views.py', 'w') as fw:
+        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w') as fw:
             fw.write(viewset_txt)
 
 

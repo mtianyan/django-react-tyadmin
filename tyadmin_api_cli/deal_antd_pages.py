@@ -1,16 +1,18 @@
 import os
 
+
 from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, CharField, DateTimeField, DateField, BooleanField, IntegerField, FloatField, FileField, ImageField
-from xadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC
-from xadmin_api_cli.fileds import richTextField, SImageField
-from xadmin_api_cli.utils import init_django_env, get_lower_case_name
+from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC
+from tyadmin_api_cli.fileds import richTextField, SImageField
+from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
 
 
 def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"):
     init_django_env(project_name_settings)
     import django
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'xadmin_api', 'authtoken', 'social_django']
+    from django.conf import settings
+    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
     # focus_model = "CourseResource"
     model_pic_dict = {}
     model_date_dict = {}
@@ -437,7 +439,7 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
                             },""".replace("$模型名字$", model_ver_name)
             opera = opera.replace("$时间处理占位$", "".join(date_row_list))
             columns.append(opera)
-            dest_path = f'./antd_page_templates/{template_type}'
+            dest_path = f'{os.path.dirname(__file__)}/antd_page_templates/{template_type}'
             with open(f'{dest_path}/index.jsx') as fr:
 
                 content = fr.read()
@@ -487,7 +489,7 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
                     update_form = update_form.replace("$宽度占位$", 'width={1200}')
                 else:
                     update_form = update_form.replace("$宽度占位$", "width={600}")
-            target_path = '../xadmin/src/pages/AutoGenPage'
+            target_path = f'{settings.BASE_DIR}/tyadmin/src/pages/AutoGenPage'
             cur_path = f'{target_path}/{model_name}List'
             if not os.path.exists(cur_path):
                 os.mkdir(cur_path)

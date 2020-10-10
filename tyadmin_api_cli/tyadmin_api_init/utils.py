@@ -2,7 +2,7 @@ import datetime
 import time
 import uuid
 
-from xadmin_api.models import TyAdminSysLog
+from tyadmin_api.models import TyAdminSysLog
 
 
 def log_save(user, request, flag, message, log_type):
@@ -22,7 +22,7 @@ from random import Random
 from django.conf import settings
 from django.core.mail import EmailMessage
 
-from xadmin_api.models import TyAdminEmailVerifyRecord
+from tyadmin_api.models import TyAdminEmailVerifyRecord
 
 
 def random_str(random_length=8):

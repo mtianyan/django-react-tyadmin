@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
-from xadmin_api.custom import DateFromToRangeFilter
-from xadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
+from tyadmin_api.custom import DateFromToRangeFilter
+from tyadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
 
 
 class TyAdminSysLogFilter(filters.FilterSet):
