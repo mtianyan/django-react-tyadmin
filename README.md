@@ -33,51 +33,68 @@
 
 ## model->前端对应关系
 
-0. ForeignKey自动生成下拉单选菜单, ManyToManyField自动生成下拉多选菜单
+|  字段类型   | 前端展示  |
+|  ----  | ----  |
+| ForeignKey  | 单选 |
+| ManyToManyField  | 多选 & 多彩标签展示 |
+| richTextField  | 富文本展示 |
+| CharField or IntegerField(with choices)  | 多选 |
+| CharField or IntegerField  | 输入框 |
+| ImageField  | 带预览上传，可选头像，图片列表展示 |
+| FileField  | 文件上传 |
+| TextField  | TextArea框 |
+| BooleanField | Switch选择|
+| IntegerField | 数字input|
+| DateField| Date选择器|
+| DateTimeField| DateTime选择器|
 
->指定`f'{settings.MAIN_DISPLAY}__name'` 关联另一张表哪个字段用于table显示
+
+
+### ForeignKey自动生成下拉单选菜单, ManyToManyField自动生成下拉多选菜单
+
+>指定`f'{MAIN_DISPLAY}__name'` 关联另一张表哪个字段用于table显示
 
 ```python
-    course_org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name="所属机构", null=True, blank=True,
-                                   help_text=f'{settings.MAIN_DISPLAY}__name')
+course_org = ForeignKey(CourseOrg, verbose_name="所属机构",
+                        help_text=f'{MAIN_DISPLAY}__name')
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192310.png)
 
 ```
-labels = models.ManyToManyField("Label", verbose_name="课程拥有的label", help_text=f'{MAIN_DISPLAY}__title')
-
+labels = ManyToManyField("Label", verbose_name="课程拥有的label", 
+                help_text=f'{MAIN_DISPLAY}__title')
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010194349.png)
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010194222.png)
 
-1. richTextField 自动生成富文本
+### richTextField 自动生成富文本
 
 ```
-    detail = models.richTextField(verbose_name="课程详情", default='')
+detail = richTextField(verbose_name="课程详情")
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193352.png)
 
-2. CharField和IntegerField choices 自动生成表单前端下拉选择框。
+### CharField和IntegerField choices 自动生成表单前端下拉选择框。
 
 ```python
-    GENDER_CHOICES = (
-        ("male", "男"),
-        ("female", "女")
-    )
-    gender = models.CharField(max_length=6,verbose_name="性别",choices=GENDER_CHOICES,default="female")
+GENDER_CHOICES = (
+   ("male", "男"),
+   ("female", "女")
+)
+gender = CharField(verbose_name="性别",choices=GENDER_CHOICES)
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010190635.png)
 
-3. ImageField 自动生成带预览的表单上传功能，列表页可选两种展示方式。
+### ImageField 自动生成带预览的表单上传功能，列表页可选两种展示方式。
 
 ```python
-    image = models.ImageField(max_length=100,verbose_name="头像", help_text=MAIN_AVATAR)
-    image = models.ImageField(verbose_name="封面图",max_length=100, help_text=MAIN_PIC)    
+avatar = ImageField(verbose_name="头像", help_text=MAIN_AVATAR)
+image = ImageField(verbose_name="封面图", help_text=MAIN_PIC)    
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010191641.png)
@@ -90,47 +107,47 @@ labels = models.ManyToManyField("Label", verbose_name="课程拥有的label", he
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010191843.png)
 
-4. FileField 字段生成文件上传功能。
+### FileField 字段生成文件上传功能。
 
 ```
-    download = models.FileField(verbose_name="资源文件", max_length=100)
+download = FileField(verbose_name="资源文件", max_length=100)
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193041.png)
 
-5. TextField 自动生成前端TextArea 框
+### TextField 自动生成前端TextArea 框
 
 ```python
- desc = models.TextField(max_length=300, verbose_name="课程描述")
+desc = TextField(verbose_name="课程描述")
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192813.png)
 
-6. BooleanField 自动前端 Boolean 单选
+### BooleanField 自动前端 Boolean 单选
 
-```
-    is_banner = models.BooleanField(default=False, verbose_name="是否轮播")
+```python
+is_banner = BooleanField(verbose_name="是否轮播")
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193001.png)
 
-7. IntegerField 自动前端 Int 输入框
+### IntegerField 自动前端 Int 输入框
 ```
-    learn_times = models.IntegerField(default=0, verbose_name="学习时长(分钟数)")
+learn_times = IntegerField(verbose_name="学习时长(分钟数)")
 ```
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193445.png)
 
-8. DateField 自动前端 Date选择框
+### DateField 自动前端 Date选择框
 
 ```
-birthday = models.DateField(verbose_name="生日")
+birthday = DateField(verbose_name="生日")
 ```
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193614.png)
 
-9. DateTimeField 自动表单 DateTime 选择框。时间范围筛选器。
+### DateTimeField 自动表单 DateTime 选择框。时间范围筛选器。
 
 ```
-last_login = models.DateTimeField(verbose_name="上次登录")
+last_login = DateTimeField(verbose_name="上次登录")
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193852.png)
@@ -142,7 +159,7 @@ last_login = models.DateTimeField(verbose_name="上次登录")
 ## 基于Model定义的表单字段级别自动验证
 
 ```
-    title = models.CharField(max_length=255, verbose_name="课程标题", unique=True)
+    title = CharField(max_length=255, verbose_name="课程标题", unique=True)
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
@@ -156,18 +173,20 @@ if xxx:
 
 ## demo项目快速上手
 
-0. 初始化项目(推荐使用cookiecutter)
+
+### 初始化项目(推荐使用cookiecutter)
 
 ```
 cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
 ```
-1. 安装tyadmin-api-cli
+
+### 安装tyadmin-api-cli
 
 ```
 pip install tyadmin-api-cli
 ```
 
-2. 注册tyadmin-api-cli
+### 注册tyadmin-api-cli
 
 ```
 INSTALLED_APPS = [
@@ -175,19 +194,19 @@ INSTALLED_APPS = [
 ]
 ```
 
-3. 初始化 后端app 及 前端项目
+### 初始化 后端app 及 前端项目
 
 ```
 python manage.py init_admin
 ```
 
-4. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
+### 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
 
 ```
 python manage.py gen_all
 ```
 
-5. 注册生成出的app
+### 注册生成出的app
 
 ```
 INSTALLED_APPS = [
@@ -197,13 +216,13 @@ INSTALLED_APPS = [
 ]
 ```
 
-6. 注册路由
+### 注册路由
 
 ```
     path('api/xadmin/v1/', include('tyadmin_api.urls')),
 ```
 
-7. 运行后端项目，运行前端项目
+### 运行后端项目，运行前端项目
 
 ```
 python manage.py makemigrations
