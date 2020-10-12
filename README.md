@@ -17,7 +17,7 @@
 
 已生成示例网站: 
 
-1. https://imooc.funpython.cn/xadmin/index
+1. https://imooc.funpython.cn/xadmin
 
 2. https://mooc.funpython.cn/xadmin
 
