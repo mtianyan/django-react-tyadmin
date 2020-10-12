@@ -2,8 +2,10 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
-
+var fs = require("fs");
+const path = require('path');
 const { REACT_APP_ENV } = process.env;
+const auto_route = eval(fs.readFileSync(path.join(__dirname,'auto_menu.json')).toString());
 export default defineConfig({
     hash: true,
     antd: {},
@@ -52,6 +54,7 @@ export default defineConfig({
                             path: '/xadmin/',
                             redirect: '/xadmin/index',
                         },
+                        ...auto_route,
                         {
                             name: 'Tyadmin内置',
                             icon: 'VideoCamera',
