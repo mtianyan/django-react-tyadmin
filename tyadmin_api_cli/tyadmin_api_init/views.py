@@ -63,7 +63,7 @@ SysUser = get_user_model()
 class DashBoardView(views.APIView):
     def get(self, request, *args, **kwargs):
         data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/dashboard.json')
-        with open(data_json) as fr:
+        with open(data_json, encoding='utf-8') as fr:
             content = fr.read()
         return JsonResponse(json.loads(content))
 
@@ -71,7 +71,7 @@ class DashBoardView(views.APIView):
 class MenuView(views.APIView):
     def get(self, request, *args, **kwargs):
         data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/menu.json')
-        with open(data_json) as fr:
+        with open(data_json, encoding='utf-8') as fr:
             content = fr.read()
         import demjson
         content = demjson.decode(content)

@@ -49,9 +49,9 @@ def gen_route(project_name_settings):
     ]
   }]
         """
-    with open(f'{settings.BASE_DIR}/tyadmin_api/menu.json', 'w') as fw:
+    with open(f'{settings.BASE_DIR}/tyadmin_api/menu.json', 'w', encoding='utf-8') as fw:
         fw.write(inner_before_list+",".join(path_list)+inner_after_list)
-    with open(f'{settings.BASE_DIR}/tyadmin/config/auto_menu.json', 'w') as fw:
+    with open(f'{settings.BASE_DIR}/tyadmin/config/auto_menu.json', 'w', encoding='utf-8') as fw:
         fw.write(inner_before_list+",".join(path_list)+inner_after_list)
 
 

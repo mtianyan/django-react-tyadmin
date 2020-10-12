@@ -60,7 +60,7 @@ class {model_name}ViewSet(XadminViewSet):
     if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
         print("已存在views跳过")
     else:
-        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w') as fw:
+        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w', encoding='utf-8') as fw:
             fw.write(viewset_txt)
 
 
