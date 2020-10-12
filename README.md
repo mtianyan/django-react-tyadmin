@@ -6,6 +6,8 @@
 更强大，更现代化，自定义度更高的Xadmin！！！
 自动生成前后端管理后台，神奇自动对接。免去普通增删改查，筛选，搜索功能开发。
 
+交流反馈群: 304094780
+
 只需要设计好Model，运行两条命令`python manage.py init_admin`,`python manage.py gen_all`
 
 >后端代码生成一个django app到项目目录, 代码归你掌控，无阻二次开发！
@@ -18,6 +20,73 @@
 1. https://imooc.funpython.cn/xadmin/index
 
 2. https://mooc.funpython.cn/xadmin
+
+## demo项目快速上手
+
+
+### 1. 初始化项目(推荐使用cookiecutter)
+
+```
+cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
+```
+
+### 2. 安装tyadmin-api-cli
+
+```
+pip install tyadmin-api-cli
+```
+
+### 3. 注册tyadmin-api-cli
+
+```
+INSTALLED_APPS = [
+    'tyadmin_api_cli',
+]
+```
+
+### 4. 初始化 后端app 及 前端项目
+
+```
+python manage.py init_admin
+```
+
+### 5. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
+
+```
+python manage.py gen_all
+```
+
+### 6. 注册生成出的app
+
+```
+INSTALLED_APPS = [
+    'tyadmin_api_cli',
+    'captcha',
+    'tyadmin_api'
+]
+```
+
+### 7. 注册路由
+
+```
+    path('api/xadmin/v1/', include('tyadmin_api.urls')),
+```
+
+### 8. 运行后端项目，运行前端项目
+
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+```
+cd tyadmin
+yarn
+yarn start
+```
+
+访问http://127.0.0.1:8001/xadmin/index
 
 ## 内嵌自动dashboard，自动注册现有model count 数据。
 
@@ -171,69 +240,4 @@ if xxx:
     raise ValidationError({"filed_name": ["错误提示"]})
 ```
 
-## demo项目快速上手
 
-
-### 1. 初始化项目(推荐使用cookiecutter)
-
-```
-cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
-```
-
-### 2. 安装tyadmin-api-cli
-
-```
-pip install tyadmin-api-cli
-```
-
-### 3. 注册tyadmin-api-cli
-
-```
-INSTALLED_APPS = [
-    'tyadmin_api_cli',
-]
-```
-
-### 4. 初始化 后端app 及 前端项目
-
-```
-python manage.py init_admin
-```
-
-### 5. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
-
-```
-python manage.py gen_all
-```
-
-### 6. 注册生成出的app
-
-```
-INSTALLED_APPS = [
-    'tyadmin_api_cli',
-    'captcha',
-    'tyadmin_api'
-]
-```
-
-### 7. 注册路由
-
-```
-    path('api/xadmin/v1/', include('tyadmin_api.urls')),
-```
-
-### 8. 运行后端项目，运行前端项目
-
-```
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
-```
-
-```
-cd tyadmin
-yarn
-yarn start
-```
-
-访问http://127.0.0.1:8001/xadmin/index
