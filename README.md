@@ -78,6 +78,8 @@ python manage.py runserver # 默认运行在8000端口
 
 安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
 
+>安装Node.js 10以上，推荐安装版本Latest LTS Version: 12.19.0
+
 ```
 cd tyadmin
 npm install
