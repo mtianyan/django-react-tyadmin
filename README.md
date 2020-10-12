@@ -24,10 +24,12 @@
 ## demo项目快速上手
 
 
-### 1. 初始化项目(推荐使用cookiecutter)
+### 1. 获得一个还未拥有后台api界面的demo项目代码(已存在项目可直接从第二步开始):
 
 ```
-cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
+git clone https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
+# 安装项目 原本就需要的依赖
+pip install -r requirement.txt
 ```
 
 ### 2. 安装tyadmin-api-cli
@@ -44,19 +46,13 @@ INSTALLED_APPS = [
 ]
 ```
 
-### 4. 初始化 后端app 及 前端项目
+### 4. 初始化 后端app 及 前端项目 并 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
 
 ```
-python manage.py init_admin
+python manage.py init_admin && python manage.py gen_all
 ```
 
-### 5. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
-
-```
-python manage.py gen_all
-```
-
-### 6. 注册生成出的app
+### 5. 注册生成出的app
 
 ```
 INSTALLED_APPS = [
@@ -66,27 +62,29 @@ INSTALLED_APPS = [
 ]
 ```
 
-### 7. 注册路由
+### 6. 注册路由
 
 ```
     path('api/xadmin/v1/', include('tyadmin_api.urls')),
 ```
 
-### 8. 运行后端项目，运行前端项目
+### 7. 运行后端项目，运行前端项目
 
 ```
 python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver # 默认运行在8000端口
 ```
+
+安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
 
 ```
 cd tyadmin
-yarn
-yarn start
+npm install
+npm run start # 默认会运行在8001端口
 ```
 
-访问http://127.0.0.1:8001/xadmin/index
+访问http://127.0.0.1:8001/xadmin/
 
 ## 内嵌自动dashboard，自动注册现有model count 数据。
 
