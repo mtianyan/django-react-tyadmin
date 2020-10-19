@@ -1,0 +1,3 @@
+django
+django-simple-captcha
+djangorestframework

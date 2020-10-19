@@ -63,11 +63,11 @@ class {model}Serializer(serializers.ModelSerializer):
         fields = "__all__"
         """
     #
-    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py'):
-        print("已存在serializers跳过")
-    else:
-        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py', 'w', encoding='utf-8') as fw:
-            fw.write(serializers_txt)
+    # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py'):
+    #     print("已存在serializers跳过")
+    # else:
+    with open(f'{settings.BASE_DIR}/tyadmin_api/auto_serializers.py', 'w') as fw:
+        fw.write(serializers_txt)
 
 
 if __name__ == '__main__':

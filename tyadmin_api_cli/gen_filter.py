@@ -77,11 +77,11 @@ class {model}Filter(filters.FilterSet):
         exclude = [{",".join(img_field_l)}]
     """
 
-    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py'):
-        print("已存在filters.py跳过")
-    else:
-        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py', 'w', encoding='utf-8') as fw:
-            fw.write(filters_txt)
+    # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py'):
+    #     print("已存在filters.py跳过")
+    # else:
+    with open(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py', 'w') as fw:
+        fw.write(filters_txt)
 
 
 if __name__ == '__main__':

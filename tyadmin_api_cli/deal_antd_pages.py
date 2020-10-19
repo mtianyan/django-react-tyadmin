@@ -9,6 +9,7 @@ from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
 
 
 def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"):
+    # focus_model = 'HistoricalNetworkDevice'
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
@@ -17,10 +18,12 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
     model_pic_dict = {}
     model_date_dict = {}
     user = get_user_model()
-    for one in django.apps.apps.get_models():
+    model_list = django.apps.apps.get_models()
+    for one in model_list:
         columns = []
         model_name = one._meta.model.__name__
-        model_ver_name = one._meta.verbose_name
+        model_ver_name = one._meta.verbose_name_raw
+        # if(isinstance(model_ver_name,__proxy__)):
         if focus_model and model_name != focus_model:
             continue
         if one._meta.app_label not in sys_label:
@@ -70,14 +73,15 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
         });
       }, []);""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]).replace("$关联Model$", rela_model)
                     model_add_item_list.append(model_add_item)
-                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage//$关联Model$List/service';""".replace("$关联Model$",
-                                                                                                                                 rela_model)
-                    model_import_item_list.append(model_import_item)
+                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
+                                                                                                                                rela_model)
+                    if model_import_item not in model_import_item_list and model_name != rela_model:
+                        model_import_item_list.append(model_import_item)
                 elif isinstance(filed, CharField):
                     if filed.choices:
                         filed_choices_list = []
                         for filed_one in filed.choices:
-                            one_line = f'{filed_one[0]}:"{filed_one[1]}"'
+                            one_line = f'"{filed_one[0]}":"{filed_one[1]}"'
                             filed_choices_list.append(one_line)
                         one_c = """{
                                            title: '%s',
@@ -403,9 +407,10 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
                     }, []);""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]) \
                         .replace("$关联Model$", rela_model).replace("$关联字段$", help_text)
                     model_many_to_many_list.append(model_many_to_many_item)
-                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage//$关联Model$List/service';""".replace("$关联Model$",
-                                                                                                                                 rela_model)
-                    model_import_item_list.append(model_import_item)
+                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
+                                                                                                                                rela_model)
+                    if model_import_item not in model_import_item_list and model_name !=rela_model:
+                        model_import_item_list.append(model_import_item)
                     columns.append(one_c)
             opera = """    {
                               title: '操作',
@@ -440,7 +445,7 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
             opera = opera.replace("$时间处理占位$", "".join(date_row_list))
             columns.append(opera)
             dest_path = f'{os.path.dirname(__file__)}/antd_page_templates/{template_type}'
-            with open(f'{dest_path}/index.jsx', encoding='utf-8') as fr:
+            with open(f'{dest_path}/index.jsx') as fr:
 
                 content = fr.read()
                 if fileds_num > 8:
@@ -465,24 +470,24 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
                 new_content = new_content.replace("$时间占位$", ",".join(model_date_dict[model_name]))
 
             if len(model_pic_dict[model_name]) > 0:
-                with open(f'{dest_path}/service_img.js', encoding='utf-8') as fr:
+                with open(f'{dest_path}/service_img.js') as fr:
                     content = fr.read()
                     new_services = content.replace("$占位path$", get_lower_case_name(model_name))
                     new_services = new_services.replace("$占位模型名$", model_name)
                     new_services = new_services.replace("$图片字段列表$", ",".join(model_pic_dict[model_name]))
             else:
-                with open(f'{dest_path}/service.js', encoding='utf-8') as fr:
+                with open(f'{dest_path}/service.js') as fr:
                     content = fr.read()
                     new_services = content.replace("$占位path$", get_lower_case_name(model_name))
                     new_services = new_services.replace("$占位模型名$", model_name)
-            with open(f'{dest_path}/components/CreateForm.jsx', encoding='utf-8') as fr:
+            with open(f'{dest_path}/components/CreateForm.jsx') as fr:
                 create_form = fr.read()
                 create_form = create_form.replace("$占位模型显示名$", str(model_ver_name))
                 if fileds_num > 8:
                     create_form = create_form.replace("$宽度占位$", 'width={1200}')
                 else:
                     create_form = create_form.replace("$宽度占位$", "width={600}")
-            with open(f'{dest_path}/components/UpdateForm.jsx', encoding='utf-8') as fr:
+            with open(f'{dest_path}/components/UpdateForm.jsx') as fr:
                 update_form = fr.read()
                 update_form = update_form.replace("$占位模型显示名$", str(model_ver_name))
                 if fileds_num > 8:
@@ -496,13 +501,13 @@ def gen_antd_pages(project_name_settings, focus_model=None, template_type="base"
             cur_path_co = f'{target_path}/{model_name}List/components'
             if not os.path.exists(cur_path_co):
                 os.mkdir(cur_path_co)
-            with open(f'{target_path}/{model_name}List/index.jsx', 'w', encoding='utf-8') as fw:
+            with open(f'{target_path}/{model_name}List/index.jsx', 'w') as fw:
                 fw.write(new_content)
-            with open(f'{target_path}/{model_name}List/service.js', 'w', encoding='utf-8') as fw:
+            with open(f'{target_path}/{model_name}List/service.js', 'w') as fw:
                 fw.write(new_services)
-            with open(f'{target_path}/{model_name}List/components/CreateForm.jsx', 'w', encoding='utf-8') as fw:
+            with open(f'{target_path}/{model_name}List/components/CreateForm.jsx', 'w') as fw:
                 fw.write(create_form)
-            with open(f'{target_path}/{model_name}List/components/UpdateForm.jsx', 'w', encoding='utf-8') as fw:
+            with open(f'{target_path}/{model_name}List/components/UpdateForm.jsx', 'w') as fw:
                 fw.write(update_form)
 
 
