@@ -18,7 +18,7 @@ def package_files(directories):
 
 setup(
     name="tyadmin_api_cli",
-    version="0.2.0",
+    version="0.2.1",
     keywords=("pip", "mtianyan", "xadmin", "Django", "Antd", "Antd Design Pro"),
     description="modern base on models django admin powered by Antd Design Pro",
     long_description="modern base on models django admin powered by Antd Design Pro",
