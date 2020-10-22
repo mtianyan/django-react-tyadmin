@@ -37,11 +37,11 @@ urlpatterns = [
     ]
     """
 
-    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py'):
-        print("已存在urls跳过")
-    else:
-        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py', 'w', encoding='utf-8') as fw:
-            fw.write(url_txt)
+    # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py'):
+    #     print("已存在urls跳过")
+    # else:
+    with open(f'{settings.BASE_DIR}/tyadmin_api/auto_url.py', 'w') as fw:
+        fw.write(url_txt)
 
 
 if __name__ == '__main__':

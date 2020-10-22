@@ -54,7 +54,7 @@ const GlobalHeaderRight = props => {
             color: 'inherit',
           }}
           target="_blank"
-          href="https://github.com/mtianyan"
+          href="https://github.com/mtianyan/tyadmin_api_cli"
           rel="noopener noreferrer"
           className={styles.action}
         >

@@ -1,0 +1,99 @@
+
+                [
+          {
+            name: '首页',
+            path: '/xadmin/index',
+            icon: 'dashboard',
+            component: './TyAdminBuiltIn/DashBoard'
+          },
+            {
+                      name: '权限',
+                      icon: 'smile',
+                      path: '/xadmin/permission',
+                      component: './AutoGenPage/PermissionList',
+                   },{
+                      name: '组',
+                      icon: 'smile',
+                      path: '/xadmin/group',
+                      component: './AutoGenPage/GroupList',
+                   },{
+                      name: '用户菜单',
+                      icon: 'smile',
+                      path: '/xadmin/user_menu',
+                      component: './AutoGenPage/UserMenuList',
+                   },{
+                      name: '用户路由',
+                      icon: 'smile',
+                      path: '/xadmin/user_router',
+                      component: './AutoGenPage/UserRouterList',
+                   },{
+                      name: '用户表',
+                      icon: 'smile',
+                      path: '/xadmin/user_profile',
+                      component: './AutoGenPage/UserProfileList',
+                   },{
+                      name: '数据中心',
+                      icon: 'smile',
+                      path: '/xadmin/data_centers',
+                      component: './AutoGenPage/DataCentersList',
+                   },{
+                      name: '集群',
+                      icon: 'smile',
+                      path: '/xadmin/clusters',
+                      component: './AutoGenPage/ClustersList',
+                   },{
+                      name: '存储',
+                      icon: 'smile',
+                      path: '/xadmin/data_stores',
+                      component: './AutoGenPage/DataStoresList',
+                   },{
+                      name: '网络端口',
+                      icon: 'smile',
+                      path: '/xadmin/network_adapters',
+                      component: './AutoGenPage/NetworkAdaptersList',
+                   },{
+                      name: '宿主机',
+                      icon: 'smile',
+                      path: '/xadmin/dedicatedhosts',
+                      component: './AutoGenPage/DedicatedhostsList',
+                   },{
+                      name: '虚拟机',
+                      icon: 'smile',
+                      path: '/xadmin/virtual_hosts',
+                      component: './AutoGenPage/VirtualHostsList',
+                   },{
+                      name: '机房',
+                      icon: 'smile',
+                      path: '/xadmin/i_d_c',
+                      component: './AutoGenPage/IDCList',
+                   },{
+                      name: '主机',
+                      icon: 'smile',
+                      path: '/xadmin/hosts',
+                      component: './AutoGenPage/HostsList',
+                   },{
+                      name: '主机组',
+                      icon: 'smile',
+                      path: '/xadmin/host_group',
+                      component: './AutoGenPage/HostGroupList',
+                   }
+   ,{
+    name: 'Tyadmin内置',
+    icon: 'VideoCamera',
+    path: '/xadmin/sys',
+    routes: [
+      {
+        name: 'TyAdmin日志',
+        icon: 'smile',
+        path: '/xadmin/sys/ty_admin_sys_log',
+        component: './TyAdminBuiltIn/TyAdminSysLogList'
+      },
+      {
+        name: 'TyAdmin验证',
+        icon: 'smile',
+        path: '/xadmin/sys/ty_admin_email_verify_record',
+        component: './TyAdminBuiltIn/TyAdminEmailVerifyRecordList'
+      }
+    ]
+  }]
+        

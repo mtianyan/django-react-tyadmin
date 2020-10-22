@@ -57,11 +57,11 @@ class {model_name}ViewSet(XadminViewSet):
         filter_class = {model_name}Filter
         search_fields = [{",".join(model_search_dict[model_name])}]
         """
-    if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
-        print("已存在views跳过")
-    else:
-        with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w', encoding='utf-8') as fw:
-            fw.write(viewset_txt)
+    # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
+    #     print("已存在views跳过")
+    # else:
+    with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w') as fw:
+        fw.write(viewset_txt)
 
 
 if __name__ == '__main__':

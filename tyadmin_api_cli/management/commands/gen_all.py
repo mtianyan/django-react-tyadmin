@@ -14,12 +14,17 @@ class Command(BaseCommand):
 
     # 接收参数
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('--models',required=True, default="", type=str, help='请输入要生成的app列表用逗号分割，如: "article","users"')
 
     def handle(self, *args, **options):
         try:
             setting_value = options['settings']
         except KeyError:
             raise ValueError("请设置settings")
-        gen_all(setting_value)
+        try:
+            models_list = options['models']
+        except KeyError:
+            raise ValueError("请设置models列表")
+        models_list = models_list.split(",")
+        gen_all(setting_value, models_list)
 

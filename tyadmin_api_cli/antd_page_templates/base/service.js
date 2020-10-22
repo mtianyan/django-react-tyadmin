@@ -22,3 +22,4 @@ export async function update$占位模型名$(params, id) {
     data: { ...params, id},
   });
 }
+$更新密码service占位$
