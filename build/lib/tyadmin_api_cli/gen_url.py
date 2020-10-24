@@ -1,22 +1,22 @@
 import os
 
 from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
+from tyadmin_api_cli.contants import SYS_LABELS
 
-
-def gen_url(project_name_settings):
+def gen_url(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
     model_list = []
     model_fk_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
+    gen_labels = SYS_LABELS + user_label_list
     for one in django.apps.apps.get_models():
         columns = []
         model_name = one._meta.model.__name__
         model_ver_name = one._meta.verbose_name
         app_label = one._meta.app_label
-        if app_label not in sys_label:
+        if app_label in gen_labels:
             model_list.append(model_name)
 
     url_txt = f"""from tyadmin_api import auto_views

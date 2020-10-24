@@ -81,7 +81,6 @@ const Login = props => {
         <TabPane key="account" tab="账户密码登录">
           <Form ref={loginAccountFormRef} onFinish={handleAccountSubmit}>
             <Form.Item
-              initialValue="mtianyan"
               style={{marginBottom: 24}}
               name="userName"
               placeholder="用户名"
@@ -92,7 +91,7 @@ const Login = props => {
                 },
               ]}
             >
-              <Input size="large" placeholder='体验账号: mtianyan' prefix={<UserOutlined
+              <Input size="large" placeholder='请输入用户名' prefix={<UserOutlined
                 style={{
                   color: '#1890ff',
                 }}
@@ -103,7 +102,6 @@ const Login = props => {
               style={{marginBottom: 24}}
               name="password"
               placeholder="密码"
-              initialValue="admin2020"
               rules={[
                 {
                   required: true,
@@ -112,7 +110,7 @@ const Login = props => {
               ]}
             >
 
-              <Input.Password size="large" placeholder='体验密码: 123456'
+              <Input.Password size="large" placeholder='请输入密码'
                               prefix={<LockTwoTone className={styles.prefixIcon} />} />
             </Form.Item>
             <Row gutter={8}>

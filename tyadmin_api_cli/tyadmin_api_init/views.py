@@ -1,11 +1,13 @@
 import django
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.views import View
+from rest_framework.views import APIView
 
-from tyadmin_api.custom import XadminViewSet
+from tyadmin_api.custom import XadminViewSet, custom_exception_handler
 from tyadmin_api.filters import TyAdminSysLogFilter, TyAdminEmailVerifyRecordFilter
 from tyadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
-from tyadmin_api.serializers import TyAdminSysLogSerializer, TyAdminEmailVerifyRecordSerializer
+from tyadmin_api.serializers import TyAdminSysLogSerializer, TyAdminEmailVerifyRecordSerializer, SysUserChangePasswordSerializer
 
 
 class TyAdminSysLogViewSet(XadminViewSet):
@@ -29,7 +31,7 @@ import os
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 from django.conf import settings
-from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.http import JsonResponse
 from rest_framework import views, status, serializers
 from rest_framework.exceptions import ValidationError
@@ -165,6 +167,17 @@ class CurrentUserView(MtyCustomExecView):
             }, status=status.HTTP_200_OK)
 
 
+class UserLogoutView(MtyCustomExecView):
+    """注销视图类"""
+
+    def get(self, request):
+        # django自带的logout
+        logout(request)
+        return JsonResponse({
+            "status": 'ok'
+        })
+
+
 class UploadView(MtyCustomExecView):
 
     def post(self, request, *args, **kwargs):
@@ -181,3 +194,51 @@ class AdminIndexView(View):
         # render就是渲染html返回用户
         # render三变量: request 模板名称 一个字典写明传给前端的值
         return render(request, "TyAdmin/index.html")
+
+
+class UserChangePasswordView(MtyCustomExecView):
+    permission_classes = ()
+    """
+    用户修改密码
+    """
+    serializer_class = SysUserChangePasswordSerializer
+
+    def get_exception_handler(self):
+        return custom_exception_handler
+
+    def get_object(self):
+        return self.request.user
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.get_object(),
+                                           data=request.data,
+                                           context=dict(request=request))
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(dict(code=200, detail='修改成功'))
+
+
+class UserListChangePasswordView(MtyCustomExecView):
+
+    def post(self, request, *args, **kwargs):
+        current_username = self.request.data["username"]
+        change_password = self.request.data["password"]
+        change_re_password = self.request.data["re_password"]
+        if change_password != change_re_password:
+            raise ValidationError({"password": ["两次密码不可以不一致"]})
+        try:
+            cur_user = SysUser.objects.get(username=current_username)
+            password = make_password(change_re_password)
+            cur_user.password = password
+            cur_user.save()
+            log_save(user=request.user.username, request=self.request, flag="修改", message=f'用户: {cur_user.username}密码被修改', log_type="user")
+        except SysUser.DoesNotExist:
+            raise ValidationError({"username": ["用户名不存在"]})
+        ret_info = {
+            "retcode": 200,
+            "retmsg": "Save Success"
+        }
+        res = {
+            'retInfos': ret_info,
+        }
+        return JsonResponse(res)

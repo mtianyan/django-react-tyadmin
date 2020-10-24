@@ -21,7 +21,7 @@ class AvatarDropdown extends React.Component {
       return;
     }
 
-    history.push(`/account/${key}`);
+    history.push(`/xadmin/account/${key}`);
   };
 
   render() {
@@ -47,7 +47,11 @@ class AvatarDropdown extends React.Component {
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}
-
+          <Menu.Item key="change_password">
+            <SettingOutlined />
+            修改密码
+          </Menu.Item>
+                  <Menu.Divider />
         <Menu.Item key="logout">
           <LogoutOutlined />
           退出登录

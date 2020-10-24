@@ -8,6 +8,8 @@ def gen_view(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
+    if not user_label_list:
+        user_label_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
     model_list = []
     app_name = "tyadmin_api"
     model_search_dict = {}
@@ -33,13 +35,15 @@ def gen_view(project_name_settings, user_label_list):
                 elif isinstance(filed, CharField):
                     search_list.append('"' + name + '"')
             model_search_dict[model_name] = search_list
-    serializers_list = [one + "Serializer" for one in model_list]
+    serializers_list = [one + "ListSerializer" for one in model_list]
+    serializers_update_list = [one + "CreateUpdateSerializer" for one in model_list]
     filters_list = [one + "Filter" for one in model_list]
     viewset_txt = f"""
 from rest_framework import viewsets
 from tyadmin_api.custom import XadminViewSet
 $model_import占位$
 from {app_name}.auto_serializers import {", ".join(serializers_list)}
+from {app_name}.auto_serializers import {", ".join(serializers_update_list)}
 from {app_name}.auto_filters import {", ".join(filters_list)}
     """
     model_import_rows = []
@@ -55,11 +59,17 @@ from {app_name}.auto_filters import {", ".join(filters_list)}
         viewset_txt += f"""
     
 class {model_name}ViewSet(XadminViewSet):
-        serializer_class = {model_name}Serializer
-        queryset = {model_name}.objects.all()
+        serializer_class = {model_name}ListSerializer
+        queryset = {model_name}.objects.all().order_by('-pk')
         filter_class = {model_name}Filter
         search_fields = [{",".join(model_search_dict[model_name])}]
-        """
+
+        def get_serializer_class(self):
+            if self.action == "list":
+                return {model_name}ListSerializer
+            else:
+                return {model_name}CreateUpdateSerializer
+"""
     # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
     #     print("已存在views跳过")
     # else:
@@ -68,5 +78,6 @@ class {model_name}ViewSet(XadminViewSet):
 
 
 if __name__ == '__main__':
-    name = input("请输入项目settings位置:")
-    gen_view(name)
+    # name = input("请输入项目settings位置:")
+    name = "skyoms.settings"
+    gen_view(name,None)

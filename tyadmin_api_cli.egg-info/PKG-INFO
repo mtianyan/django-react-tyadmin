@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: tyadmin-api-cli
-Version: 0.2.1
+Version: 0.3.0
 Summary: modern base on models django admin powered by Antd Design Pro
 Home-page: https://github.com/mtianyan/tyadmin_api_cli
 Author: mtianyan

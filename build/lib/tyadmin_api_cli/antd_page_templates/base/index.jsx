@@ -1,6 +1,7 @@
 import {DownOutlined, PlusOutlined, EditOutlined,DeleteOutlined} from '@ant-design/icons';
-import {Button, Divider, Dropdown, Input, Menu, message, Popconfirm, Select, Switch, Tag, Space} from 'antd';
+import {Button, Divider, Dropdown, Input, Menu, message, Popconfirm, Select, Switch, Tag, Space, Form} from 'antd';
 import React, {useEffect,useRef, useState} from 'react';
+import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
@@ -8,14 +9,16 @@ import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, u
 import UpdateForm from './components/UpdateForm';
 import UploadAvatar from '@/components/UploadAvatar';
 $import占位$
+$passwordform引入$
 import moment from 'moment';
 const {Option} = Select;
 import {BooleanDisplay, dealDateTimeDisplay, dealTime, deepCopy, getObjectClass, getTableColumns, richForm, richTrans, richCol,fileUpload} from '@/utils/utils';
 import 'braft-editor/dist/index.css'
-
+const FormItem = Form.Item;
 const TableList = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  $Password占位$
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef();
   const addFormRef = useRef();
@@ -93,13 +96,14 @@ const TableList = () => {
     return false;
   }
 };
+  $更新密码方法占位$
   const dateFieldList = [$时间占位$]
   const base_columns = [$占位列数据$];
 
   let cp = deepCopy(base_columns);
   const table_columns = getTableColumns(cp);
 
-  const update_columns = [...base_columns];
+  const update_columns = base_columns.filter(({dataIndex}) => !['password'].includes(dataIndex));
 
   const create_columns = [...base_columns];
 
@@ -228,6 +232,7 @@ const TableList = () => {
           rowSelection={{}}
         />
       </UpdateForm>
+        $Password更新Form$
     </PageHeaderWrapper>
   );
 };

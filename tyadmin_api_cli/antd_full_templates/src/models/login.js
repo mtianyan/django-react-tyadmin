@@ -1,8 +1,9 @@
 import {stringify} from 'querystring';
 import {history} from 'umi';
-import {AccountLogin, getEmailCaptcha} from '@/services/login';
+import {AccountLogin, getEmailCaptcha, Logout} from '@/services/login';
 import {setAuthority} from '@/utils/authority';
 import {getPageQuery} from '@/utils/utils';
+import {message} from 'antd';
 
 const Model = {
   namespace: 'login',
@@ -70,6 +71,11 @@ const Model = {
 
     },
     logout() {
+      Logout().then(r =>
+        message.success('成功退出登录'),
+      );
+      reloadAuthorized();
+      localStorage.clear();
       const {redirect} = getPageQuery(); // Note: There may be security issues, please note
 
       if (window.location.pathname !== '/xadmin/login' && !redirect) {

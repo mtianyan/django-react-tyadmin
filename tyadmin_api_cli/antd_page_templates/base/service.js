@@ -22,4 +22,10 @@ export async function update$占位模型名$(params, id) {
     data: { ...params, id},
   });
 }
+export async function query$占位模型名$VerboseName(params) {
+  return request('/api/xadmin/v1/$占位path$/verbose_name', {
+    params,
+  });
+}
+
 $更新密码service占位$

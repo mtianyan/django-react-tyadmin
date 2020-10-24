@@ -2,11 +2,14 @@ import {parse} from 'querystring';
 import pathRegexp from 'path-to-regexp';
 import React from 'react';
 import UploadFileList from '@/components/UploadFileList';
-import {Switch, Upload} from 'antd';
+import {Col, Descriptions, Popover, Row, Select, Space, Switch, Tag, Transfer, Upload} from 'antd';
 import {richEditUpload} from '@/services/editor';
 import {ContentUtils} from 'braft-utils';
 import BraftEditor from 'braft-editor';
 import DynamicIcon from '@/components/DynamicIcon';
+import Ellipsis from '@/components/Ellipsis';
+import {InfoCircleTwoTone} from '@ant-design/icons';
+const {Option} = Select;
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -149,7 +152,7 @@ export const getTableColumns = (cp) => {
   return cp.map((one) => {
     if ('backendType' in one) {
       if (one.backendType === 'foreignKey') {
-        one.dataIndex = one.dataIndex + '_text';
+        one.dataIndex = one.dataIndex;
       }
     }
     if (one.valueType === 'dateTime') {
@@ -171,8 +174,24 @@ export const getUpdateColumns = (cp) => {
 
 
 export const fieldErrorHandle = (err, formRef) => {
+  console.log(err)
+  console.log(formRef)
   for (let key in err.data.fields_errors) {
     var value = err.data.fields_errors[key];
+    formRef.current.setFields([
+      {
+        name: key,
+        errors: value,
+      },
+    ]);
+  }
+};
+
+export const fieldsLevelErrorHandle = (err, formRef) => {
+  console.log(err)
+  console.log(formRef)
+  for (let key in err.fields_errors) {
+    var value = err.fields_errors[key];
     formRef.current.setFields([
       {
         name: key,
@@ -537,4 +556,128 @@ export const getRandomInt = (min, max)=> {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export const dealForeignKeyField = (item, value, onChange, ForeignKeyList) => {
+  if (value) {
+    if (value.hasOwnProperty("id")) {
+      value = value.id.toString()
+      onChange(value)
+    }
+  }
+  const children = ForeignKeyList.map((item) => {
+    return <Option key={item.id.toString()} value={item.id.toString()}>{item.ty_options_display_txt}</Option>;
+  });
+  return <Select
+    showSearch
+    placeholder={"请选择"+ item.title}
+    value={value}
+    onChange={onChange}
+    filterOption={(input, option) =>
+      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    }
+  >
+    {children}
+  </Select>;
+}
+
+export  const dealManyToManyField = (item,value,onChange,type, ManyToManyList) =>{
+  const children = ManyToManyList.map(item => {
+    return (
+      <Option key={item.id} value={item.id}>
+        {item.ty_options_display_txt}
+      </Option>
+    );
+  });
+  if (typeof value === 'object'){
+    if(value[0].hasOwnProperty('id')){
+      value = value.map(one => {
+        if (one.hasOwnProperty('id')) {
+          return one.id.toString();
+        } else {
+          return one;
+        }
+      });
+      onChange(value)
+    }
+
+  }
+  if (type === 'form') {
+    return (<Transfer
+        showSearch
+        dataSource={ManyToManyList}
+        targetKeys={value}
+        onChange={(targetKeys, direction, moveKeys) => {
+          console.log(targetKeys, direction, moveKeys);
+          if (direction === 'right') {
+            onChange([...targetKeys, ...moveKeys]);
+          } else {
+            onChange(targetKeys.filter(el => !moveKeys.includes(el)));
+          }
+        }}
+        render={item => item.ty_options_display_txt}
+        oneWay={false}
+        pagination
+      />
+    );
+  }
+  return (
+    <Select
+      mode="multiple" placeholder={"请选择"+ item.title} onChange={onChange}>
+      {children}
+    </Select>
+  );
+}
+
+export const renderManyToMany = (text)=>{
+  const color_arr = [
+    'green',
+    'cyan',
+    'blue',
+    'geekblue',
+    'purple',
+    'magenta',
+    'red',
+    'volcano',
+    'orange',
+    'gold',
+    'lime',
+  ];
+  const child = [];
+  let items = [];
+  console.log(text);
+  for (let key in text) {
+    let value = text[key];
+    let one = <Descriptions.Item><Tag color={'blue'}>{value.ty_options_display_txt}</Tag></Descriptions.Item>;
+    items.push(one);
+  }
+  text.forEach((value, index, arr) => {
+    if (index <= 3) {
+      child.push(<Col xs={4} sm={4} md={6} lg={6} xl={12} style={{paddingTop: 4}}><Tag
+        color={color_arr[index % 10]}><Ellipsis style={{overflow:'visible'}} tooltip length={30}>{value.ty_options_display_txt}</Ellipsis></Tag></Col>);
+    } else if (index === 4) {
+      child.push(<Popover trigger="click" content={<Descriptions>
+        {items}
+      </Descriptions>} title="多对多数据"><Col span={4} style={{paddingTop: 4}}><Tag
+        color={color_arr[index % 10]}>...</Tag></Col></Popover>);
+    }
+  });
+  return <Row>{child}</Row>;
+}
+
+export const renderForeignKey = (text, VerboseNameMap) =>{
+  console.log(text)
+  console.log(VerboseNameMap)
+  let items = [];
+  for (let key in text) {
+    if (key !== "ty_options_display_txt") {
+      let one = <Descriptions.Item label={VerboseNameMap[key]}>{text[key]}</Descriptions.Item>;
+      items.push(one)
+    }
+  }
+  return <Space><span>{text.ty_options_display_txt}</span><Popover trigger="click" content={<Descriptions>
+    {items}
+  </Descriptions>} title="外键数据">
+    <InfoCircleTwoTone size="small"/>
+  </Popover></Space>
 }

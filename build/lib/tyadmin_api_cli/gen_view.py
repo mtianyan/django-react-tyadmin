@@ -2,9 +2,9 @@ import os
 from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerField, CharField, ImageField, TextField
 
 from tyadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.contants import SYS_LABELS
 
-
-def gen_view(project_name_settings):
+def gen_view(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
@@ -12,13 +12,13 @@ def gen_view(project_name_settings):
     app_name = "tyadmin_api"
     model_search_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
+    gen_labels = SYS_LABELS + user_label_list
     for one in django.apps.apps.get_models():
 
         model_name = one._meta.model.__name__
         model_ver_name = one._meta.verbose_name
         app_label = one._meta.app_label
-        if app_label not in sys_label:
+        if app_label in gen_labels:
             try:
                 app_model_import_dict[app_label].append(model_name)
             except KeyError:
@@ -45,7 +45,10 @@ from {app_name}.auto_filters import {", ".join(filters_list)}
     model_import_rows = []
     print(app_model_import_dict)
     for app, m_list in app_model_import_dict.items():
-        txt = f'from {app}.models import {", ".join(m_list)}\n'
+        if app in ["auth", "contenttypes"]:
+            txt = f'from django.contrib.{app}.models import {", ".join(m_list)}\n'
+        else:
+            txt = f'from {app}.models import {", ".join(m_list)}\n'
         model_import_rows.append(txt)
     viewset_txt = viewset_txt.replace("$model_import占位$", "".join(model_import_rows))
     for model_name in model_list:

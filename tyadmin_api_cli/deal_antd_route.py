@@ -6,6 +6,8 @@ def gen_route(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
+    if not user_label_list:
+        user_label_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
     path_list = []
     gen_labels = SYS_LABELS + user_label_list
     gen_labels = [one for one in gen_labels if one != "contenttypes"]
@@ -57,5 +59,6 @@ def gen_route(project_name_settings, user_label_list):
 
 
 if __name__ == '__main__':
-    name = input("请输入项目settings位置:")
-    gen_route(name)
+    # name = input("请输入项目settings位置:")
+    name = "skyoms.settings"
+    gen_route(name, None)

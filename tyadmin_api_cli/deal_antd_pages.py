@@ -1,10 +1,9 @@
 import os
 
-
 from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, CharField, DateTimeField, DateField, BooleanField, IntegerField, FloatField, FileField, ImageField
 from django.db.models.fields import NOT_PROVIDED
-from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC,SYS_LABELS
+from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC, SYS_LABELS
 from tyadmin_api_cli.fileds import richTextField, SImageField
 from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
 
@@ -14,6 +13,8 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
+    if not user_label_list:
+        user_label_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
     gen_labels = SYS_LABELS + user_label_list
     # focus_model = "CourseResource"
     model_pic_dict = {}
@@ -29,9 +30,9 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
         if focus_model and model_name != focus_model:
             continue
         if one._meta.app_label in gen_labels:
-            print("^^"*20)
+            print("^^" * 20)
             print(one._meta.app_label)
-            print("^^"*20)
+            print("^^" * 20)
             img_field_list = []
             date_row_list = []
             model_add_item_list = []
@@ -45,17 +46,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 ver_name = filed.verbose_name
                 if isinstance(filed, ForeignKey):
                     rela_model = filed.related_model._meta.object_name
-                    if one._meta.app_label == "auth" and name == "content_type":
-                        help_text = "model"
-                    else:
-                        if MAIN_DISPLAY in filed.help_text:
-                            help_text = filed.help_text.replace(MAIN_DISPLAY + "__", "")
-                        else:
-                            try:
-                                help_text = settings.ADMIN_ADAPTER[one._meta.app_label][one.objects.model._meta.object_name][filed.name]
-                            except KeyError:
-                                raise ValueError(f"温馨提示: App: {one._meta.app_label}中 Model: {one.objects.model._meta.object_name} 外键字段: {filed.name} 未进行指定！请根据文档进行指定！")
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                                             title: '%s',
                                             dataIndex: '%s',
@@ -63,17 +54,11 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                             rules: [
                                             ],
                                                   renderFormItem: (item, {value, onChange}) => {
-                          const children = $模型名字$ForeignKeyList.map((item) => {
-                            return <Option key={item.id} value={item.id}>{item.$外键显示字段$}</Option>;
-                          });
-                          return <Select
-                            placeholder="请选择$模型显示名字$"
-                            onChange={onChange}
-                          >
-                            {children}
-                          </Select>;
-                        },
-                                          },""" % (ver_name, name)
+                                            return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
+                        },render: (text, record) => {
+      return renderForeignKey(text, %sVerboseNameMap);
+    },
+                                          },""" % (ver_name, name, name, name)
                     else:
                         one_c = """{
                               title: '%s',
@@ -86,39 +71,43 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                 },
                               ],
                                     renderFormItem: (item, {value, onChange}) => {
-            const children = $模型名字$ForeignKeyList.map((item) => {
-              return <Option key={item.id} value={item.id}>{item.$外键显示字段$}</Option>;
-            });
-            return <Select
-              placeholder="请选择$模型显示名字$"
-              onChange={onChange}
-            >
-              {children}
-            </Select>;
+                  return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
           },
-                            },""" % (ver_name, name, ver_name)
+              render: (text, record) => {
+      return renderForeignKey(text, %sVerboseNameMap);
+    },
+                            },""" % (ver_name, name, ver_name, name, name)
                     one_c = one_c.replace("$模型名字$", name)
-                    one_c = one_c.replace("$外键显示字段$", help_text)
                     print(name)
                     print(filed)
-                    if isinstance(filed.verbose_name,str):
-                       one_c = one_c.replace("$模型显示名字$", filed.verbose_name)
+                    if isinstance(filed.verbose_name, str):
+                        one_c = one_c.replace("$模型显示名字$", filed.verbose_name)
                     else:
-                       one_c = one_c.replace("$模型显示名字$", name)
+                        one_c = one_c.replace("$模型显示名字$", name)
                     model_add_item = """const [$模型名字$ForeignKeyList, set$模型名字首字母大写$ForeignKeyList] = useState([]);
       useEffect(() => {
-        query$关联Model$().then(value => {
-          set$模型名字首字母大写$ForeignKeyList(value.data);
+        query$关联Model$({all: 1}).then(value => {
+          set$模型名字首字母大写$ForeignKeyList(value);
         });
-      }, []);""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]).replace("$关联Model$", rela_model)
+      }, []);
+      const [$模型名字$VerboseNameMap, set$模型名字首字母大写$VerboseNameMap] = useState([]);
+  useEffect(() => {
+    query$关联Model$VerboseName().then(value => {
+      set$模型名字首字母大写$VerboseNameMap(value);
+    });
+  }, []);
+      """.replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]).replace("$关联Model$", rela_model)
                     model_add_item_list.append(model_add_item)
-                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
-                                                                                                                                rela_model)
+                    model_import_item = """import {query$关联Model$, query$关联Model$VerboseName} from '@/pages/AutoGenPage/$关联Model$List/service';""" \
+                        .replace("$关联Model$", rela_model)
                     if model_import_item not in model_import_item_list and model_name != rela_model:
                         model_import_item_list.append(model_import_item)
                 elif isinstance(filed, CharField):
                     if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: "{filed.default}",'
+                        if filed.default is not None:
+                            default_replace = f' initialValue: "{filed.default}",'
+                        else:
+                            default_replace = ""
                     else:
                         default_replace = ""
                     if filed.choices:
@@ -126,7 +115,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                         for filed_one in filed.choices:
                             one_line = f'"{filed_one[0]}":"{filed_one[1]}"'
                             filed_choices_list.append(one_line)
-                        if filed.blank == True:
+                        if filed.blank:
                             one_c = """{
                             %s
                                                                        title: '%s',
@@ -168,7 +157,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                           ],
                                         },""" % (default_replace, ver_name, name, ver_name)
                     else:
-                        if filed.blank == True:
+                        if filed.blank:
                             one_c = """{
                             %s
                               title: '%s',
@@ -233,7 +222,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     date_field_list.append('"' + name + '"')
                     date_row_list.append(f'record.{name} = moment(record.{name});')
                 elif isinstance(filed, DateField):
-                    if filed.auto_now == True:
+                    if filed.auto_now:
                         pass
                     one_c = """{
                          title: '%s',
@@ -256,7 +245,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                             default_replace = f' initialValue: false,'
                     else:
                         default_replace = ""
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                         %s
                                                           title: '%s',
@@ -302,7 +291,10 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                 },""" % (default_replace, ver_name, name, ver_name, name, name, name)
                 elif isinstance(filed, IntegerField) or isinstance(filed, FloatField):
                     if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: {filed.default},'
+                        if filed.default:
+                            default_replace = f' initialValue: {filed.default},'
+                        else:
+                            default_replace = ""
                     else:
                         default_replace = ""
                     if filed.choices:
@@ -310,7 +302,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                         for filed_one in filed.choices:
                             one_line = f'{filed_one[0]}:"{filed_one[1]}"'
                             filed_choices_list.append(one_line)
-                            if filed.blank == True:
+                            if filed.blank:
                                 one_c = """{
                                 %s
                                           title: '%s',
@@ -338,7 +330,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                         },""" % (default_replace, ver_name, name, ver_name)
                             one_c = one_c.replace("$valueEnum$", ",".join(filed_choices_list))
                     else:
-                        if filed.blank == True:
+                        if filed.blank:
                             one_c = """{
                              %s
                                       title: '%s',
@@ -365,7 +357,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     help_text = filed.help_text
 
                     if help_text == MAIN_AVATAR:
-                        if filed.blank == True:
+                        if filed.blank:
                             one_c = """{
                                                 title: '%s',
                                                 dataIndex: '%s',
@@ -396,7 +388,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
         },
                           },""" % (ver_name, name, ver_name, name)
                     else:
-                        if filed.blank == True:
+                        if filed.blank:
                             one_c = """{
                                                 title: '%s',
                                                 dataIndex: '%s',
@@ -432,7 +424,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                           },""" % (ver_name, name, ver_name, name)
                 elif isinstance(filed, FileField):
                     img_field_list.append('"' + name + '"')
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                                                             title: '%s',
                                                             dataIndex: '%s',
@@ -471,7 +463,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                         default_replace = f' initialValue: "{filed.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                         %s
                                                           title: '%s',
@@ -500,7 +492,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                         default_replace = f' initialValue: "{filed.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                         %s
                                                           title: '%s',
@@ -530,13 +522,13 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                       renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
           return richForm(form, rest.id);
         },
-                                },""" % (default_replace, ver_name, name, ver_name)
+                                },""" % (default_replace, ver_name, name)
                 else:
                     if filed.default != NOT_PROVIDED:
                         default_replace = f' initialValue: "{filed.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank == True:
+                    if filed.blank:
                         one_c = """{
                         %s
                           title: '%s',
@@ -567,66 +559,28 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     continue
                 else:
                     name = filed.name
-                    ver_name = filed.verbose_name
                     rela_model = filed.related_model._meta.object_name
-                    print("&&&"*30)
+                    print("&&&" * 30)
                     print(one._meta.app_label, name)
-                    print("&&&"*30)
-                    if one._meta.app_label == "auth" and name == "permissions":
-                        help_text = "name"
-                    elif one._meta.app_label == user._meta.app_label and name == "groups":
-                        help_text = "name"
-                    elif one._meta.app_label == user._meta.app_label and name == "user_permissions":
-                        help_text = "name"
-                    else:
-                        if MAIN_DISPLAY in filed.help_text:
-                            help_text = filed.help_text.replace(MAIN_DISPLAY + "__", "")
+                    print("&&&" * 30)
+                    if filed.blank:
+                        if filed.name == "permissions" and one._meta.app_label == "auth" and rela_model == "Group":
+                            width_help = "      width: '75%',"
                         else:
-                            try:
-                                help_text = settings.ADMIN_ADAPTER[one._meta.app_label][one.objects.model._meta.object_name][filed.name]
-                            except KeyError:
-                                raise ValueError(f"当前app: {one._meta.app_label}中 Model: {one.objects.model._meta.object_name} 多对多字段未进行指定！请根据文档进行指定！\n如果是第三方App，请在Settings.py中根据文档规则指定！")
-                    if filed.blank == True:
+                            width_help = ""
                         one_c = """{
                       title: '%s',
                       dataIndex: '%s',
+                      %s
                       rules: [
                       ],
-                      renderFormItem: (item, {value, onChange}) => {
-              const children = %sManyToManyList.map(item => {
-                return (
-                  <Option key={item.id} value={item.id}>
-                    {item.%s}
-                  </Option>
-                );
-              });
-              return (
-                <Select mode="multiple" placeholder="请选择%s" onChange={onChange}>
-                  {children}
-                </Select>
-              );
+                      renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+                  return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
             },
                 render: (text, record) => {
-              const color_arr = [
-                'green',
-                'cyan',
-                'blue',
-                'geekblue',
-                'purple',
-                'magenta',
-                'red',
-                'volcano',
-                'orange',
-                'gold',
-                'lime',
-              ];
-              const child = [];
-              text.forEach((value, index, arr) => {
-                child.push(<Tag color={color_arr[value $百分$ 10]}>{%sManyToManyMap[value]}</Tag>);
-              });
-              return <Space>{child}</Space>;
+                    return renderManyToMany(text)
             },
-                    },""" % (ver_name, name, name, help_text, ver_name, name)
+                    },""" % (ver_name, name, width_help, name,)
                     else:
                         one_c = """{
                                              title: '%s',
@@ -638,59 +592,24 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                                },
                                              ],
                                              renderFormItem: (item, {value, onChange}) => {
-                                     const children = %sManyToManyList.map(item => {
-                                       return (
-                                         <Option key={item.id} value={item.id}>
-                                           {item.%s}
-                                         </Option>
-                                       );
-                                     });
-                                     return (
-                                       <Select mode="multiple" placeholder="请选择%s" onChange={onChange}>
-                                         {children}
-                                       </Select>
-                                     );
+                                          return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
                                    },
                                        render: (text, record) => {
-                                     const color_arr = [
-                                       'green',
-                                       'cyan',
-                                       'blue',
-                                       'geekblue',
-                                       'purple',
-                                       'magenta',
-                                       'red',
-                                       'volcano',
-                                       'orange',
-                                       'gold',
-                                       'lime',
-                                     ];
-                                     const child = [];
-                                     text.forEach((value, index, arr) => {
-                                       child.push(<Tag color={color_arr[value $百分$ 10]}>{%sManyToManyMap[value]}</Tag>);
-                                     });
-                                     return <Space>{child}</Space>;
+                                          return renderManyToMany(text)
                                    },
-                                           },""" % (ver_name, name, ver_name, name, help_text, ver_name, name)
+                                           },""" % (ver_name, name, ver_name, name)
                     one_c = one_c.replace("$百分$", "%")
                     model_many_to_many_item = """const [$模型名字$ManyToManyList, set$模型名字首字母大写$ManyToManyList] = useState([]);
-                      const [$模型名字$ManyToManyMap, set$模型名字首字母大写$ManyToManyMap] = useState([]);
                     useEffect(() => {
-                      query$关联Model$().then(value => {
-                        set$模型名字首字母大写$ManyToManyList(value.data);
-                        let get$模型名字首字母大写$ManyToManyMap = {};
-              for (let index in value.data) {
-                let item = value.data[index];
-                get$模型名字首字母大写$ManyToManyMap[item.id.toString()] = item.$关联字段$;
-              }
-              set$模型名字首字母大写$ManyToManyMap(get$模型名字首字母大写$ManyToManyMap);
+                      query$关联Model$({all:1}).then(value => {
+                        set$模型名字首字母大写$ManyToManyList(value);
                       });
                     }, []);""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]) \
-                        .replace("$关联Model$", rela_model).replace("$关联字段$", help_text)
+                        .replace("$关联Model$", rela_model)
                     model_many_to_many_list.append(model_many_to_many_item)
                     model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
                                                                                                                                 rela_model)
-                    if model_import_item not in model_import_item_list and model_name !=rela_model:
+                    if model_import_item not in model_import_item_list and model_name != rela_model:
                         model_import_item_list.append(model_import_item)
                     columns.append(one_c)
             if one._meta.app_label == user._meta.app_label:
@@ -786,9 +705,11 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 new_content = new_content.replace("$多对多占位$", "".join(model_many_to_many_list))
                 new_content = new_content.replace("$import占位$", "".join(model_import_item_list))
                 new_content = new_content.replace("$时间占位$", ",".join(model_date_dict[model_name]))
-                if one._meta.app_label == user._meta.app_label:
+                if one._meta.app_label == user._meta.app_label and model_name == user._meta.object_name:
+                    print("生成密码", one._meta.app_label, model_name)
                     new_content = new_content.replace("$passwordform引入$", """import UpdatePasswordForm from './components/UpdatePasswordForm';""")
-                    new_content = new_content.replace("$Password占位$", 'const [updatePassWordModalVisible, handleUpdatePassWordModalVisible] = useState(false);\nconst [updatePasswordForm] = Form.useForm();')
+                    new_content = new_content.replace("$Password占位$",
+                                                      'const [updatePassWordModalVisible, handleUpdatePassWordModalVisible] = useState(false);\nconst [updatePasswordForm] = Form.useForm();')
                     new_content = new_content.replace("$更新密码方法占位$", """  const handlePassWordUpdate = () => {
     if (updatePasswordForm.getFieldValue('password') !== updatePasswordForm.getFieldValue('re_password')) {
       updatePasswordForm.setFields([{
@@ -861,10 +782,10 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                       </UpdatePasswordForm>
                     }""")
                 else:
-                    new_content = new_content.replace("$passwordform引入$","")
-                    new_content = new_content.replace("$Password占位$",'')
-                    new_content = new_content.replace("$更新密码方法占位$",'')
-                    new_content = new_content.replace("$Password更新Form$",'')
+                    new_content = new_content.replace("$passwordform引入$", "")
+                    new_content = new_content.replace("$Password占位$", '')
+                    new_content = new_content.replace("$更新密码方法占位$", '')
+                    new_content = new_content.replace("$Password更新Form$", '')
 
             if len(model_pic_dict[model_name]) > 0:
                 with open(f'{dest_path}/service_img.js') as fr:
@@ -887,21 +808,21 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
 }
                         """)
                     else:
-                        new_services = new_services.replace("$更新密码service占位$","")
+                        new_services = new_services.replace("$更新密码service占位$", "")
             with open(f'{dest_path}/components/CreateForm.jsx') as fr:
                 create_form = fr.read()
                 create_form = create_form.replace("$占位模型显示名$", str(model_ver_name))
                 if fileds_num > 8:
                     create_form = create_form.replace("$宽度占位$", 'width={1200}')
                 else:
-                    create_form = create_form.replace("$宽度占位$", "width={600}")
+                    create_form = create_form.replace("$宽度占位$", "width={800}")
             with open(f'{dest_path}/components/UpdateForm.jsx') as fr:
                 update_form = fr.read()
                 update_form = update_form.replace("$占位模型显示名$", str(model_ver_name))
                 if fileds_num > 8:
                     update_form = update_form.replace("$宽度占位$", 'width={1200}')
                 else:
-                    update_form = update_form.replace("$宽度占位$", "width={600}")
+                    update_form = update_form.replace("$宽度占位$", "width={800}")
 
             with open(f'{dest_path}/components/UpdatePasswordForm.jsx') as fr:
                 change_password_form = fr.read()
@@ -927,7 +848,6 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
 
 
 if __name__ == '__main__':
-    settings_name = input("请输入项目settings位置:")
-    user_label_list = input('请输入要生成的app列表用逗号分割，如: "article","users"')
-    user_label_list = user_label_list.split(",")
-    gen_antd_pages(settings_name, user_label_list)
+    # settings_name = input("请输入项目settings位置:")
+    name = "skyoms.settings"
+    gen_antd_pages(name, None)

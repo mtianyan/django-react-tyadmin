@@ -14,7 +14,10 @@ class Command(BaseCommand):
 
     # 接收参数
     def add_arguments(self, parser):
-        parser.add_argument('--models',required=True, default="", type=str, help='请输入要生成的app列表用逗号分割，如: "article","users"')
+        parser.add_argument(
+            'args', metavar='app_label', nargs='*',
+            help='Specify the app label(s) to create migrations for.',
+        )
 
     def handle(self, *args, **options):
         try:
@@ -22,9 +25,14 @@ class Command(BaseCommand):
         except KeyError:
             raise ValueError("请设置settings")
         try:
-            models_list = options['models']
+            all_apps_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
         except KeyError:
-            raise ValueError("请设置models列表")
-        models_list = models_list.split(",")
-        gen_all(setting_value, models_list)
-
+            raise ValueError("请按照文档设置TY_ADMIN_CONFIG-GEN_APPS")
+        if len(args) > 0:
+            apps_list = list(args)
+            for one in all_apps_list:
+                if one not in all_apps_list:
+                    raise ValueError("输入的app，不在GEN_APPS列表中")
+        else:
+            apps_list = all_apps_list
+        gen_all(setting_value, apps_list)

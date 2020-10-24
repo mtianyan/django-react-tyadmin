@@ -1,16 +1,18 @@
 import os
 
-
+from django.conf import settings
 from django.db.models import DateTimeField, ForeignKey, ImageField, FileField
 
-from tyadmin_api_cli.contants import MAIN_DISPLAY,SYS_LABELS
+from tyadmin_api_cli.contants import MAIN_DISPLAY, SYS_LABELS
 from tyadmin_api_cli.utils import init_django_env
 
 
-def gen_filter(project_name_settings,user_label_list):
+def gen_filter(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
+    if not user_label_list:
+        user_label_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
     model_list = []
     model_pic_dict = {}
     model_fk_dict = {}
@@ -42,16 +44,15 @@ def gen_filter(project_name_settings,user_label_list):
                     fk_field_list.append(name + "$分割$" + help_text)
                 if isinstance(filed, DateTimeField):
                     date_field_list.append(name)
+                if filed.__class__.__name__ == "TimeZoneField":
+                    img_field_list.append('"' + name + '"')
             model_pic_dict[model_name] = img_field_list
             model_fk_dict[model_name] = fk_field_list
             model_date_dict[model_name] = date_field_list
             model_list.append(model_name)
-    app_name = "tyadmin_api"
-    filters_txt = f"""
-from django_filters import rest_framework as filters
+    filters_txt = f"""from django_filters import rest_framework as filters
 from tyadmin_api.custom import DateFromToRangeFilter
-$model_import占位$
-        """
+$model_import占位$"""
     model_import_rows = []
     for app, m_list in app_model_import_dict.items():
         if app in ["auth", "contenttypes"]:
@@ -59,6 +60,7 @@ $model_import占位$
         else:
             txt = f'from {app}.models import {", ".join(m_list)}\n'
         model_import_rows.append(txt)
+    model_import_rows = model_import_rows[:-1] + [model_import_rows[-1].replace("\n", "")]
     filters_txt = filters_txt.replace("$model_import占位$", "".join(model_import_rows))
     for (model, img_field_l), (model_2, fk_field_l), (model_3, date_field_l) in zip(model_pic_dict.items(), model_fk_dict.items(),
                                                                                     model_date_dict.items()):
@@ -73,12 +75,12 @@ $model_import占位$
             date_range_p.append(date_one_line)
         filters_txt += f"""
 
+
 class {model}Filter(filters.FilterSet):
 {"".join(fk_display_p)}{"".join(date_range_p)}
     class Meta:
         model = {model}
-        exclude = [{",".join(img_field_l)}]
-    """
+        exclude = [{",".join(img_field_l)}]"""
 
     # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_filters.py'):
     #     print("已存在filters.py跳过")
@@ -89,4 +91,4 @@ class {model}Filter(filters.FilterSet):
 
 if __name__ == '__main__':
     name = input("请输入项目settings位置:")
-    gen_filter(name)
+    gen_filter(name, None)

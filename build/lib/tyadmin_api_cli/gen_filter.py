@@ -3,11 +3,11 @@ import os
 
 from django.db.models import DateTimeField, ForeignKey, ImageField, FileField
 
-from tyadmin_api_cli.contants import MAIN_DISPLAY
+from tyadmin_api_cli.contants import MAIN_DISPLAY,SYS_LABELS
 from tyadmin_api_cli.utils import init_django_env
 
 
-def gen_filter(project_name_settings):
+def gen_filter(project_name_settings,user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
@@ -16,13 +16,13 @@ def gen_filter(project_name_settings):
     model_fk_dict = {}
     model_date_dict = {}
     app_model_import_dict = {}
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
+    gen_labels = SYS_LABELS + user_label_list
     for one in django.apps.apps.get_models():
         columns = []
         model_name = one._meta.model.__name__
         model_ver_name = one._meta.verbose_name
         app_label = one._meta.app_label
-        if app_label not in sys_label:
+        if app_label in gen_labels:
             try:
                 app_model_import_dict[app_label].append(model_name)
             except KeyError:
@@ -54,7 +54,10 @@ $model_import占位$
         """
     model_import_rows = []
     for app, m_list in app_model_import_dict.items():
-        txt = f'from {app}.models import {", ".join(m_list)}\n'
+        if app in ["auth", "contenttypes"]:
+            txt = f'from django.contrib.{app}.models import {", ".join(m_list)}\n'
+        else:
+            txt = f'from {app}.models import {", ".join(m_list)}\n'
         model_import_rows.append(txt)
     filters_txt = filters_txt.replace("$model_import占位$", "".join(model_import_rows))
     for (model, img_field_l), (model_2, fk_field_l), (model_3, date_field_l) in zip(model_pic_dict.items(), model_fk_dict.items(),

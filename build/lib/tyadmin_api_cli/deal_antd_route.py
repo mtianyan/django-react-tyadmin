@@ -1,15 +1,16 @@
 
 from tyadmin_api_cli.utils import get_lower_case_name, init_django_env
+from tyadmin_api_cli.contants import SYS_LABELS
 
-
-def gen_route(project_name_settings):
+def gen_route(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
     from django.conf import settings
     path_list = []
-    sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
+    gen_labels = SYS_LABELS + user_label_list
+    gen_labels = [one for one in gen_labels if one != "contenttypes"]
     for one in django.apps.apps.get_models():
-        if one._meta.app_label not in sys_label:
+        if one._meta.app_label in gen_labels:
             url = "/xadmin/" + get_lower_case_name(one._meta.model.__name__)
             one = "{" + f"""
                       name: '{one._meta.verbose_name}',

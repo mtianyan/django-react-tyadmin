@@ -5,8 +5,10 @@ from django.core.files.images import ImageFile
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.fields.files import ImageFieldFile, FieldFile
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework.response import Response
@@ -68,6 +70,14 @@ class XadminViewSet(MtyModelViewSet):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
     filter_backends = (DjangoFilterBackend, SearchFilter)
 
+    def get_exception_handler(self):
+        return custom_exception_handler
+
+    def list(self, request, *args, **kwargs):
+        if "all" in request.query_params:
+            self.pagination_class = None
+        return super().list(request, args, kwargs)
+
     def create(self, request, *args, **kwargs):
         ret = super().create(request, args, kwargs)
         log_save(user=request.user.username, request=self.request, flag="新增",
@@ -128,6 +138,19 @@ class XadminViewSet(MtyModelViewSet):
         return Response({
             "code": 200
         })
+
+    @action(methods=['get'], detail=False, url_path="verbose_name/?")
+    def verbose_name(self, request, pk=None):
+        field_list = self.serializer_class.Meta.model._meta.get_fields()
+        ret = {}
+        for one_field in field_list:
+            key = one_field.name
+            if "verbose_name" in dir(one_field):
+                value = one_field.verbose_name
+            else:
+                value = key
+            ret[key] = value
+        return JsonResponse(ret)
 
 
 class DateRangeWidget(RangeWidget):

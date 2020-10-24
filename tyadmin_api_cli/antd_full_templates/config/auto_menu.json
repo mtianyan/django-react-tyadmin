@@ -76,6 +76,36 @@
                       icon: 'smile',
                       path: '/xadmin/host_group',
                       component: './AutoGenPage/HostGroupList',
+                   },{
+                      name: 'solar event',
+                      icon: 'smile',
+                      path: '/xadmin/solar_schedule',
+                      component: './AutoGenPage/SolarScheduleList',
+                   },{
+                      name: 'interval',
+                      icon: 'smile',
+                      path: '/xadmin/interval_schedule',
+                      component: './AutoGenPage/IntervalScheduleList',
+                   },{
+                      name: 'clocked',
+                      icon: 'smile',
+                      path: '/xadmin/clocked_schedule',
+                      component: './AutoGenPage/ClockedScheduleList',
+                   },{
+                      name: 'crontab',
+                      icon: 'smile',
+                      path: '/xadmin/crontab_schedule',
+                      component: './AutoGenPage/CrontabScheduleList',
+                   },{
+                      name: 'periodic tasks',
+                      icon: 'smile',
+                      path: '/xadmin/periodic_tasks',
+                      component: './AutoGenPage/PeriodicTasksList',
+                   },{
+                      name: 'periodic task',
+                      icon: 'smile',
+                      path: '/xadmin/periodic_task',
+                      component: './AutoGenPage/PeriodicTaskList',
                    }
    ,{
     name: 'Tyadmin内置',

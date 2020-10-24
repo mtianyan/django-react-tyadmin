@@ -6,18 +6,18 @@ from tyadmin_api_cli.deal_antd_pages import gen_antd_pages
 from tyadmin_api_cli.deal_antd_route import gen_route
 
 
-def gen_all(project_name_settings):
-    gen_url(project_name_settings)
+def gen_all(project_name_settings, models_list):
+    gen_url(project_name_settings, models_list)
     print("*" * 20, "已自动生成urls", "*" * 20)
-    gen_view(project_name_settings)
+    gen_view(project_name_settings, models_list)
     print("*" * 20, "已自动生成views", "*" * 20)
-    gen_serializer(project_name_settings)
+    gen_serializer(project_name_settings, models_list)
     print("*" * 20, "已自动生成serializers", "*" * 20)
-    gen_filter(project_name_settings)
+    gen_filter(project_name_settings, models_list)
     print("*" * 20, "已自动生成filters", "*" * 20)
-    gen_antd_pages(project_name_settings)
+    gen_antd_pages(project_name_settings, models_list)
     print("*" * 20, "已自动生成antd pages", "*" * 20)
-    gen_route(project_name_settings)
+    gen_route(project_name_settings, models_list)
     print("*" * 20, "已自动生成antd router", "*" * 20)
 
 

@@ -18,3 +18,10 @@ export async function getCode() {
     },
   );
 }
+export async function Logout() {
+  return request(
+    '/api/xadmin/v1/logout', {
+      method: 'GET'
+    }
+  );
+}

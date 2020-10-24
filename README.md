@@ -44,7 +44,13 @@ pip install tyadmin-api-cli
 INSTALLED_APPS = [
     'tyadmin_api_cli',
 ]
+
+TY_ADMIN_CONFIG = {
+    'GEN_APPS': ['users', 'article']
+}
 ```
+
+填写你想要生成的app列表。
 
 ### 4. 初始化 后端app 及 前端项目 并 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
 

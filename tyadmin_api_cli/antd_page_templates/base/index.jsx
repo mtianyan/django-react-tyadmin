@@ -1,18 +1,18 @@
-import {DownOutlined, PlusOutlined, EditOutlined,DeleteOutlined} from '@ant-design/icons';
-import {Button, Divider, Dropdown, Input, Menu, message, Popconfirm, Select, Switch, Tag, Space, Form} from 'antd';
+import {DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
+import {notification, Button, Col, Descriptions, Divider, Dropdown, Form, Input, Menu, message, Popconfirm, Popover, Row, Select, Tag, Transfer,Switch} from 'antd';
 import React, {useEffect,useRef, useState} from 'react';
 import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
-import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, update$占位模型名$} from './service';
+import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, update$占位模型名$,query$占位模型名$VerboseName} from './service';
 import UpdateForm from './components/UpdateForm';
 import UploadAvatar from '@/components/UploadAvatar';
 $import占位$
 $passwordform引入$
 import moment from 'moment';
 const {Option} = Select;
-import {BooleanDisplay, dealDateTimeDisplay, dealTime, deepCopy, getObjectClass, getTableColumns, richForm, richTrans, richCol,fileUpload} from '@/utils/utils';
+import { BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
 import 'braft-editor/dist/index.css'
 const FormItem = Form.Item;
 const TableList = () => {
@@ -34,17 +34,14 @@ const TableList = () => {
     return true;
   } catch (error) {
       if ('fields_errors' in error.data) {
-        for (let key in error.data.fields_errors) {
-          var value = error.data.fields_errors[key];
-          addFormRef.current.setFields([
-            {
-              name: key,
-              errors: value,
-            },
-          ]);
-        }
+           fieldsLevelErrorHandle(error.data, addFormRef)
+      }else if('non_field_errors' in error.data){
+notification.error({
+      message: '温馨提示',
+      description: `${error.data.non_field_errors}`,
+    });
       } else {
-        message.error('非字段类型错误');
+        message.error('未知错误');
       }
     hide();
     message.error('添加失败');
@@ -62,15 +59,7 @@ const TableList = () => {
     return true;
   } catch (error) {
             if ('fields_errors' in error.data) {
-        for (let key in error.data.fields_errors) {
-          var value = error.data.fields_errors[key];
-          updateFormRef.current.setFields([
-            {
-              name: key,
-              errors: value,
-            },
-          ]);
-        }
+                                    fieldsLevelErrorHandle(error.data,updateFormRef)
       } else {
         message.error('非字段类型错误');
       }
@@ -199,7 +188,7 @@ const TableList = () => {
           $两列布局占位$
           form={
             {
-              labelCol: {span: 6},
+              labelCol: {span: 3},
               labelAlign: 'left',
             }}
           columns={create_columns}
@@ -225,7 +214,7 @@ const TableList = () => {
           $两列布局占位$
           type="form"
           form={{
-            initialValues: updateFormValues, labelCol: {span: 6},
+            initialValues: updateFormValues, labelCol: {span: 3},
             labelAlign: 'left',
           }}
           columns={update_columns}
