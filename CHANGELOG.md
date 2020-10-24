@@ -8,6 +8,7 @@
 - 外键field 下拉框添加搜索
 - settings.py 提供GEN_APPS变量指明要生成哪几个app
 - 移除--models，可直接python manage.py gen_all user app_2,统一使用体验
+- 外键右侧小图标可弹窗显示外键表完整数据
 
 #### Bug Fixes
 - Fixed 退出登录问题
