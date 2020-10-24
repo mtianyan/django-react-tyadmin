@@ -1,1 +1,0 @@
-tyadmin_api_cli
