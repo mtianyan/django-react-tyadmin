@@ -1,3 +1,9 @@
+## v0.6.0 (2020-10-26)
+
+#### Bug Fixes
+- Fixed 富文本前端import异常
+- Fixed manytomany create form data 类型异常
+
 ## v0.5.0 (2020-10-25)
 
 #### Features / Enhancement

@@ -7,7 +7,7 @@ from django.db.models import QuerySet, ManyToManyRel
 from django.db.models.fields.files import ImageFieldFile, FieldFile
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView, get_object_or_404
@@ -82,13 +82,28 @@ class XadminViewSet(MtyModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            ret = super().create(request, args, kwargs)
+            data = deepcopy(request.data)
+            del_dict = {}
+            for key, value in request.data.items():
+                print(getattr(self.serializer_class.Meta.model, key).__class__.__name__)
+                print(value)
+                print(type(value))
+                if getattr(self.serializer_class.Meta.model, key).__class__.__name__ == "ManyToManyDescriptor" and isinstance(value, str):
+                    del_dict[key] = eval(value)
+                    del data[key]
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            for key, value in del_dict.items():
+                serializer.validated_data[key] = value
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            ret = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            log_save(user=request.user.username, request=self.request, flag="新增",
+                     message=f'{self.serializer_class.Meta.model._meta.verbose_name}: {ret.data.__str__()}被新增',
+                     log_type=self.serializer_class.Meta.model._meta.model_name)
+            return ret
         except DjangoValidationError as e:
             raise ValidationError(e.error_dict)
-        log_save(user=request.user.username, request=self.request, flag="新增",
-                 message=f'{self.serializer_class.Meta.model._meta.verbose_name}: {ret.data.__str__()}被新增',
-                 log_type=self.serializer_class.Meta.model._meta.model_name)
-        return ret
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
