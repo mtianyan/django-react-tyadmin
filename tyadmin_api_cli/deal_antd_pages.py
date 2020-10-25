@@ -552,6 +552,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                                         },""" % (default_replace, ver_name, name)
                     else:
                         one_c = """{
+                                                %s
                                   title: '%s',
                                   dataIndex: '%s',
                                       customCol:richCol,
@@ -566,7 +567,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                       renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
           return richForm(form, rest.id);
         },
-                                },""" % (default_replace, ver_name, name)
+                                },""" % (default_replace, ver_name, name, ver_name)
                 elif filed.__class__.__name__ == "TimeZoneField":
                     if filed.default != NOT_PROVIDED:
                         if filed.default is not None:
