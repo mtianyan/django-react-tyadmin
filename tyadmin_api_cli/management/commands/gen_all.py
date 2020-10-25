@@ -26,7 +26,7 @@ class Command(BaseCommand):
             raise ValueError("请设置settings")
         try:
             all_apps_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
-        except KeyError:
+        except AttributeError:
             raise ValueError("请按照文档设置TY_ADMIN_CONFIG-GEN_APPS")
         if len(args) > 0:
             apps_list = list(args)

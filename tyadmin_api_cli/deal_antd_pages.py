@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, CharField, DateTimeField, DateField, BooleanField, IntegerField, FloatField, FileField, ImageField
 from django.db.models.fields import NOT_PROVIDED
 
-from tyadmin_api.adapters import ADAPTER_DICT
-from tyadmin_api.adapters.field_adapter import FIELD_ADAPTER
+from tyadmin_api_cli.adapters import ADAPTER_DICT
+from tyadmin_api_cli.adapters.field_adapter import FIELD_ADAPTER
 from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC, SYS_LABELS
 from tyadmin_api_cli.fileds import richTextField, SImageField
 from tyadmin_api_cli.utils import init_django_env, get_lower_case_name, trans, contain_zh

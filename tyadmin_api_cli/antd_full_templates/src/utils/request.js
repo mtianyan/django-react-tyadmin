@@ -28,25 +28,28 @@ const codeMessage = {
 
 const errorHandler = error => {
   const {response, data} = error;
+  console.log(response);
+  console.log(data);
+  console.log('errorHandler');
+  console.log(response.status);
   if (response.status === 500) {
     notification.error({
       message: '温馨提示',
       description: `服务器发生异常，请重试`,
     });
   }
-  else if (response.status === 403 && data instanceof Object && 'none_fields_errors' in data) {
-    console.log("请登录，cookie可能已过期，或还未登录")
-    // notification.error({
-    //   message: '温馨提示',
-    //   description: `身份认证过期，请重新登录！`,
-    // });
+  if (data && data instanceof Object && 'none_fields_errors' in data) {
+    notification.error({
+      message: '温馨提示',
+      description: `${data.none_fields_errors}`,
+    });
   }
 
-  else if (data && data instanceof Object && 'fields_errors' in data) {
+  if (data && data instanceof Object && 'fields_errors' in data) {
     throw error;
   }
 
-  else if (response) {
+  if (response) {
     const errorText = codeMessage[response.status] || response.statusText;
     const {status, url} = response;
     notification.error({

@@ -77,12 +77,12 @@
                       path: '/xadmin/host_group',
                       component: './AutoGenPage/HostGroupList',
                    },{
-                      name: '日程事件',
+                      name: 'solar event',
                       icon: 'smile',
                       path: '/xadmin/solar_schedule',
                       component: './AutoGenPage/SolarScheduleList',
                    },{
-                      name: '间隔',
+                      name: 'interval',
                       icon: 'smile',
                       path: '/xadmin/interval_schedule',
                       component: './AutoGenPage/IntervalScheduleList',
@@ -92,17 +92,17 @@
                       path: '/xadmin/clocked_schedule',
                       component: './AutoGenPage/ClockedScheduleList',
                    },{
-                      name: '计划任务',
+                      name: 'crontab',
                       icon: 'smile',
                       path: '/xadmin/crontab_schedule',
                       component: './AutoGenPage/CrontabScheduleList',
                    },{
-                      name: '周期性任务',
+                      name: 'periodic tasks',
                       icon: 'smile',
                       path: '/xadmin/periodic_tasks',
                       component: './AutoGenPage/PeriodicTasksList',
                    },{
-                      name: '周期性任务',
+                      name: 'periodic task',
                       icon: 'smile',
                       path: '/xadmin/periodic_task',
                       component: './AutoGenPage/PeriodicTaskList',
