@@ -76,7 +76,7 @@ class XadminViewSet(MtyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         api_settings.DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-        if "all" in request.query_params:
+        if "all" in request.query_params and len(request.query_params.keys()) == 1:
             self.pagination_class = None
         return super().list(request, args, kwargs)
 
