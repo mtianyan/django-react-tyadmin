@@ -785,17 +785,7 @@ export const  exportExcelAll = async (params, queryRule, columns, excel_name) =>
                     }else {
                         // result[c.dataIndex] = JSON.stringify(item[c.dataIndex]);
                         let value = item[c.dataIndex];
-                        if(value == null){
-                            value = ""
-                        }
-                        else if(value instanceof Array){
-                            let txt_list = []
-                            for (let i = 0; i < value.length; i++) {
-                                txt_list.push(value[i].ty_options_display_txt)
-                            }
-                            value = txt_list.join(",")
-                        }
-                        else if(typeof item[c.dataIndex] === "object"){
+                        if(typeof item[c.dataIndex] === "object"){
                             value = item[c.dataIndex].ty_options_display_txt
                         }
                         result[c.dataIndex] = value;
@@ -827,14 +817,7 @@ export const  exportExcelCurrent = (selectedRows, columns, excel_name) => {
                     }else {
                         // result[c.dataIndex] = JSON.stringify(item[c.dataIndex]);
                         let value = item[c.dataIndex];
-                        if(value instanceof Array){
-                            let txt_list = []
-                            for (let i = 0; i < value.length; i++) {
-                                txt_list.push(value[i].ty_options_display_txt)
-                            }
-                            value = txt_list.join(",")
-                        }
-                        else if(typeof item[c.dataIndex] === "object"){
+                        if(typeof item[c.dataIndex] === "object"){
                             value = item[c.dataIndex].ty_options_display_txt
                         }
                         result[c.dataIndex] = value;
