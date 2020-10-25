@@ -1,5 +1,5 @@
 
-from tyadmin_api_cli.utils import get_lower_case_name, init_django_env
+from tyadmin_api_cli.utils import get_lower_case_name, init_django_env, trans
 from tyadmin_api_cli.contants import SYS_LABELS
 
 def gen_route(project_name_settings, user_label_list):
@@ -13,9 +13,10 @@ def gen_route(project_name_settings, user_label_list):
     gen_labels = [one for one in gen_labels if one != "contenttypes"]
     for one in django.apps.apps.get_models():
         if one._meta.app_label in gen_labels:
+            model_name = trans(one._meta.verbose_name)
             url = "/xadmin/" + get_lower_case_name(one._meta.model.__name__)
             one = "{" + f"""
-                      name: '{one._meta.verbose_name}',
+                      name: '{model_name}',
                       icon: 'smile',
                       path: '{url}',
                       component: './AutoGenPage/{one._meta.model.__name__}List',

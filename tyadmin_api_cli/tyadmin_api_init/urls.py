@@ -1,6 +1,7 @@
 from django.urls import re_path, include, path
 from rest_framework.routers import DefaultRouter
 
+from tyadmin_api.adapters.django_celery_beat_ty_admin import PeriodicTask_task
 from tyadmin_api.views import LoginView, CurrentUserView, CaptchaView, UserSendCaptchaView, DashBoardView, UploadView, MenuView, \
     UserChangePasswordView, UserListChangePasswordView, UserLogoutView
 from tyadmin_api.views import TyAdminSysLogViewSet, TyAdminEmailVerifyRecordViewSet
@@ -22,5 +23,6 @@ urlpatterns = [
     path('dashboard', DashBoardView.as_view(), name="dashboard"),
     path('change_password', UserChangePasswordView.as_view(), name="change_password"),
     path('list_change_password', UserListChangePasswordView.as_view(), name="list_change_password"),
+    path('adapters/periodic_task/task', PeriodicTask_task.as_view(), name="adapters/periodic_task/task"),
     path('', include('tyadmin_api.auto_url'))
 ]

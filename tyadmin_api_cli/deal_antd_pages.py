@@ -1,12 +1,42 @@
 import os
-
+from django.utils import translation
 from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, CharField, DateTimeField, DateField, BooleanField, IntegerField, FloatField, FileField, ImageField
 from django.db.models.fields import NOT_PROVIDED
+
+from tyadmin_api.adapters import ADAPTER_DICT
+from tyadmin_api.adapters.field_adapter import FIELD_ADAPTER
 from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC, SYS_LABELS
 from tyadmin_api_cli.fileds import richTextField, SImageField
-from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
+from tyadmin_api_cli.utils import init_django_env, get_lower_case_name, trans, contain_zh
 
+def services_adapter_priority(app_label, model_name, field_name):
+    try:
+        if "services" in FIELD_ADAPTER[app_label][model_name][field_name]:
+            return True
+    except KeyError:
+        return False
+
+def field_adapter_priority(app_label, model_name, field_name):
+    try:
+        if "field" in FIELD_ADAPTER[app_label][model_name][field_name]:
+            return True
+    except KeyError:
+        return False
+
+def import_adapter_priority(app_label, model_name, field_name):
+    try:
+        if "index_import" in FIELD_ADAPTER[app_label][model_name][field_name]:
+            return True
+    except KeyError:
+        return False
+
+def effect_state_adapter_priority(app_label, model_name, field_name):
+    try:
+        if "effect_state" in FIELD_ADAPTER[app_label][model_name][field_name]:
+            return True
+    except KeyError:
+        return False
 
 def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, template_type="base"):
     # focus_model = 'HistoricalNetworkDevice'
@@ -19,13 +49,14 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
     # focus_model = "CourseResource"
     model_pic_dict = {}
     model_date_dict = {}
+    model_service_dict = {}
     user = get_user_model()
+    from django.utils.translation import gettext as _
     model_list = django.apps.apps.get_models()
     for one in model_list:
         columns = []
         model_name = one._meta.model.__name__
-        print(model_name)
-        model_ver_name = one._meta.verbose_name_raw
+        model_ver_name = trans(one._meta.verbose_name_raw)
         # if(isinstance(model_ver_name,__proxy__)):
         if focus_model and model_name != focus_model:
             continue
@@ -38,13 +69,26 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
             model_add_item_list = []
             model_many_to_many_list = []
             model_import_item_list = []
+            model_service_item_list = []
             date_field_list = []
             fileds_num = len(one.objects.model._meta.fields)
 
             for filed in one.objects.model._meta.fields:
                 name = filed.name
-                ver_name = filed.verbose_name
-                if isinstance(filed, ForeignKey):
+                ver_name = trans(filed.verbose_name)
+                if not contain_zh(ver_name):
+                    ver_name = trans(filed.name)
+                print(ver_name)
+                if import_adapter_priority(one._meta.app_label,one._meta.model.__name__, name):
+                    model_import_item_list.append(FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["index_import"])
+                if effect_state_adapter_priority(one._meta.app_label,one._meta.model.__name__, name):
+                    model_add_item_list.append(FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["effect_state"])
+                if services_adapter_priority(one._meta.app_label, one._meta.model.__name__, name):
+                    model_service_item_list.append(FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["services"])
+                if field_adapter_priority(one._meta.app_label,one._meta.model.__name__, name):
+                    one_c = FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["field"]
+
+                elif isinstance(filed, ForeignKey):
                     rela_model = filed.related_model._meta.object_name
                     if filed.blank:
                         one_c = """{
@@ -356,7 +400,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     img_field_list.append('"' + name + '"')
                     help_text = filed.help_text
 
-                    if help_text == MAIN_AVATAR:
+                    if "头像" in filed.verbose_name or filed.name == "avatar" or help_text == MAIN_AVATAR:
                         if filed.blank:
                             one_c = """{
                                                 title: '%s',
@@ -523,6 +567,46 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
           return richForm(form, rest.id);
         },
                                 },""" % (default_replace, ver_name, name)
+                elif filed.__class__.__name__ == "TimeZoneField":
+                    if filed.default != NOT_PROVIDED:
+                        if filed.default is not None:
+                            default_replace = f' initialValue: "{filed.default}",'
+                        else:
+                            default_replace = ""
+                    else:
+                        default_replace = ""
+                    if filed.CHOICES:
+                        filed_choices_list = []
+                        for filed_one in filed.CHOICES:
+                            one_line = f'"{filed_one[0]}":"{filed_one[1]}"'
+                            filed_choices_list.append(one_line)
+                        if filed.blank:
+                            one_c = """{
+                            %s
+                                                                       title: '%s',
+                                                                       dataIndex: '%s',
+                                                                       rules: [
+                                                                       ],
+                                                                       valueEnum: {
+                                                                         $valueEnum$
+                                                                        },
+                                                                     },""" % (default_replace, ver_name, name)
+                        else:
+                            one_c = """{
+                            %s
+                                           title: '%s',
+                                           dataIndex: '%s',
+                                           rules: [
+                                             {
+                                               required: true,
+                                               message: '%s为必填项',
+                                             },
+                                           ],
+                                           valueEnum: {
+                                             $valueEnum$
+                                            },
+                                         },""" % (default_replace, ver_name, name, ver_name)
+                        one_c = one_c.replace("$valueEnum$", ",".join(filed_choices_list))
                 else:
                     if filed.default != NOT_PROVIDED:
                         default_replace = f' initialValue: "{filed.default}",'
@@ -552,9 +636,10 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 model_pic_dict[model_name] = img_field_list
                 model_date_dict[model_name] = date_field_list
                 columns.append(one_c)
-
+            model_service_dict[model_name] = model_service_item_list
             for filed in one.objects.model._meta.many_to_many:
                 black_many_to_many = []
+                ver_name = filed.verbose_name
                 if filed.name in black_many_to_many:
                     continue
                 else:
@@ -565,7 +650,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     print("&&&" * 30)
                     if filed.blank:
                         if filed.name == "permissions" and one._meta.app_label == "auth" and rela_model == "Group":
-                            width_help = "      width: '75%',"
+                            width_help = "      width: '70%',"
                         else:
                             width_help = ""
                         one_c = """{
@@ -591,7 +676,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                                                  message: '%s为必填项',
                                                },
                                              ],
-                                             renderFormItem: (item, {value, onChange}) => {
+                                             renderFormItem: (item, {value, onChange, type, defaultRender}) => {
                                           return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
                                    },
                                        render: (text, record) => {
@@ -612,7 +697,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     if model_import_item not in model_import_item_list and model_name != rela_model:
                         model_import_item_list.append(model_import_item)
                     columns.append(one_c)
-            if one._meta.app_label == user._meta.app_label:
+            if one._meta.app_label == user._meta.app_label and model_name == user._meta.object_name:
                 opera = """    {
                                               title: '操作',
                                               dataIndex: 'option',
@@ -707,7 +792,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 new_content = new_content.replace("$时间占位$", ",".join(model_date_dict[model_name]))
                 if one._meta.app_label == user._meta.app_label and model_name == user._meta.object_name:
                     print("生成密码", one._meta.app_label, model_name)
-                    new_content = new_content.replace("$passwordform引入$", """import UpdatePasswordForm from './components/UpdatePasswordForm';""")
+                    new_content = new_content.replace("$passwordform引入$", """import {updateUserPassword} from './service';\nimport UpdatePasswordForm from './components/UpdatePasswordForm';""")
                     new_content = new_content.replace("$Password占位$",
                                                       'const [updatePassWordModalVisible, handleUpdatePassWordModalVisible] = useState(false);\nconst [updatePasswordForm] = Form.useForm();')
                     new_content = new_content.replace("$更新密码方法占位$", """  const handlePassWordUpdate = () => {
@@ -728,7 +813,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
           );
         },
       );
-      form.submit;
+      updatePasswordForm.submit;
     }
   };""")
                     new_content = new_content.replace("$Password更新Form$", """      {
@@ -786,29 +871,23 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     new_content = new_content.replace("$Password占位$", '')
                     new_content = new_content.replace("$更新密码方法占位$", '')
                     new_content = new_content.replace("$Password更新Form$", '')
+            with open(f'{dest_path}/service.js') as fr:
+                content = fr.read()
 
-            if len(model_pic_dict[model_name]) > 0:
-                with open(f'{dest_path}/service_img.js') as fr:
-                    content = fr.read()
-                    new_services = content.replace("$占位path$", get_lower_case_name(model_name))
-                    new_services = new_services.replace("$占位模型名$", model_name)
-                    new_services = new_services.replace("$图片字段列表$", ",".join(model_pic_dict[model_name]))
-            else:
-                with open(f'{dest_path}/service.js') as fr:
-                    content = fr.read()
-                    new_services = content.replace("$占位path$", get_lower_case_name(model_name))
-                    new_services = new_services.replace("$占位模型名$", model_name)
-                    if one._meta.app_label == user._meta.app_label:
-                        new_services = new_services.replace("$更新密码service占位$", """
-                        export async function updateUserPassword(params) {
-  return request('/api/xadmin/v1/list_change_password', {
-    method: 'POST',
-    data: { ...params},
-  });
-}
-                        """)
-                    else:
-                        new_services = new_services.replace("$更新密码service占位$", "")
+                new_services = content.replace("$占位path$", get_lower_case_name(model_name))
+                new_services = new_services.replace("$占位模型名$", model_name)
+                new_services = new_services.replace("$图片字段列表$", ",".join(model_pic_dict[model_name]))
+                new_services = new_services.replace("$适配service占位$", "\n".join(model_service_dict[model_name]))
+                if one._meta.app_label == user._meta.app_label:
+                    new_services = new_services.replace("$更新密码service占位$", """
+export async function updateUserPassword(params) {
+    return request('/api/xadmin/v1/list_change_password', {
+     method: 'POST',
+     data: { ...params},
+});
+}""")
+                else:
+                    new_services = new_services.replace("$更新密码service占位$", "")
             with open(f'{dest_path}/components/CreateForm.jsx') as fr:
                 create_form = fr.read()
                 create_form = create_form.replace("$占位模型显示名$", str(model_ver_name))
@@ -823,7 +902,6 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     update_form = update_form.replace("$宽度占位$", 'width={1200}')
                 else:
                     update_form = update_form.replace("$宽度占位$", "width={800}")
-
             with open(f'{dest_path}/components/UpdatePasswordForm.jsx') as fr:
                 change_password_form = fr.read()
 

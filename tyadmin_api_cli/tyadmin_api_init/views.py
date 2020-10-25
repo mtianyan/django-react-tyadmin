@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from rest_framework.views import APIView
 
+from tyadmin_api_cli.contants import SYS_LABELS
 from tyadmin_api.custom import XadminViewSet, custom_exception_handler
 from tyadmin_api.filters import TyAdminSysLogFilter, TyAdminEmailVerifyRecordFilter
 from tyadmin_api.models import TyAdminSysLog, TyAdminEmailVerifyRecord
@@ -62,14 +63,6 @@ class RichUploadSerializer(serializers.Serializer):
 SysUser = get_user_model()
 
 
-class DashBoardView(views.APIView):
-    def get(self, request, *args, **kwargs):
-        data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/dashboard.json')
-        with open(data_json, encoding='utf-8') as fr:
-            content = fr.read()
-        return JsonResponse(json.loads(content))
-
-
 class MenuView(views.APIView):
     def get(self, request, *args, **kwargs):
         data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/menu.json')
@@ -85,12 +78,12 @@ class MenuView(views.APIView):
 
 class DashBoardView(views.APIView):
     def get(self, request, *args, **kwargs):
-        sys_label = ['admin', 'auth', 'contenttypes', 'sessions', 'captcha', 'xadmin', 'tyadmin_api', 'authtoken', 'social_django']
+        gen_label = SYS_LABELS + settings.TY_ADMIN_CONFIG["GEN_APPS"]
         count_dict = {}
         for one in django.apps.apps.get_models():
             app_label = one._meta.app_label
-            if app_label not in sys_label:
-                model_ver_name = one._meta.verbose_name
+            if app_label in gen_label:
+                model_ver_name = one._meta.verbose_name_raw
                 one_num = one.objects.all().count()
                 count_dict[model_ver_name] = one_num
         return JsonResponse({

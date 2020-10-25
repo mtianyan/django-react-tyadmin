@@ -1,18 +1,18 @@
-import {DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
+import {DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined, ExportOutlined} from '@ant-design/icons';
 import {notification, Button, Col, Descriptions, Divider, Dropdown, Form, Input, Menu, message, Popconfirm, Popover, Row, Select, Tag, Transfer,Switch} from 'antd';
 import React, {useEffect,useRef, useState} from 'react';
 import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
-import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, update$占位模型名$,query$占位模型名$VerboseName} from './service';
+import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, update$占位模型名$,query$占位模型名$VerboseName, query$占位模型名$ListDisplay, query$占位模型名$DisplayOrder} from './service';
 import UpdateForm from './components/UpdateForm';
 import UploadAvatar from '@/components/UploadAvatar';
 $import占位$
 $passwordform引入$
 import moment from 'moment';
 const {Option} = Select;
-import { BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
+import { dealPureSelectField, orderForm, exportExcelCurrent, exportExcelAll, getUpdateColumns, dealRemoveError, dealError, BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
 import 'braft-editor/dist/index.css'
 const FormItem = Form.Item;
 const TableList = () => {
@@ -33,19 +33,7 @@ const TableList = () => {
     message.success('添加成功');
     return true;
   } catch (error) {
-      if ('fields_errors' in error.data) {
-           fieldsLevelErrorHandle(error.data, addFormRef)
-      }else if('non_field_errors' in error.data){
-notification.error({
-      message: '温馨提示',
-      description: `${error.data.non_field_errors}`,
-    });
-      } else {
-        message.error('未知错误');
-      }
-    hide();
-    message.error('添加失败');
-    return false;
+            return dealError(error, addFormRef, hide, "添加");
   }
 };
 
@@ -58,14 +46,7 @@ notification.error({
     message.success('修改成功');
     return true;
   } catch (error) {
-            if ('fields_errors' in error.data) {
-                                    fieldsLevelErrorHandle(error.data,updateFormRef)
-      } else {
-        message.error('非字段类型错误');
-      }
-    hide();
-    message.error('修改失败请重试！');
-    return false;
+      return dealError(error, updateFormRef, hide, "修改");
   }
 };
 
@@ -80,9 +61,8 @@ notification.error({
     message.success('删除成功');
     return true;
   } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
+      hide()
+      return dealRemoveError(error, "删除");
   }
 };
   $更新密码方法占位$
@@ -90,15 +70,32 @@ notification.error({
   const base_columns = [$占位列数据$];
 
   let cp = deepCopy(base_columns);
+
+  const [formOrder, setFormOrder] = useState([]);
+
+  useEffect(()=>{
+    query$占位模型名$DisplayOrder().then(r => {
+      setFormOrder(r.form_order)
+    })
+  }, [])
   const table_columns = getTableColumns(cp);
 
-  const update_columns = base_columns.filter(({dataIndex}) => !['password'].includes(dataIndex));
+  let order_cp = deepCopy(base_columns);
+  const form_ordered = orderForm(formOrder, order_cp);
 
-  const create_columns = [...base_columns];
+  const create_columns = [...form_ordered];
+  const update_columns = getUpdateColumns(form_ordered);
 
   const [columnsStateMap, setColumnsStateMap] = useState({});
 
   const [paramState, setParamState] = useState({});
+
+  useEffect(()=>{
+    query$占位模型名$ListDisplay().then(value => {
+      setColumnsStateMap(value)
+    })
+  },[])
+
 
   $外键占位$
 
@@ -112,7 +109,7 @@ notification.error({
           return params;
         })}
         params={paramState}
-        scroll={{x: '100%'}}
+           scroll={{x: 'max-content'}}
         columnsStateMap={columnsStateMap}
         onColumnsStateChange={(map) => setColumnsStateMap(map)}
         headerTitle="$占位模型显示名$表格"
@@ -121,6 +118,9 @@ notification.error({
         toolBarRender={(action, {selectedRows}) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
+          </Button>,
+            <Button type="primary" onClick={() => exportExcelAll(paramState, query$占位模型名$, table_columns, '$占位模型显示名$-All')}>
+            <ExportOutlined /> 导出全部
           </Button>,
           <Input.Search style={{marginRight: 20}} placeholder="搜索$占位模型显示名$ " onSearch={value => {
             setParamState({
@@ -137,10 +137,14 @@ notification.error({
                       await handleRemove(selectedRows);
                       actionRef.current.reloadAndRest();
                     }
+                                        else if(e.key === 'export_current'){
+                      exportExcelCurrent(selectedRows,table_columns, '$占位模型显示名$-select')
+                    }
                   }}
                   selectedKeys={[]}
                 >
                   <Menu.Item key="remove">批量删除</Menu.Item>
+                                      <Menu.Item key="export_current">导出已选</Menu.Item>
                 </Menu>
               }
             >
@@ -188,7 +192,7 @@ notification.error({
           $两列布局占位$
           form={
             {
-              labelCol: {span: 3},
+              labelCol: {span: 6},
               labelAlign: 'left',
             }}
           columns={create_columns}
@@ -214,7 +218,7 @@ notification.error({
           $两列布局占位$
           type="form"
           form={{
-            initialValues: updateFormValues, labelCol: {span: 3},
+            initialValues: updateFormValues, labelCol: {span: 6},
             labelAlign: 'left',
           }}
           columns={update_columns}

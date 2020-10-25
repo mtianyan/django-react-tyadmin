@@ -7,6 +7,11 @@ from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerFie
 
 
 def gen_ser_txt(serializers_txt, model, fk_display_p):
+    if model == "CrontabSchedule":
+        print("hah")
+        append_timezone_adapter = 'timezone = serializers.CharField()'
+    else:
+        append_timezone_adapter = ''
     for one in fk_display_p:
         if "SelfListSerializer()" in one:
             serializers_txt += f"""
@@ -26,6 +31,7 @@ class {model}SelfListSerializer(serializers.ModelSerializer):
     serializers_txt += f"""
 
 class {model}ListSerializer(serializers.ModelSerializer):
+    {append_timezone_adapter}
 {"".join(fk_display_p)}
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -41,6 +47,7 @@ class {model}ListSerializer(serializers.ModelSerializer):
     serializers_txt += f"""
 
 class {model}CreateUpdateSerializer(serializers.ModelSerializer):
+    {append_timezone_adapter}
     ty_options_display_txt = serializers.SerializerMethodField()
     class Meta:
         model = {model}
@@ -82,6 +89,7 @@ def gen_serializer(project_name_settings, user_label_list):
                 if isinstance(field, ForeignKey):
                     field_object_name = field.target_field.model._meta.object_name
                     fk_field_list.append(name + "$分割$" + field_object_name)
+
             model_fk_dict[model_name] = fk_field_list
             model_list.append(model_name)
             many_2_many_list = []

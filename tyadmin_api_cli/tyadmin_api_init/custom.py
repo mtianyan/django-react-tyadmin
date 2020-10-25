@@ -1,9 +1,9 @@
 from copy import deepcopy
-
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.conf import settings
 from django.core.files.images import ImageFile
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, ManyToManyRel
 from django.db.models.fields.files import ImageFieldFile, FieldFile
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.viewsets import ViewSetMixin
 
+from tyadmin_api.ty_settings import MAX_LIST_DISPLAY_COUNT
 from tyadmin_api.utils import log_save
 from tyadmin_api.pagination import CustomPageNumberPagination
 from django_filters import rest_framework as filters, RangeFilter
@@ -74,12 +75,16 @@ class XadminViewSet(MtyModelViewSet):
         return custom_exception_handler
 
     def list(self, request, *args, **kwargs):
+        api_settings.DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         if "all" in request.query_params:
             self.pagination_class = None
         return super().list(request, args, kwargs)
 
     def create(self, request, *args, **kwargs):
-        ret = super().create(request, args, kwargs)
+        try:
+            ret = super().create(request, args, kwargs)
+        except DjangoValidationError as e:
+            raise ValidationError(e.error_dict)
         log_save(user=request.user.username, request=self.request, flag="新增",
                  message=f'{self.serializer_class.Meta.model._meta.verbose_name}: {ret.data.__str__()}被新增',
                  log_type=self.serializer_class.Meta.model._meta.model_name)
@@ -91,7 +96,6 @@ class XadminViewSet(MtyModelViewSet):
         data = deepcopy(request.data)
         del_dict = {}
         for key, value in request.data.items():
-            print(key)
             if isinstance(getattr(instance, key), ImageFieldFile) and isinstance(value, str):
                 print(value)
                 print(self.request.META['HTTP_HOST'] + settings.MEDIA_URL)
@@ -105,6 +109,9 @@ class XadminViewSet(MtyModelViewSet):
                 pure_value = value.replace("http://" + self.request.META['HTTP_HOST'] + settings.MEDIA_URL, "")
                 print(pure_value)
                 del_dict[key] = pure_value
+                del data[key]
+            elif getattr(instance, key).__class__.__name__ == "ManyRelatedManager" and isinstance(value, str):
+                del_dict[key] = eval(value)
                 del data[key]
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -151,6 +158,70 @@ class XadminViewSet(MtyModelViewSet):
                 value = key
             ret[key] = value
         return JsonResponse(ret)
+
+    @action(methods=['get'], detail=False, url_path="list_display/?")
+    def list_display(self, request, pk=None):
+        field_list = self.serializer_class.Meta.model._meta.get_fields()
+        ret = {}
+        count = MAX_LIST_DISPLAY_COUNT
+        for one_field in field_list:
+            if count < 0 or one_field.__class__.__name__ in ["OneToOneRel", "ManyToOneRel", "DateTimeField", "AutoField"]:
+                key = one_field.name
+                if "verbose_name" in dir(one_field):
+                    if key == "avatar" or "头像" in one_field.verbose_name:
+                        pass
+                    else:
+                        ret[key] = {
+                            "show": False
+                        }
+            else:
+                print(one_field.name)
+                count -= 1
+        return JsonResponse(ret)
+
+    @action(methods=['get'], detail=False, url_path="list_display/?")
+    def list_display(self, request, pk=None):
+        field_list = self.serializer_class.Meta.model._meta.get_fields()
+        ret = {}
+        count = MAX_LIST_DISPLAY_COUNT
+        for one_field in field_list:
+            if count < 0 or one_field.__class__.__name__ in ["OneToOneRel", "ManyToOneRel", "DateTimeField", "AutoField"]:
+                key = one_field.name
+                if "verbose_name" in dir(one_field):
+                    if key == "avatar" or "头像" in one_field.verbose_name:
+                        pass
+                    else:
+                        ret[key] = {
+                            "show": False
+                        }
+            else:
+                print(one_field.name)
+                count -= 1
+        return JsonResponse(ret)
+
+    @action(methods=['get'], detail=False, url_path="display_order/?")
+    def display_order(self, request, pk=None):
+        from django.contrib import admin
+        admin_order = []
+        admin_include_flag = False
+        for model, model_admin in admin.site._registry.items():
+            if model == self.serializer_class.Meta.model:
+                admin_include_flag = True
+                if model_admin.fieldsets:
+                    for one in model_admin.fieldsets:
+                        admin_order += one[1]["fields"]
+                else:
+                    admin_include_flag = False
+        if not admin_include_flag:
+            field_list = self.serializer_class.Meta.model._meta.get_fields()
+            admin_order = [one.name for one in field_list]
+
+        field_list = self.serializer_class.Meta.model._meta.get_fields()
+        table_order = [one.name for one in field_list]
+        return JsonResponse({
+            'form_order': admin_order,
+            'table_order': table_order,  # TODO list_display影响
+        })
 
 
 class DateRangeWidget(RangeWidget):
