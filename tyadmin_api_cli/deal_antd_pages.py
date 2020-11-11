@@ -909,7 +909,7 @@ export async function updateUserPassword(params) {
             target_path = f'{settings.BASE_DIR}/tyadmin/src/pages/AutoGenPage'
             cur_path = f'{target_path}/{model_name}List'
             if not os.path.exists(cur_path):
-                os.mkdir(cur_path)
+                os.makedirs(cur_path)
             cur_path_co = f'{target_path}/{model_name}List/components'
             if not os.path.exists(cur_path_co):
                 os.mkdir(cur_path_co)
