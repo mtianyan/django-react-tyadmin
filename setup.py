@@ -12,13 +12,13 @@ def package_files(directories):
         for (path, directories, filenames) in walk(item):
             for filename in filenames:
                 paths.append(join('..', path, filename))
-    print(paths)
+    # print(paths)
     return paths
 
 
 setup(
     name="tyadmin_api_cli",
-    version="0.6.3",
+    version="0.7.0",
     keywords=("pip", "mtianyan", "xadmin", "Django", "Antd", "Antd Design Pro"),
     description="modern base on models django admin powered by Antd Design Pro",
     long_description="modern base on models django admin powered by Antd Design Pro",
@@ -37,5 +37,5 @@ setup(
         ])
     },
     platforms="any",
-    install_requires=["django", "django-simple-captcha", "djangorestframework"]
+    install_requires=["django", "django-simple-captcha", "djangorestframework", "demjson"]
 )

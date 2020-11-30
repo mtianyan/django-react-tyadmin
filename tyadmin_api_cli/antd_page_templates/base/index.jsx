@@ -5,20 +5,20 @@ import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
-import {add$占位模型名$, query$占位模型名$, remove$占位模型名$, update$占位模型名$,query$占位模型名$VerboseName, query$占位模型名$ListDisplay, query$占位模型名$DisplayOrder} from './service';
+import {add>>MODEL_NAME<<, query>>MODEL_NAME<<, remove>>MODEL_NAME<<, update>>MODEL_NAME<<,query>>MODEL_NAME<<VerboseName, query>>MODEL_NAME<<ListDisplay, query>>MODEL_NAME<<DisplayOrder} from './service';
 import UpdateForm from './components/UpdateForm';
 import UploadAvatar from '@/components/UploadAvatar';
-$import占位$
-$passwordform引入$
+>>IMPORT_PLACE<<
+>>PASSWORD_FORM<<
 import moment from 'moment';
 const {Option} = Select;
-import { richForm, richCol, dealPureSelectField, orderForm, exportExcelCurrent, exportExcelAll, getUpdateColumns, dealRemoveError, dealError, BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
+import { BooleanFormItem, dealManyToManyFieldTags, fileUpload,twoColumns, richForm, richCol, dealPureSelectField, orderForm, exportExcelCurrent, exportExcelAll, getUpdateColumns, dealRemoveError, dealError, BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
 import 'braft-editor/dist/index.css'
 const FormItem = Form.Item;
 const TableList = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  $Password占位$
+  >>PASSWORD_PLACE<<
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef();
   const addFormRef = useRef();
@@ -28,7 +28,7 @@ const TableList = () => {
   const hide = message.loading('正在添加');
 
   try {
-    await add$占位模型名$({...fields});
+    await add>>MODEL_NAME<<({...fields});
     hide();
     message.success('添加成功');
     return true;
@@ -41,7 +41,7 @@ const TableList = () => {
   const hide = message.loading('正在修改');
 
   try {
-    await update$占位模型名$(value, current_id);
+    await update>>MODEL_NAME<<(value, current_id);
     hide();
     message.success('修改成功');
     return true;
@@ -56,7 +56,7 @@ const TableList = () => {
 
   try {
     const ids = selectedRows.map(row => row.id).join(',');
-    await remove$占位模型名$(ids);
+    await remove>>MODEL_NAME<<(ids);
     hide();
     message.success('删除成功');
     return true;
@@ -65,16 +65,16 @@ const TableList = () => {
       return dealRemoveError(error, "删除");
   }
 };
-  $更新密码方法占位$
-  const dateFieldList = [$时间占位$]
-  const base_columns = [$占位列数据$];
+  >>UPDATE_PASSWORD_METHOD<<
+  const dateFieldList = [>>TIME_PLACE<<]
+  const base_columns = [>>COLUMNS_LIST<<];
 
   let cp = deepCopy(base_columns);
 
   const [formOrder, setFormOrder] = useState([]);
 
   useEffect(()=>{
-    query$占位模型名$DisplayOrder().then(r => {
+    query>>MODEL_NAME<<DisplayOrder().then(r => {
       setFormOrder(r.form_order)
     })
   }, [])
@@ -84,23 +84,24 @@ const TableList = () => {
   const form_ordered = orderForm(formOrder, order_cp);
 
   const create_columns = [...form_ordered];
-  const update_columns = getUpdateColumns(form_ordered);
+  const update_cp = deepCopy(form_ordered)
+  const update_columns = getUpdateColumns(update_cp);
 
   const [columnsStateMap, setColumnsStateMap] = useState({});
 
   const [paramState, setParamState] = useState({});
 
   useEffect(()=>{
-    query$占位模型名$ListDisplay().then(value => {
+    query>>MODEL_NAME<<ListDisplay().then(value => {
       setColumnsStateMap(value)
     })
   },[])
 
 
-  $外键占位$
+  >>FOREIGNKEY_PLACE<<
 
 
-    $多对多占位$
+    >>MANY_TO_MANY_PLACE<<
   return (
     <PageHeaderWrapper>
       <ProTable
@@ -112,17 +113,17 @@ const TableList = () => {
            scroll={{x: 'max-content'}}
         columnsStateMap={columnsStateMap}
         onColumnsStateChange={(map) => setColumnsStateMap(map)}
-        headerTitle="$占位模型显示名$表格"
+        headerTitle=">>MODEL_VERBOSE_NAME<<表格"
         actionRef={actionRef}
         rowKey="id"
         toolBarRender={(action, {selectedRows}) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-            <Button type="primary" onClick={() => exportExcelAll(paramState, query$占位模型名$, table_columns, '$占位模型显示名$-All')}>
+            <Button type="primary" onClick={() => exportExcelAll(paramState, query>>MODEL_NAME<<, table_columns, '>>MODEL_VERBOSE_NAME<<-All')}>
             <ExportOutlined /> 导出全部
           </Button>,
-          <Input.Search style={{marginRight: 20}} placeholder="搜索$占位模型显示名$ " onSearch={value => {
+          <Input.Search style={{marginRight: 20}} placeholder="搜索>>MODEL_VERBOSE_NAME<< " onSearch={value => {
             setParamState({
               search: value,
             });
@@ -138,7 +139,7 @@ const TableList = () => {
                       actionRef.current.reloadAndRest();
                     }
                                         else if(e.key === 'export_current'){
-                      exportExcelCurrent(selectedRows,table_columns, '$占位模型显示名$-select')
+                      exportExcelCurrent(selectedRows,table_columns, '>>MODEL_VERBOSE_NAME<<-select')
                     }
                   }}
                   selectedKeys={[]}
@@ -168,7 +169,7 @@ const TableList = () => {
           </div> : false
 
         )}
-        request={(params, sorter, filter) => query$占位模型名$({...params, sorter, filter})}
+        request={(params, sorter, filter) => query>>MODEL_NAME<<({...params, sorter, filter})}
         columns={table_columns}
         rowSelection={{}}
       />
@@ -189,7 +190,7 @@ const TableList = () => {
           }}
           rowKey="key"
           type="form"
-          $两列布局占位$
+          search={>>TWO_COLUMNS_COL<<}
           form={
             {
               labelCol: {span: 6},
@@ -215,7 +216,7 @@ const TableList = () => {
             }
           }}
           rowKey="key"
-          $两列布局占位$
+          search={>>TWO_COLUMNS_COL<<}
           type="form"
           form={{
             initialValues: updateFormValues, labelCol: {span: 6},
@@ -225,7 +226,7 @@ const TableList = () => {
           rowSelection={{}}
         />
       </UpdateForm>
-        $Password更新Form$
+        >>PASSWORD_UPDATE_FORM<<
     </PageHeaderWrapper>
   );
 };

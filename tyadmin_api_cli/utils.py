@@ -7,7 +7,6 @@ from django.utils import translation
 
 def init_django_env(project_name_settings):
     pwd = os.path.dirname(os.path.realpath(__file__))
-    print(pwd)
     # 将项目目录加入setting
     sys.path.append(pwd)
     # manage.py中

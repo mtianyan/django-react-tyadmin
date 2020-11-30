@@ -47,7 +47,7 @@ from {app_name}.auto_serializers import {", ".join(serializers_update_list)}
 from {app_name}.auto_filters import {", ".join(filters_list)}
     """
     model_import_rows = []
-    print(app_model_import_dict)
+    # print(app_model_import_dict)
     for app, m_list in app_model_import_dict.items():
         if app in ["auth", "contenttypes"]:
             txt = f'from django.contrib.{app}.models import {", ".join(m_list)}\n'
@@ -59,16 +59,16 @@ from {app_name}.auto_filters import {", ".join(filters_list)}
         viewset_txt += f"""
     
 class {model_name}ViewSet(XadminViewSet):
-        serializer_class = {model_name}ListSerializer
-        queryset = {model_name}.objects.all().order_by('-pk')
-        filter_class = {model_name}Filter
-        search_fields = [{",".join(model_search_dict[model_name])}]
+    serializer_class = {model_name}ListSerializer
+    queryset = {model_name}.objects.all().order_by('-pk')
+    filter_class = {model_name}Filter
+    search_fields = [{",".join(model_search_dict[model_name])}]
 
-        def get_serializer_class(self):
-            if self.action == "list":
-                return {model_name}ListSerializer
-            else:
-                return {model_name}CreateUpdateSerializer
+    def get_serializer_class(self):
+        if self.action == "list":
+            return {model_name}ListSerializer
+        else:
+            return {model_name}CreateUpdateSerializer
 """
     # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
     #     print("已存在views跳过")
