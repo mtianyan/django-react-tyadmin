@@ -1,0 +1,3 @@
+tyadmin-api-cli
+django-filter
+demjson
