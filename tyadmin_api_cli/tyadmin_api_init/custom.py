@@ -82,19 +82,13 @@ class XadminViewSet(MtyModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            data = deepcopy(request.data)
-            del_dict = {}
-            for key, value in request.data.items():
-                print(getattr(self.serializer_class.Meta.model, key).__class__.__name__)
-                print(value)
-                print(type(value))
-                if getattr(self.serializer_class.Meta.model, key).__class__.__name__ == "ManyToManyDescriptor" and isinstance(value, str):
-                    del_dict[key] = eval(value)
-                    del data[key]
-            serializer = self.get_serializer(data=data)
+            # data = deepcopy(request.data)
+            # del_dict = {}
+            self_serializer_class = self.get_serializer_class()
+            serializer = self_serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            for key, value in del_dict.items():
-                serializer.validated_data[key] = value
+            # for key, value in del_dict.items():
+            #     serializer.validated_data[key] = value
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             ret = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

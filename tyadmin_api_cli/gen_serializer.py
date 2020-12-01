@@ -8,26 +8,25 @@ from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerFie
 
 def gen_ser_txt(serializers_txt, model, fk_display_p):
     if model == "CrontabSchedule":
-        print("hah")
         append_timezone_adapter = 'timezone = serializers.CharField()'
     else:
         append_timezone_adapter = ''
-    for one in fk_display_p:
-        if "SelfListSerializer()" in one:
-            serializers_txt += f"""
-
-class {model}SelfListSerializer(serializers.ModelSerializer):
-    key = serializers.CharField(source="pk")
-    ty_options_display_txt = serializers.SerializerMethodField()
-
-    class Meta:
-        model = {model}
-        fields = "__all__"
-
-    @staticmethod
-    def get_ty_options_display_txt(obj):
-        return str(obj)
-"""
+#     for one in fk_display_p:
+#         if "SelfSerializer()" in one:
+#             serializers_txt += f"""
+#
+# class {model}SelfSerializer(serializers.ModelSerializer):
+#     key = serializers.CharField(source="pk")
+#     ty_options_display_txt = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = {model}
+#         fields = "__all__"
+#
+#     @staticmethod
+#     def get_ty_options_display_txt(obj):
+#         return str(obj)
+# """
     serializers_txt += f"""
 
 class {model}ListSerializer(serializers.ModelSerializer):
@@ -101,13 +100,12 @@ def gen_serializer(project_name_settings, user_label_list):
             for field in one.objects.model._meta.many_to_many:
                 name = field.name
                 rela_model = field.related_model._meta.object_name
-                logging.debug(f"{one._meta.app_label}, {one._meta.model.__name__}, {rela_model}")
                 many_2_many_list.append(name + "$分割$" + rela_model)
-                print("&&&" * 30)
+                # print("&&&" * 30)
             model_many_2_many_dict[one._meta.model.__name__] = many_2_many_list
     # status_text = serializers.CharField(source="status.text", read_only=True)
-    print(model_fk_dict)
-    print(model_many_2_many_dict)
+    # print(model_fk_dict)
+    # print(model_many_2_many_dict)
     app_name = "tyadmin_api"
     serializers_txt = f"""from rest_framework import serializers
 $model_import占位$"""
@@ -117,7 +115,7 @@ $model_import占位$"""
         model_import_rows.append(txt)
     serializers_txt = serializers_txt.replace("$model_import占位$", "".join(model_import_rows))
 
-    print(model_fk_dict)
+    # print(model_fk_dict)
     wait_model_list = list(model_fk_dict.keys())
     for (model, fk_field_l), (_, many_2) in zip(model_fk_dict.items(), model_many_2_many_dict.items()):
         fk_display_p = inner_deal_foreign(model, fk_field_l, many_2)
@@ -146,13 +144,43 @@ def inner_deal_foreign(model, fk_field_l, many_2):
     for one_fk in fk_field_l:
         fk_name, fk_object_name = one_fk.split("$分割$")
         if fk_object_name == model:
-            fk_one_line = f'    {fk_name} = {fk_object_name}SelfListSerializer()\n'
+            fk_one_line = f"""
+    class {fk_object_name}SelfSerializer(serializers.ModelSerializer):
+        ty_options_display_txt = serializers.SerializerMethodField()
+
+        class Meta:
+            model = {fk_object_name}
+            fields = "__all__"
+
+        @staticmethod
+        def get_ty_options_display_txt(obj):
+            return str(obj)
+    {fk_name} = {fk_object_name}SelfSerializer()"""
         else:
-            fk_one_line = f'    {fk_name} = {fk_object_name}CreateUpdateSerializer()\n'
+            fk_one_line = f"""
+    class {fk_object_name}Serializer(serializers.ModelSerializer):
+        ty_options_display_txt = serializers.SerializerMethodField()
+        class Meta:
+            model = {fk_object_name}
+            fields = "__all__"
+        @staticmethod
+        def get_ty_options_display_txt(obj):
+            return str(obj)
+    {fk_name} = {fk_object_name}Serializer()"""
         fk_display_p.append(fk_one_line)
     for one in many_2:
         many_name, many_object_name = one.split("$分割$")
-        fk_one_line = f'    {many_name} = {many_object_name}CreateUpdateSerializer(many=True)\n'
+        fk_one_line = f"""
+    class {many_object_name}Serializer(serializers.ModelSerializer):
+        ty_options_display_txt = serializers.SerializerMethodField()
+        class Meta:
+            model = {many_object_name}
+            fields = "__all__"
+        @staticmethod
+        def get_ty_options_display_txt(obj):
+            return str(obj)
+    {many_name} = {many_object_name}Serializer(many=True)"""
+        # fk_one_line = f'    {many_name} = {many_object_name}CreateUpdateSerializer(many=True)\n'
         fk_display_p.append(fk_one_line)
     return fk_display_p
 

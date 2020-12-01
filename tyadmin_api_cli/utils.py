@@ -9,7 +9,6 @@ from django.utils import translation
 
 def init_django_env(project_name_settings):
     pwd = os.path.dirname(os.path.realpath(__file__))
-    print(pwd)
     # 将项目目录加入setting
     sys.path.append(pwd)
     # manage.py中
@@ -72,7 +71,7 @@ def format_json_string(raw_s, indent = 4):
         if line[0] in ['}', ']']:
             indention -= 1
  
-        formatted_s += ' ' *(4 * indention) + line + '\n'
+        formatted_s += ' ' *(indent * indention) + line + '\n'
 
         # apply for next line
         if line[0] in ['{', '[']:

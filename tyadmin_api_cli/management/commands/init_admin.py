@@ -22,7 +22,9 @@ class Command(BaseCommand):
         except KeyError:
             raise ValueError("请设置settings")
         init_django_env(setting_value)
-        print(settings.BASE_DIR)
+        # print(settings.BASE_DIR)
+        print("###"*20)
         init_tyadmin_api(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), settings.BASE_DIR)
         init_tyadmin(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), settings.BASE_DIR)
+        print("###"*20)
         # gen_all(setting_value)
