@@ -28,7 +28,7 @@ router = DefaultRouter(trailing_slash=False)
 
     for model_name in model_list:
         url_txt += f"""
-router.register('{get_lower_case_name(model_name)}/?', auto_views.{model_name}ViewSet)
+router.register('{get_lower_case_name(model_name)}', auto_views.{model_name}ViewSet)
     """
 
     url_txt += """

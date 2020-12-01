@@ -8,13 +8,13 @@ def gen_table_display(project_name_settings, list_display, focus_model):
     for one in django.apps.apps.get_models():
         if one._meta.model.__name__ == focus_model:
             print("{")
-            for filed in one.objects.model._meta.fields:
-                if filed.name in list_display:
+            for field in one.objects.model._meta.fields:
+                if field.name in list_display:
                     pass
                 else:
                     print("""%s: {
           show: false,
-        },""" % (filed.name))
+        },""" % (field.name))
             print("}")
 
 

@@ -1,7 +1,7 @@
 import os
 
 from tyadmin_api_cli.contants import MAIN_DISPLAY, SYS_LABELS
-from tyadmin_api_cli.utils import init_django_env
+from tyadmin_api_cli.utils import init_django_env, get_model_import_path
 #  获取当前文件的路径，以及路径的父级文件夹名
 from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerField, CharField, ImageField, ManyToManyField
 
@@ -49,9 +49,11 @@ class {model}ListSerializer(serializers.ModelSerializer):
 class {model}CreateUpdateSerializer(serializers.ModelSerializer):
     {append_timezone_adapter}
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = {model}
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -77,12 +79,15 @@ def gen_serializer(project_name_settings, user_label_list):
         model_name = one._meta.model.__name__
         model_ver_name = one._meta.verbose_name
         app_label = one._meta.app_label
+
+        import_path = get_model_import_path(one)
+
         if app_label in gen_labels:
             fk_field_list = []
             try:
-                app_model_import_dict[app_label].append(model_name)
+                app_model_import_dict[import_path].append(model_name)
             except KeyError:
-                app_model_import_dict[app_label] = [model_name]
+                app_model_import_dict[import_path] = [model_name]
             for field in one.objects.model._meta.fields:
                 name = field.name
                 ver_name = field.verbose_name
@@ -93,11 +98,10 @@ def gen_serializer(project_name_settings, user_label_list):
             model_fk_dict[model_name] = fk_field_list
             model_list.append(model_name)
             many_2_many_list = []
-            for filed in one.objects.model._meta.many_to_many:
-                name = filed.name
-                rela_model = filed.related_model._meta.object_name
-                print("&&&" * 30)
-                print(one._meta.app_label, one._meta.model.__name__, rela_model)
+            for field in one.objects.model._meta.many_to_many:
+                name = field.name
+                rela_model = field.related_model._meta.object_name
+                logging.debug(f"{one._meta.app_label}, {one._meta.model.__name__}, {rela_model}")
                 many_2_many_list.append(name + "$分割$" + rela_model)
                 print("&&&" * 30)
             model_many_2_many_dict[one._meta.model.__name__] = many_2_many_list
@@ -108,11 +112,8 @@ def gen_serializer(project_name_settings, user_label_list):
     serializers_txt = f"""from rest_framework import serializers
 $model_import占位$"""
     model_import_rows = []
-    for app, m_list in app_model_import_dict.items():
-        if app in ["auth", "contenttypes"]:
-            txt = f'from django.contrib.{app}.models import {", ".join(m_list)}\n'
-        else:
-            txt = f'from {app}.models import {", ".join(m_list)}\n'
+    for import_path, m_list in app_model_import_dict.items():
+        txt = f'from {import_path}.models import {", ".join(m_list)}\n'
         model_import_rows.append(txt)
     serializers_txt = serializers_txt.replace("$model_import占位$", "".join(model_import_rows))
 

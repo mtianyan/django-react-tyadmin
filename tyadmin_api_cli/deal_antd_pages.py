@@ -7,7 +7,7 @@ from django.db.models.fields import NOT_PROVIDED
 from tyadmin_api_cli.adapters import ADAPTER_DICT
 from tyadmin_api_cli.adapters.field_adapter import FIELD_ADAPTER
 from tyadmin_api_cli.contants import MAIN_DISPLAY, MAIN_AVATAR, MAIN_PIC, SYS_LABELS
-from tyadmin_api_cli.fileds import richTextField, SImageField
+from tyadmin_api_cli.fields import richTextField, SImageField
 from tyadmin_api_cli.utils import init_django_env, get_lower_case_name, trans, contain_zh
 
 def services_adapter_priority(app_label, model_name, field_name):
@@ -57,9 +57,10 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
         columns = []
         model_name = one._meta.model.__name__
         model_ver_name = trans(one._meta.verbose_name_raw)
-        # if(isinstance(model_ver_name,__proxy__)):
         if focus_model and model_name != focus_model:
             continue
+        if one._meta.app_label not in gen_labels:
+          logging.debug(f'{one._meta.app_label} => not generated!')
         if one._meta.app_label in gen_labels:
             print("^^" * 20)
             print(one._meta.app_label)
@@ -71,13 +72,13 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
             model_import_item_list = []
             model_service_item_list = []
             date_field_list = []
-            fileds_num = len(one.objects.model._meta.fields)
+            fields_num = len(one.objects.model._meta.fields)
 
-            for filed in one.objects.model._meta.fields:
-                name = filed.name
-                ver_name = trans(filed.verbose_name)
+            for field in one.objects.model._meta.fields:
+                name = field.name
+                ver_name = trans(field.verbose_name)
                 if not contain_zh(ver_name):
-                    ver_name = trans(filed.name)
+                    ver_name = trans(field.name)
                 print(ver_name)
                 if import_adapter_priority(one._meta.app_label,one._meta.model.__name__, name):
                     model_import_item_list.append(FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["index_import"])
@@ -88,602 +89,602 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 if field_adapter_priority(one._meta.app_label,one._meta.model.__name__, name):
                     one_c = FIELD_ADAPTER[one._meta.app_label][one._meta.model.__name__][name]["field"]
 
-                elif isinstance(filed, ForeignKey):
-                    rela_model = filed.related_model._meta.object_name
-                    if filed.blank:
-                        one_c = """{
-                                            title: '%s',
-                                            dataIndex: '%s',
-                                            backendType: 'foreignKey',
-                                            rules: [
-                                            ],
-                                                  renderFormItem: (item, {value, onChange}) => {
-                                            return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
-                        },render: (text, record) => {
+                elif isinstance(field, ForeignKey):
+                    rela_model = field.related_model._meta.object_name
+                    if field.blank:
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    backendType: 'foreignKey',
+    rules: [
+    ],
+    renderFormItem: (item, {value, onChange}) => {
+      return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
+    },render: (text, record) => {
       return renderForeignKey(text, %sVerboseNameMap);
     },
-                                          },""" % (ver_name, name, name, name)
+  },""" % (ver_name, name, name, name)
                     else:
-                        one_c = """{
-                              title: '%s',
-                              dataIndex: '%s',
-                              backendType: 'foreignKey',
-                              rules: [
-                                {
-                                  required: true,
-                                  message: '%s为必填项',
-                                },
-                              ],
-                                    renderFormItem: (item, {value, onChange}) => {
-                  return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
-          },
-              render: (text, record) => {
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    backendType: 'foreignKey',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    renderFormItem: (item, {value, onChange}) => {
+      return dealForeignKeyField(item, value, onChange, %sForeignKeyList);
+    },
+    render: (text, record) => {
       return renderForeignKey(text, %sVerboseNameMap);
     },
-                            },""" % (ver_name, name, ver_name, name, name)
+  },""" % (ver_name, name, ver_name, name, name)
                     one_c = one_c.replace("$模型名字$", name)
                     print(name)
-                    print(filed)
-                    if isinstance(filed.verbose_name, str):
-                        one_c = one_c.replace("$模型显示名字$", filed.verbose_name)
+                    print(field)
+                    if isinstance(field.verbose_name, str):
+                        one_c = one_c.replace("$模型显示名字$", field.verbose_name)
                     else:
                         one_c = one_c.replace("$模型显示名字$", name)
                     model_add_item = """const [$模型名字$ForeignKeyList, set$模型名字首字母大写$ForeignKeyList] = useState([]);
-      useEffect(() => {
-        query$关联Model$({all: 1}).then(value => {
-          set$模型名字首字母大写$ForeignKeyList(value);
-        });
-      }, []);
-      const [$模型名字$VerboseNameMap, set$模型名字首字母大写$VerboseNameMap] = useState([]);
-  useEffect(() => {
-    query$关联Model$VerboseName().then(value => {
-      set$模型名字首字母大写$VerboseNameMap(value);
-    });
-  }, []);
-      """.replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]).replace("$关联Model$", rela_model)
+    useEffect(() => {
+      query$关联Model$({all: 1}).then(value => {
+        set$模型名字首字母大写$ForeignKeyList(value);
+      });
+    }, []);
+    const [$模型名字$VerboseNameMap, set$模型名字首字母大写$VerboseNameMap] = useState([]);
+    useEffect(() => {
+      query$关联Model$VerboseName().then(value => {
+        set$模型名字首字母大写$VerboseNameMap(value);
+      });
+    }, []);
+""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]).replace("$关联Model$", rela_model)
                     model_add_item_list.append(model_add_item)
-                    model_import_item = """import {query$关联Model$, query$关联Model$VerboseName} from '@/pages/AutoGenPage/$关联Model$List/service';""" \
+                    model_import_item = """import { query$关联Model$, query$关联Model$VerboseName } from '@/pages/AutoGenPage/$关联Model$List/service';""" \
                         .replace("$关联Model$", rela_model)
                     if model_import_item not in model_import_item_list and model_name != rela_model:
                         model_import_item_list.append(model_import_item)
-                elif isinstance(filed, CharField):
-                    if filed.default != NOT_PROVIDED:
-                        if filed.default is not None:
-                            default_replace = f' initialValue: "{filed.default}",'
+                elif isinstance(field, CharField):
+                    if field.default != NOT_PROVIDED:
+                        if field.default is not None:
+                            default_replace = f'initialValue: "{field.default}",'
                         else:
                             default_replace = ""
                     else:
                         default_replace = ""
-                    if filed.choices:
-                        filed_choices_list = []
-                        for filed_one in filed.choices:
-                            one_line = f'"{filed_one[0]}":"{filed_one[1]}"'
-                            filed_choices_list.append(one_line)
-                        if filed.blank:
-                            one_c = """{
-                            %s
-                                                                       title: '%s',
-                                                                       dataIndex: '%s',
-                                                                       rules: [
-                                                                       ],
-                                                                       valueEnum: {
-                                                                         $valueEnum$
-                                                                        },
-                                                                     },""" % (default_replace, ver_name, name)
+                    if field.choices:
+                        field_choices_list = []
+                        for field_one in field.choices:
+                            one_line = f'"{field_one[0]}":"{field_one[1]}"'
+                            field_choices_list.append(one_line)
+                        if field.blank:
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name)
                         else:
-                            one_c = """{
-                            %s
-                                           title: '%s',
-                                           dataIndex: '%s',
-                                           rules: [
-                                             {
-                                               required: true,
-                                               message: '%s为必填项',
-                                             },
-                                           ],
-                                           valueEnum: {
-                                             $valueEnum$
-                                            },
-                                         },""" % (default_replace, ver_name, name, ver_name)
-                        one_c = one_c.replace("$valueEnum$", ",".join(filed_choices_list))
+                          one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name, ver_name)
+                          one_c = one_c.replace("$valueEnum$", ",".join(field_choices_list))
                     elif name == "password":
-                        one_c = """{
+                        one_c = """ {
                         %s
-                                          title: '%s',
-                                          dataIndex: '%s',
-                                          hideInTable: true,
-                                  hideInSearch: true,
-                                          rules: [
-                                            {
-                                              required: true,
-                                              message: '%s为必填项',
-                                            },
-                                          ],
-                                        },""" % (default_replace, ver_name, name, ver_name)
+    title: '%s',
+    dataIndex: '%s',
+    hideInTable: true,
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
                     else:
-                        if filed.blank:
-                            one_c = """{
-                            %s
-                              title: '%s',
-                              dataIndex: '%s',
-                              rules: [
-                              ],
-                            },""" % (default_replace, ver_name, name)
+                        if field.blank:
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+  },""" % (default_replace, ver_name, name)
                         else:
-                            one_c = """{
-                            %s
-                      title: '%s',
-                      dataIndex: '%s',
-                      rules: [
-                        {
-                          required: true,
-                          message: '%s为必填项',
-                        },
-                      ],
-                    },""" % (default_replace, ver_name, name, ver_name)
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
                 elif name == "id":
-                    if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: "{filed.default}",'
+                    if field.default != NOT_PROVIDED:
+                        default_replace = f'initialValue: "{field.default}",'
                     else:
                         default_replace = ""
-                    one_c = """{
-                    %s
-                                  title: '%s',
-                                  dataIndex: '%s',
-                                  hideInForm: true,
-                                  hideInSearch: true,
-                                  rules: [
-                                    {
-                                      required: true,
-                                      message: '%s为必填项',
-                                    },
-                                  ],
-                                },""" % (default_replace, ver_name, name, ver_name)
-                elif isinstance(filed, DateTimeField):
-                    print(filed.default)
+                    one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    hideInForm: true,
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
+                elif isinstance(field, DateTimeField):
+                    # logging.debug(field.default)
                     hideInform = None
-                    if filed.default != django.db.models.NOT_PROVIDED or filed.auto_now == True:
+                    if field.default != django.db.models.NOT_PROVIDED or field.auto_now == True:
                         hideInform = True
-                    one_c = """{
-              title: '%s',
-              dataIndex: '%s',
-              valueType: 'dateTime',
-              $隐藏form$
-              rules: [
-                {
-                  required: true,
-                  message: '%s为必填项',
-                },
-              ],
-                                       render: (text, record) => {
-          return dealDateTimeDisplay(text);
-        },
-            },""" % (ver_name, name, ver_name)
+                    one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'dateTime',
+    $隐藏form$
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    render: (text, record) => {
+      return dealDateTimeDisplay(text);
+    },
+  },""" % (ver_name, name, ver_name)
                     if hideInform:
                         one_c = one_c.replace("$隐藏form$", "hideInForm: true,")
                     else:
                         one_c = one_c.replace("$隐藏form$", "")
                     date_field_list.append('"' + name + '"')
                     date_row_list.append(f'record.{name} = moment(record.{name});')
-                elif isinstance(filed, DateField):
-                    if filed.auto_now:
+                elif isinstance(field, DateField):
+                    if field.auto_now:
                         pass
                     one_c = """{
-                         title: '%s',
-                         dataIndex: '%s',
-                         valueType: 'date',
-                         rules: [
-                           {
-                             required: true,
-                             message: '%s为必填项',
-                           },
-                         ],
-                       },""" % (ver_name, name, ver_name)
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'date',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (ver_name, name, ver_name)
                     date_field_list.append('"' + name + '"')
                     date_row_list.append(f'record.{name} = moment(record.{name});')
-                elif isinstance(filed, BooleanField):
-                    if filed.default != NOT_PROVIDED:
-                        if filed.default:
-                            default_replace = f' initialValue: true,'
+                elif isinstance(field, BooleanField):
+                    if field.default != NOT_PROVIDED:
+                        if field.default:
+                            default_replace = f'initialValue: true,'
                         else:
-                            default_replace = f' initialValue: false,'
+                            default_replace = f'initialValue: false,'
                     else:
                         default_replace = ""
-                    if filed.blank:
-                        one_c = """{
+                    if field.blank:
+                        one_c = """ {
                         %s
-                                                          title: '%s',
-                                                          dataIndex: '%s',
-                                                          rules: [
-                                                          ],
-                                                              render: (text, record) => {
-                                  return BooleanDisplay(text);
-                                },
-                                                              renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                                  const is_value = form.getFieldValue('%s');
-                                  if (type === "form" && !is_value) {
-                                    form.setFieldsValue({'%s': false});
-                                  }
-                                  return <Switch checked={is_value} onClick={(checked) => {
-                                    form.setFieldsValue({'%s': checked});
-                                  }} />;
-                                },
-                                                        },""" % (default_replace, ver_name, name, name, name, name)
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+    render: (text, record) => {
+      return BooleanDisplay(text);
+    },
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const is_value = form.getFieldValue('%s');
+      if (type === "form" && !is_value) {
+        form.setFieldsValue({'%s': false});
+      }
+      return <Switch checked={is_value} onClick={(checked) => {
+        form.setFieldsValue({'%s': checked});
+      }} />;
+    },
+  },""" % (default_replace, ver_name, name, name, name, name)
                     else:
-                        one_c = """{
+                        one_c = """ {
                         %s
-                                  title: '%s',
-                                  dataIndex: '%s',
-                                  rules: [
-                                    {
-                                      required: true,
-                                      message: '%s为必填项',
-                                    },
-                                  ],
-                                      render: (text, record) => {
-          return BooleanDisplay(text);
-        },
-                                      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-          const is_value = form.getFieldValue('%s');
-          if (type === "form" && !is_value) {
-            form.setFieldsValue({'%s': false});
-          }
-          return <Switch checked={is_value} onClick={(checked) => {
-            form.setFieldsValue({'%s': checked});
-          }} />;
-        },
-                                },""" % (default_replace, ver_name, name, ver_name, name, name, name)
-                elif isinstance(filed, IntegerField) or isinstance(filed, FloatField):
-                    if filed.default != NOT_PROVIDED:
-                        if filed.default:
-                            default_replace = f' initialValue: {filed.default},'
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    render: (text, record) => {
+      return BooleanDisplay(text);
+    },
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const is_value = form.getFieldValue('%s');
+      if (type === "form" && !is_value) {
+        form.setFieldsValue({'%s': false});
+      }
+      return <Switch checked={is_value} onClick={(checked) => {
+        form.setFieldsValue({'%s': checked});
+      }} />;
+    },
+  },""" % (default_replace, ver_name, name, ver_name, name, name, name)
+                elif isinstance(field, IntegerField) or isinstance(field, FloatField):
+                    if field.default != NOT_PROVIDED:
+                        if field.default:
+                            default_replace = f'initialValue: {field.default},'
                         else:
                             default_replace = ""
                     else:
                         default_replace = ""
-                    if filed.choices:
-                        filed_choices_list = []
-                        for filed_one in filed.choices:
-                            one_line = f'{filed_one[0]}:"{filed_one[1]}"'
-                            filed_choices_list.append(one_line)
-                            if filed.blank:
+                    if field.choices:
+                        field_choices_list = []
+                        for field_one in field.choices:
+                            one_line = f'{field_one[0]}:"{field_one[1]}"'
+                            field_choices_list.append(one_line)
+                            if field.blank:
                                 one_c = """{
                                 %s
-                                          title: '%s',
-                                          dataIndex: '%s',
-                                          rules: [
-                                          ],
-                                           valueEnum: {
-                                                     $valueEnum$
-                                                    },
-                                        },""" % (default_replace, ver_name, name)
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name)
                             else:
-                                one_c = """{
-                                 %s
-                                          title: '%s',
-                                          dataIndex: '%s',
-                                          rules: [
-                                            {
-                                              required: true,
-                                              message: '%s为必填项',
-                                            },
-                                          ],
-                                           valueEnum: {
-                                                     $valueEnum$
-                                                    },
-                                        },""" % (default_replace, ver_name, name, ver_name)
-                            one_c = one_c.replace("$valueEnum$", ",".join(filed_choices_list))
+                                one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name, ver_name)
+                            one_c = one_c.replace("$valueEnum$", ",".join(field_choices_list))
                     else:
-                        if filed.blank:
-                            one_c = """{
-                             %s
-                                      title: '%s',
-                                      dataIndex: '%s',
-                                                valueType: 'digit',
-                                      rules: [
-                                      ],
-                                    },""" % (default_replace, ver_name, name)
+                        if field.blank:
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'digit',
+    rules: [
+    ],
+  },""" % (default_replace, ver_name, name)
                         else:
-                            one_c = """{
-                             %s
-                                      title: '%s',
-                                      dataIndex: '%s',
-                                                valueType: 'digit',
-                                      rules: [
-                                        {
-                                          required: true,
-                                          message: '%s为必填项',
-                                        },
-                                      ],
-                                    },""" % (default_replace, ver_name, name, ver_name)
-                elif isinstance(filed, ImageField) or isinstance(filed, SImageField):
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'digit',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
+                elif isinstance(field, ImageField) or isinstance(field, SImageField):
                     img_field_list.append('"' + name + '"')
-                    help_text = filed.help_text
+                    help_text = field.help_text
 
-                    if "头像" in filed.verbose_name or filed.name == "avatar" or help_text == MAIN_AVATAR:
-                        if filed.blank:
-                            one_c = """{
-                                                title: '%s',
-                                                dataIndex: '%s',
-                                         valueType: 'avatar',
-                                                       hideInSearch: true,
-                                                rules: [
-                                                ],
-                                                renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
-                              return <UploadAvatar img={imageUrl}/>
-                            },
-                                              },""" % (ver_name, name, name)
+                    if "头像" in field.verbose_name or field.name == "avatar" or help_text == MAIN_AVATAR:
+                        if field.blank:
+                            one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'avatar',
+    hideInSearch: true,
+    rules: [
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const imageUrl = form.getFieldValue('%s');
+      return <UploadAvatar img={imageUrl}/>
+    },
+  },""" % (ver_name, name, name)
                         else:
-                            one_c = """{
-                            title: '%s',
-                            dataIndex: '%s',
-                     valueType: 'avatar',
-                                   hideInSearch: true,
-                            rules: [
-                              {
-                                required: true,
-                                message: '%s为必填项',
-                              },
-                            ],
-                            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-          const imageUrl = form.getFieldValue('%s');
-          return <UploadAvatar img={imageUrl}/>
-        },
-                          },""" % (ver_name, name, ver_name, name)
+                            one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'avatar',
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const imageUrl = form.getFieldValue('%s');
+      return <UploadAvatar img={imageUrl}/>
+    },
+  },""" % (ver_name, name, ver_name, name)
                     else:
-                        if filed.blank:
-                            one_c = """{
-                                                title: '%s',
-                                                dataIndex: '%s',
-                                                              render: (text, record) => {
-                                          return <img src={text} width="80px" alt=""/>
-                                        },
-                                                      hideInSearch: true,
-                                                rules: [
-                                                ],
-                                                 renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
-                              return <UploadAvatar img={imageUrl}/>
-                            },
-                                              },""" % (ver_name, name, name)
+                        if field.blank:
+                            one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    render: (text, record) => {
+      return <img src={text} width="80px" alt=""/>
+    },
+    hideInSearch: true,
+    rules: [
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const imageUrl = form.getFieldValue('%s');
+      return <UploadAvatar img={imageUrl}/>
+    },
+  },""" % (ver_name, name, name)
                         else:
-                            one_c = """{
-                            title: '%s',
-                            dataIndex: '%s',
-                                          render: (text, record) => {
-                      return <img src={text} width="80px" alt=""/>
-                    },
-                                  hideInSearch: true,
-                            rules: [
-                              {
-                                required: true,
-                                message: '%s为必填项',
-                              },
-                            ],
-                             renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-          const imageUrl = form.getFieldValue('%s');
-          return <UploadAvatar img={imageUrl}/>
-        },
-                          },""" % (ver_name, name, ver_name, name)
-                elif isinstance(filed, FileField):
+                            one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    render: (text, record) => {
+      return <img src={text} width="80px" alt=""/>
+    },
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const imageUrl = form.getFieldValue('%s');
+      return <UploadAvatar img={imageUrl}/>
+    },
+  },""" % (ver_name, name, ver_name, name)
+                elif isinstance(field, FileField):
                     img_field_list.append('"' + name + '"')
-                    if filed.blank:
-                        one_c = """{
-                                                            title: '%s',
-                                                            dataIndex: '%s',
-                                                                   hideInSearch: true,
-                                                            rules: [
-                                                            ],
-                                                                render: (text, record) => {
-                          return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
-                        },    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                          const downloadUrl = form.getFieldValue('download');
-                          return fileUpload(downloadUrl);
-                        },
-    
-                                                          },""" % (ver_name, name)
+                    if field.blank:
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    hideInSearch: true,
+    rules: [
+    ],
+    render: (text, record) => {
+      return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
+    },
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const downloadUrl = form.getFieldValue('download');
+      return fileUpload(downloadUrl);
+    },
+  },""" % (ver_name, name)
                     else:
-                        one_c = """{
-                                                                                    title: '%s',
-                                                                                    dataIndex: '%s',
-                                                                                           hideInSearch: true,
-                                                                                    rules: [
-                                                                                      {
-                                                                                        required: true,
-                                                                                        message: '%s为必填项',
-                                                                                      },
-                                                                                    ],
-                                                                                        render: (text, record) => {
-                                                  return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
-                                                },    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                                                  const downloadUrl = form.getFieldValue('download');
-                                                  return fileUpload(downloadUrl);
-                                                },
-
-                                                                                  },""" % (ver_name, name, ver_name)
-                elif filed.__class__.__name__ == "TextField":
-                    if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: "{filed.default}",'
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    render: (text, record) => {
+      return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
+    },
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      const downloadUrl = form.getFieldValue('download');
+      return fileUpload(downloadUrl);
+    },
+  },""" % (ver_name, name, ver_name)
+                elif field.__class__.__name__ == "TextField":
+                    if field.default != NOT_PROVIDED:
+                        default_replace = f'initialValue: "{field.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank:
-                        one_c = """{
-                        %s
-                                                          title: '%s',
-                                                          dataIndex: '%s',
-                                                        valueType: 'textarea',
-                                                         ellipsis: true,
-                                                          rules: [
-                                                          ],
-                                                        },""" % (default_replace, ver_name, name)
+                    if field.blank:
+                        one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'textarea',
+    ellipsis: true,
+    rules: [
+    ],
+  },""" % (default_replace, ver_name, name)
                     else:
-                        one_c = """{
-                        %s
-                                  title: '%s',
-                                  dataIndex: '%s',
-                                valueType: 'textarea',
-                                 ellipsis: true,
-                                  rules: [
-                                    {
-                                      required: true,
-                                      message: '%s为必填项',
-                                    },
-                                  ],
-                                },""" % (default_replace, ver_name, name, ver_name)
-                elif filed.__class__.__name__ == "UEditorField" or isinstance(filed, richTextField):
-                    if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: "{filed.default}",'
+                        one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    valueType: 'textarea',
+    ellipsis: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
+                elif field.__class__.__name__ == "UEditorField" or isinstance(field, richTextField):
+                    if field.default != NOT_PROVIDED:
+                        default_replace = f'initialValue: "{field.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank:
-                        one_c = """{
-                        %s
-                                                          title: '%s',
-                                                          dataIndex: '%s',
-                                                              customCol:richCol,
-                                                              ellipsis: true,
-                                                                                            hideInSearch: true,
-                                                          rules: [
-                                                          ],
-                                                              renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                                  return richForm(form, rest.id);
-                                },
-                                                        },""" % (default_replace, ver_name, name)
+                    if field.blank:
+                        one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    customCol:richCol,
+    ellipsis: true,
+    hideInSearch: true,
+    rules: [
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      return richForm(form, rest.id);
+    },
+  },""" % (default_replace, ver_name, name)
                     else:
-                        one_c = """{
-                                                %s
-                                  title: '%s',
-                                  dataIndex: '%s',
-                                      customCol:richCol,
-                                      ellipsis: true,
-                                                                    hideInSearch: true,
-                                  rules: [
-                                    {
-                                      required: true,
-                                      message: '%s为必填项',
-                                    },
-                                  ],
-                                      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-          return richForm(form, rest.id);
-        },
-                                },""" % (default_replace, ver_name, name, ver_name)
-                elif filed.__class__.__name__ == "TimeZoneField":
-                    if filed.default != NOT_PROVIDED:
-                        if filed.default is not None:
-                            default_replace = f' initialValue: "{filed.default}",'
+                        one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    customCol:richCol,
+    ellipsis: true,
+    hideInSearch: true,
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+      return richForm(form, rest.id);
+    },
+  },""" % (default_replace, ver_name, name, ver_name)
+                elif field.__class__.__name__ == "TimeZoneField":
+                    if field.default != NOT_PROVIDED:
+                        if field.default is not None:
+                            default_replace = f'initialValue: "{field.default}",'
                         else:
                             default_replace = ""
                     else:
                         default_replace = ""
-                    if filed.CHOICES:
-                        filed_choices_list = []
-                        for filed_one in filed.CHOICES:
-                            one_line = f'"{filed_one[0]}":"{filed_one[1]}"'
-                            filed_choices_list.append(one_line)
-                        if filed.blank:
-                            one_c = """{
+                    if field.CHOICES:
+                        field_choices_list = []
+                        for field_one in field.CHOICES:
+                            one_line = f'"{field_one[0]}":"{field_one[1]}"'
+                            field_choices_list.append(one_line)
+                        if field.blank:
+                            one_c = """ {
                             %s
-                                                                       title: '%s',
-                                                                       dataIndex: '%s',
-                                                                       rules: [
-                                                                       ],
-                                                                       valueEnum: {
-                                                                         $valueEnum$
-                                                                        },
-                                                                     },""" % (default_replace, ver_name, name)
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name)
                         else:
-                            one_c = """{
-                            %s
-                                           title: '%s',
-                                           dataIndex: '%s',
-                                           rules: [
-                                             {
-                                               required: true,
-                                               message: '%s为必填项',
-                                             },
-                                           ],
-                                           valueEnum: {
-                                             $valueEnum$
-                                            },
-                                         },""" % (default_replace, ver_name, name, ver_name)
-                        one_c = one_c.replace("$valueEnum$", ",".join(filed_choices_list))
+                            one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    valueEnum: {
+      $valueEnum$
+    },
+  },""" % (default_replace, ver_name, name, ver_name)
+                        one_c = one_c.replace("$valueEnum$", ",".join(field_choices_list))
                 else:
-                    if filed.default != NOT_PROVIDED:
-                        default_replace = f' initialValue: "{filed.default}",'
+                    if field.default != NOT_PROVIDED:
+                        default_replace = f'initialValue: "{field.default}",'
                     else:
                         default_replace = ""
-                    if filed.blank:
-                        one_c = """{
-                        %s
-                          title: '%s',
-                          dataIndex: '%s',
-                          rules: [
-                          ],
-                        },""" % (default_replace, ver_name, name)
+                    if field.blank:
+                        one_c = """ {
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+    ],
+  },""" % (default_replace, ver_name, name)
                     else:
-                        print(filed.__class__.__name__)
+                        print(field.__class__.__name__)
                         one_c = """{
-                        %s
-                      title: '%s',
-                      dataIndex: '%s',
-                      rules: [
-                        {
-                          required: true,
-                          message: '%s为必填项',
-                        },
-                      ],
-                    },""" % (default_replace, ver_name, name, ver_name)
+    %s
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+  },""" % (default_replace, ver_name, name, ver_name)
                 model_pic_dict[model_name] = img_field_list
                 model_date_dict[model_name] = date_field_list
                 columns.append(one_c)
             model_service_dict[model_name] = model_service_item_list
-            for filed in one.objects.model._meta.many_to_many:
+            for field in one.objects.model._meta.many_to_many:
                 black_many_to_many = []
-                ver_name = filed.verbose_name
-                if filed.name in black_many_to_many:
+                ver_name = field.verbose_name
+                if field.name in black_many_to_many:
                     continue
                 else:
-                    name = filed.name
-                    rela_model = filed.related_model._meta.object_name
+                    name = field.name
+                    rela_model = field.related_model._meta.object_name
                     print("&&&" * 30)
                     print(one._meta.app_label, name)
                     print("&&&" * 30)
-                    if filed.blank:
-                        if filed.name == "permissions" and one._meta.app_label == "auth" and rela_model == "Group":
+                    if field.blank:
+                        if field.name == "permissions" and one._meta.app_label == "auth" and rela_model == "Group":
                             width_help = "      width: '70%',"
                         else:
                             width_help = ""
-                        one_c = """{
-                      title: '%s',
-                      dataIndex: '%s',
-                      %s
-                      rules: [
-                      ],
-                      renderFormItem: (item, {value, onChange, type, defaultRender}) => {
-                  return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
-            },
-                render: (text, record) => {
-                    return renderManyToMany(text)
-            },
-                    },""" % (ver_name, name, width_help, name,)
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    %s
+    rules: [
+    ],
+    renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+      return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
+    },
+    render: (text, record) => {
+      return renderManyToMany(text)
+    },
+  },""" % (ver_name, name, width_help, name,)
                     else:
-                        one_c = """{
-                                             title: '%s',
-                                             dataIndex: '%s',
-                                             rules: [
-                                               {
-                                                 required: true,
-                                                 message: '%s为必填项',
-                                               },
-                                             ],
-                                             renderFormItem: (item, {value, onChange, type, defaultRender}) => {
-                                          return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
-                                   },
-                                       render: (text, record) => {
-                                          return renderManyToMany(text)
-                                   },
-                                           },""" % (ver_name, name, ver_name, name)
+                        one_c = """ {
+    title: '%s',
+    dataIndex: '%s',
+    rules: [
+      {
+        required: true,
+        message: '%s为必填项',
+      },
+    ],
+    renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+      return dealManyToManyField(item, value,onChange,type, %sManyToManyList)
+    },
+    render: (text, record) => {
+      return renderManyToMany(text)
+    },
+  },""" % (ver_name, name, ver_name, name)
                     one_c = one_c.replace("$百分$", "%")
                     model_many_to_many_item = """const [$模型名字$ManyToManyList, set$模型名字首字母大写$ManyToManyList] = useState([]);
                     useEffect(() => {
@@ -693,85 +694,83 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                     }, []);""".replace("$模型名字$", name).replace("$模型名字首字母大写$", name[0].upper() + name[1:]) \
                         .replace("$关联Model$", rela_model)
                     model_many_to_many_list.append(model_many_to_many_item)
-                    model_import_item = """import {query$关联Model$} from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
+                    model_import_item = """import { query$关联Model$ } from '@/pages/AutoGenPage/$关联Model$List/service';""".replace("$关联Model$",
                                                                                                                                 rela_model)
                     if model_import_item not in model_import_item_list and model_name != rela_model:
                         model_import_item_list.append(model_import_item)
                     columns.append(one_c)
             if one._meta.app_label == user._meta.app_label and model_name == user._meta.object_name:
-                opera = """    {
-                                              title: '操作',
-                                              dataIndex: 'option',
-                                              valueType: 'option',
-                                                    fixed: 'right',
-                          width: 100,
-                                              render: (text, record) => (
-                                                <>
-
-                                                  <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                                    $时间处理占位$
-                                                    handleUpdateModalVisible(true);
-                                                    setUpdateFormValues(record);
-                                                  }} />
-                                                  <Divider type="vertical" />
-                                                  <KeyOutlined onClick={() => {
-                                            handleUpdatePassWordModalVisible(true);
-                                              setUpdateFormValues(record);
-          }} />
-                                                  <Divider type="vertical" />
-                                                  <Popconfirm
-                                                    title="您确定要删除$模型名字$吗？"
-                                                    placement="topRight"
-                                                    onConfirm={() => {
-                                                      handleRemove([record])
-                                                      actionRef.current.reloadAndRest();
-                                                    }}
-                                                    okText="确定"
-                                                    cancelText="取消"
-                                                  >
-                                                    <DeleteOutlined title="删除" className="icon" />
-                                                  </Popconfirm>
-                                                </>
-                                              ),
-                                            },""".replace("$模型名字$", model_ver_name)
+                opera = """ {
+    title: '操作',
+    dataIndex: 'option',
+    valueType: 'option',
+    fixed: 'right',
+    width: 100,
+    render: (text, record) => (
+      <>
+        <EditOutlined title="编辑" className="icon" onClick={async () => {
+          $时间处理占位$
+          handleUpdateModalVisible(true);
+          setUpdateFormValues(record);
+        }} />
+        <Divider type="vertical" />
+        <KeyOutlined onClick={() => {
+          handleUpdatePassWordModalVisible(true);
+          setUpdateFormValues(record);
+        }} />
+        <Divider type="vertical" />
+          <Popconfirm
+            title="您确定要删除$模型名字$吗？"
+            placement="topRight"
+            onConfirm={() => {
+              handleRemove([record])
+              actionRef.current.reloadAndRest();
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+          <DeleteOutlined title="删除" className="icon" />
+        </Popconfirm>
+      </>
+    ),
+  },""".replace("$模型名字$", model_ver_name)
             else:
-                opera = """    {
-                              title: '操作',
-                              dataIndex: 'option',
-                              valueType: 'option',
-                                    fixed: 'right',
-          width: 100,
-                              render: (text, record) => (
-                                <>
-    
-                                  <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                    $时间处理占位$
-                                    handleUpdateModalVisible(true);
-                                    setUpdateFormValues(record);
-                                  }} />
-                                  <Divider type="vertical" />
-                                  <Popconfirm
-                                    title="您确定要删除$模型名字$吗？"
-                                    placement="topRight"
-                                    onConfirm={() => {
-                                      handleRemove([record])
-                                      actionRef.current.reloadAndRest();
-                                    }}
-                                    okText="确定"
-                                    cancelText="取消"
-                                  >
-                                    <DeleteOutlined title="删除" className="icon" />
-                                  </Popconfirm>
-                                </>
-                              ),
-                            },""".replace("$模型名字$", model_ver_name)
+                opera = """ {
+    title: '操作',
+    dataIndex: 'option',
+    valueType: 'option',
+    fixed: 'right',
+    width: 100,
+    render: (text, record) => (
+      <>
+        <EditOutlined title="编辑" className="icon" onClick={async () => {
+          $时间处理占位$
+          handleUpdateModalVisible(true);
+          setUpdateFormValues(record);
+        }} />
+        <Divider type="vertical" />
+        <Popconfirm
+          title="您确定要删除$模型名字$吗？"
+          placement="topRight"
+          onConfirm={() => {
+            handleRemove([record])
+            actionRef.current.reloadAndRest();
+          }}
+          okText="确定"
+          cancelText="取消"
+        >
+          <DeleteOutlined title="删除" className="icon" />
+        </Popconfirm>
+      </>
+    ),
+  },""".replace("$模型名字$", model_ver_name)
             opera = opera.replace("$时间处理占位$", "".join(date_row_list))
             columns.append(opera)
             dest_path = f'{os.path.dirname(__file__)}/antd_page_templates/{template_type}'
             with open(f'{dest_path}/index.jsx', encoding='utf-8') as fr:
 
                 content = fr.read()
-                if fileds_num > 8:
+                if fields_num > 8:
                     new_content = content.replace("$两列布局占位$", """          search={{
                                 span: {
                                   lg: 12,
@@ -793,7 +792,7 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 new_content = new_content.replace("$时间占位$", ",".join(model_date_dict[model_name]))
                 if one._meta.app_label == user._meta.app_label and model_name == user._meta.object_name:
                     print("生成密码", one._meta.app_label, model_name)
-                    new_content = new_content.replace("$passwordform引入$", """import {updateUserPassword} from './service';\nimport UpdatePasswordForm from './components/UpdatePasswordForm';""")
+                    new_content = new_content.replace("$passwordform引入$", """import { updateUserPassword } from './service';\nimport UpdatePasswordForm from './components/UpdatePasswordForm';""")
                     new_content = new_content.replace("$Password占位$",
                                                       'const [updatePassWordModalVisible, handleUpdatePassWordModalVisible] = useState(false);\nconst [updatePasswordForm] = Form.useForm();')
                     new_content = new_content.replace("$更新密码方法占位$", """  const handlePassWordUpdate = () => {
@@ -892,14 +891,14 @@ export async function updateUserPassword(params) {
             with open(f'{dest_path}/components/CreateForm.jsx', encoding='utf-8') as fr:
                 create_form = fr.read()
                 create_form = create_form.replace("$占位模型显示名$", str(model_ver_name))
-                if fileds_num > 8:
+                if fields_num > 8:
                     create_form = create_form.replace("$宽度占位$", 'width={1200}')
                 else:
                     create_form = create_form.replace("$宽度占位$", "width={800}")
             with open(f'{dest_path}/components/UpdateForm.jsx', encoding='utf-8') as fr:
                 update_form = fr.read()
                 update_form = update_form.replace("$占位模型显示名$", str(model_ver_name))
-                if fileds_num > 8:
+                if fields_num > 8:
                     update_form = update_form.replace("$宽度占位$", 'width={1200}')
                 else:
                     update_form = update_form.replace("$宽度占位$", "width={800}")

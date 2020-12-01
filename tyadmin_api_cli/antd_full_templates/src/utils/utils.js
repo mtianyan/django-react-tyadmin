@@ -1,4 +1,4 @@
-import {parse} from 'querystring';
+import { parse } from 'querystring';
 import pathRegexp from 'path-to-regexp';
 import React from 'react';
 import UploadFileList from '@/components/UploadFileList';
@@ -17,14 +17,14 @@ import {
     Transfer,
     Upload,
 } from 'antd';
-import {richEditUpload} from '@/services/editor';
-import {ContentUtils} from 'braft-utils';
+import { richEditUpload } from '@/services/editor';
+import { ContentUtils } from 'braft-utils';
 import BraftEditor from 'braft-editor';
 import DynamicIcon from '@/components/DynamicIcon';
 import Ellipsis from '@/components/Ellipsis';
-import {InfoCircleTwoTone} from '@ant-design/icons';
+import { InfoCircleTwoTone } from '@ant-design/icons';
 
-const {Option} = Select;
+const { Option } = Select;
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -38,7 +38,7 @@ export const isAntDesignPro = () => {
 }; // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 
 export const isAntDesignProOrDev = () => {
-    const {NODE_ENV} = process.env;
+    const { NODE_ENV } = process.env;
 
     if (NODE_ENV === 'development') {
         return true;
@@ -55,7 +55,7 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 export const getAuthorityFromRouter = (router = [], pathname) => {
     const authority = router.find(
-        ({routes, path = '/', target = '_self'}) =>
+        ({ routes, path = '/', target = '_self' }) =>
             (path && target !== '_blank' && pathRegexp(path).exec(pathname)) ||
             (routes && getAuthorityFromRouter(routes, pathname)),
     );
@@ -98,7 +98,7 @@ export const deepCopy = (target) => {
         if (Array.isArray(target)) {
             obj = [];//处理target是数组的情况
         }
-        copyed_objs.push({target: target, copyTarget: obj});
+        copyed_objs.push({ target: target, copyTarget: obj });
         Object.keys(target).forEach(key => {
             if (obj[key]) {
                 return;
@@ -113,22 +113,22 @@ export const deepCopy = (target) => {
 
 export const buildFileFormData = (params, fileFieldList) => {
     let fileData = new FormData();
-    console.log(params);
+    // console.log(params);
     for (let index in fileFieldList) {
         let fileField = fileFieldList[index];
-        console.log(fileField);
-        console.log('fileField');
+        // console.log(fileField);
+        // console.log('fileField');
         if (typeof params[fileField] === 'string') {
             fileData.append(fileField, params[fileField]);
         } else {
-            console.log(params[fileField].fileList[0].originFileObj);
+            // console.log(params[fileField].fileList[0].originFileObj);
             if (params[fileField].file.originFileObj !== undefined) {
                 fileData.append(fileField, params[fileField].file.originFileObj);
             } else {
                 // 处理avatar和file兼容
                 fileData.append(fileField, params[fileField].fileList[0].originFileObj);
-                console.log('fileData');
-                console.log(fileData);
+                // console.log('fileData');
+                // console.log(fileData);
             }
         }
     }
@@ -192,7 +192,7 @@ export const getTableColumns = (cp) => {
 
 
 export const getUpdateColumns = (cp) => {
-    const cp_filter = cp.filter(({dataIndex}) => !['password'].includes(dataIndex));
+    const cp_filter = cp.filter(({ dataIndex }) => !['password'].includes(dataIndex));
     return cp_filter.map((one) => {
         if (one.valueType === 'dateTime' && one.hideInForm === true) {
             delete one.hideInForm;
@@ -272,7 +272,7 @@ export const download = (data, strFileName, strMimeType) => {
 
         blob = x instanceof B ?
             x :
-            new B([x], {type: m});
+            new B([x], { type: m });
     } catch (y) {
         if (BB) {
             b = new BB();
@@ -294,7 +294,7 @@ export const download = (data, strFileName, strMimeType) => {
 
         for (i; i < mx; ++i) uia[i] = bin.charCodeAt(i);
 
-        return new B([uia], {type: t});
+        return new B([uia], { type: t });
     }
 
     function saver(url, winMode) {
@@ -375,9 +375,9 @@ export const fileUpload = (downloadUrl) => {
             status: 'done',
             url: downloadUrl,
         }];
-        return <UploadFileList defaultFileList={download}/>;
+        return <UploadFileList defaultFileList={download} />;
     } else {
-        return <UploadFileList/>;
+        return <UploadFileList />;
     }
 };
 
@@ -419,16 +419,16 @@ export const richForm = (form, fieldName) => {
                     accept="image/*"
                     showUploadList={false}
                     customRequest={({
-                                        action,
-                                        data,
-                                        file,
-                                        filename,
-                                        headers,
-                                        onError,
-                                        onProgress,
-                                        onSuccess,
-                                        withCredentials,
-                                    }) => {
+                        action,
+                        data,
+                        file,
+                        filename,
+                        headers,
+                        onError,
+                        onProgress,
+                        onSuccess,
+                        withCredentials,
+                    }) => {
 
 
                         if (!file) {
@@ -443,26 +443,26 @@ export const richForm = (form, fieldName) => {
                             formData.append(filename, file);
 
                             richEditUpload(formData).then(r => {
-                                    let content = form.getFieldValue(fieldName);
-                                    if (typeof content === 'string') {
-                                        // 点了编辑刚进来.没有onChange
-                                        form.setFieldsValue({
-                                            [fieldName]: ContentUtils.insertMedias(BraftEditor.createEditorState(form.getFieldValue(fieldName)), [{
-                                                type: 'IMAGE',
-                                                url: r.image_url,
-                                            }]),
-                                        });
-                                    } else {
-                                        // 进来onChange了
-                                        form.setFieldsValue({
-                                            [fieldName]: ContentUtils.insertMedias(form.getFieldValue(fieldName), [{
-                                                type: 'IMAGE',
-                                                url: r.image_url,
-                                            }]),
-                                        });
-                                    }
+                                let content = form.getFieldValue(fieldName);
+                                if (typeof content === 'string') {
+                                    // 点了编辑刚进来.没有onChange
+                                    form.setFieldsValue({
+                                        [fieldName]: ContentUtils.insertMedias(BraftEditor.createEditorState(form.getFieldValue(fieldName)), [{
+                                            type: 'IMAGE',
+                                            url: r.image_url,
+                                        }]),
+                                    });
+                                } else {
+                                    // 进来onChange了
+                                    form.setFieldsValue({
+                                        [fieldName]: ContentUtils.insertMedias(form.getFieldValue(fieldName), [{
+                                            type: 'IMAGE',
+                                            url: r.image_url,
+                                        }]),
+                                    });
+                                }
 
-                                },
+                            },
                             );
                         }
 
@@ -483,7 +483,7 @@ export const richForm = (form, fieldName) => {
     ];
     return <BraftEditor
         key={fieldName}
-        onChange={(value) => form.setFieldsValue({[fieldName]: value})}
+        onChange={(value) => form.setFieldsValue({ [fieldName]: value })}
         defaultValue={BraftEditor.createEditorState(detail)}
         className="my-editor"
         controls={controls}
@@ -503,7 +503,7 @@ export const richTrans = (value) => {
 
 
 export const BooleanDisplay = (text) => {
-    return <Switch disabled checked={text}/>;
+    return <Switch disabled checked={text} />;
 };
 
 export const recursionGet = (setValues, valueId) => {
@@ -527,8 +527,8 @@ export const recursionChangeByKey = (setValues, key, row) => {
     for (let index = 0; index < setValues.length; index += 1) {
         if (setValues[index].key === key) {
             console.log('yyx', row);
-            console.log('yy', {...setValues[index], ...row});
-            setValues[index] = {...setValues[index], ...row};
+            console.log('yy', { ...setValues[index], ...row });
+            setValues[index] = { ...setValues[index], ...row };
             break;
         }
         if (setValues[index].children instanceof Array && setValues[index].children.length > 0) {
@@ -565,19 +565,19 @@ export const recursionChange = (setValues) => {
             if (setValues[index].children instanceof Array && setValues[index].children.length > 0) {
                 // callback(setValues[index])
                 console.log('xx', setValues[index]);
-                setValues[index].icon = <DynamicIcon type={setValues[index].icon}/>;
+                setValues[index].icon = <DynamicIcon type={setValues[index].icon} />;
                 recursionChange(setValues[index].children);
             } else {
-                setValues[index].icon = <DynamicIcon type={setValues[index].icon}/>;
+                setValues[index].icon = <DynamicIcon type={setValues[index].icon} />;
                 // callback(setValues[index])
             }
         }
     } else if (setValues.children instanceof Array && setValues.children.length > 0) {
         // callback(setValues)
-        setValues.icon = <DynamicIcon type={setValues[index].icon}/>;
+        setValues.icon = <DynamicIcon type={setValues[index].icon} />;
         recursionChange(setValues.children);
     } else {
-        setValues.icon = <DynamicIcon type={setValues[index].icon}/>;
+        setValues.icon = <DynamicIcon type={setValues[index].icon} />;
         // callback(setValues)
     }
 };
@@ -595,13 +595,13 @@ export const dealPureSelectField = (item, value, onChange, ChoiceDict) => {
         children.push(one)
     }
     return <Select
-      showSearch
-      placeholder={'请选择' + item.title}
-      value={value}
-      onChange={onChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
+        showSearch
+        placeholder={'请选择' + item.title}
+        value={value}
+        onChange={onChange}
+        filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
     >
         {children}
     </Select>;
@@ -655,28 +655,28 @@ export const dealManyToManyField = (item, value, onChange, type, ManyToManyList)
     console.log(value);
     if (type === 'form') {
         return (<Transfer
-                showSearch
-                dataSource={ManyToManyList}
-                targetKeys={value}
-                onChange={(targetKeys, direction, moveKeys) => {
-                    console.log(targetKeys, direction, moveKeys);
-                    if (direction === 'right') {
-                        onChange([...targetKeys, ...moveKeys]);
-                    } else {
-                        onChange(targetKeys.filter(el => !moveKeys.includes(el)));
-                    }
-                }}
-                render={item => item.ty_options_display_txt}
-                oneWay={false}
-                pagination
-            />
+            showSearch
+            dataSource={ManyToManyList}
+            targetKeys={value}
+            onChange={(targetKeys, direction, moveKeys) => {
+                console.log(targetKeys, direction, moveKeys);
+                if (direction === 'right') {
+                    onChange([...targetKeys, ...moveKeys]);
+                } else {
+                    onChange(targetKeys.filter(el => !moveKeys.includes(el)));
+                }
+            }}
+            render={item => item.ty_options_display_txt}
+            oneWay={false}
+            pagination
+        />
         );
     }
     return (
-      <Select
-        mode="multiple" placeholder={"请选择"+ item.title} onChange={onChange}>
-        {children}
-      </Select>
+        <Select
+            mode="multiple" placeholder={"请选择" + item.title} onChange={onChange}>
+            {children}
+        </Select>
     );
 };
 
@@ -704,13 +704,13 @@ export const renderManyToMany = (text) => {
     }
     text.forEach((value, index, arr) => {
         if (index <= 3) {
-            child.push(<Col xs={24} sm={8} md={8} lg={8} xl={6} style={{paddingRight:4, paddingTop: 4}}><Tag
-                color={color_arr[index % 10]}><Ellipsis style={{overflow: 'visible'}} tooltip
-                                                        length={30}>{value.ty_options_display_txt}</Ellipsis></Tag></Col>);
+            child.push(<Col xs={24} sm={8} md={8} lg={8} xl={6} style={{ paddingRight: 4, paddingTop: 4 }}><Tag
+                color={color_arr[index % 10]}><Ellipsis style={{ overflow: 'visible' }} tooltip
+                    length={30}>{value.ty_options_display_txt}</Ellipsis></Tag></Col>);
         } else if (index === 4) {
             child.push(<Popover trigger="click" content={<Descriptions>
                 {items}
-            </Descriptions>} title="多对多数据"><Col span={3} style={{paddingTop: 4}}><Tag
+            </Descriptions>} title="多对多数据"><Col span={3} style={{ paddingTop: 4 }}><Tag
                 color={color_arr[index % 10]}>...</Tag></Col></Popover>);
         }
     });
@@ -730,7 +730,7 @@ export const renderForeignKey = (text, VerboseNameMap) => {
     return <Space><span>{text.ty_options_display_txt}</span><Popover trigger="click" content={<Descriptions>
         {items}
     </Descriptions>} title="外键数据">
-        <InfoCircleTwoTone size="small"/>
+        <InfoCircleTwoTone size="small" />
     </Popover></Space>;
 };
 
@@ -769,9 +769,9 @@ export const dealRemoveError = (error, type) => {
     return false;
 };
 
-export const  exportExcelAll = async (params, queryRule, columns, excel_name) => {
+export const exportExcelAll = async (params, queryRule, columns, excel_name) => {
     params.all = 1
-    const ReqDetailList = await queryRule({...params})
+    const ReqDetailList = await queryRule({ ...params })
     const option = {};
 
     option.fileName = excel_name;
@@ -780,22 +780,22 @@ export const  exportExcelAll = async (params, queryRule, columns, excel_name) =>
             sheetData: ReqDetailList.map(item => {
                 const result = {};
                 columns.forEach(c => {
-                    if(c.dataIndex === "option"){
+                    if (c.dataIndex === "option") {
 
-                    }else {
+                    } else {
                         // result[c.dataIndex] = JSON.stringify(item[c.dataIndex]);
                         let value = item[c.dataIndex];
-                        if(value == null){
+                        if (value == null) {
                             value = ""
                         }
-                        else if(value instanceof Array){
+                        else if (value instanceof Array) {
                             let txt_list = []
                             for (let i = 0; i < value.length; i++) {
                                 txt_list.push(value[i].ty_options_display_txt)
                             }
                             value = txt_list.join(",")
                         }
-                        else if(typeof item[c.dataIndex] === "object"){
+                        else if (typeof item[c.dataIndex] === "object") {
                             value = item[c.dataIndex].ty_options_display_txt
                         }
                         result[c.dataIndex] = value;
@@ -814,7 +814,7 @@ export const  exportExcelAll = async (params, queryRule, columns, excel_name) =>
     toExcel.saveExcel();
 }
 
-export const  exportExcelCurrent = (selectedRows, columns, excel_name) => {
+export const exportExcelCurrent = (selectedRows, columns, excel_name) => {
     const option = {};
     option.fileName = excel_name;
     option.datas = [
@@ -822,19 +822,19 @@ export const  exportExcelCurrent = (selectedRows, columns, excel_name) => {
             sheetData: selectedRows.map(item => {
                 const result = {};
                 columns.forEach(c => {
-                    if(c.dataIndex === "option"){
+                    if (c.dataIndex === "option") {
 
-                    }else {
+                    } else {
                         // result[c.dataIndex] = JSON.stringify(item[c.dataIndex]);
                         let value = item[c.dataIndex];
-                        if(value instanceof Array){
+                        if (value instanceof Array) {
                             let txt_list = []
                             for (let i = 0; i < value.length; i++) {
                                 txt_list.push(value[i].ty_options_display_txt)
                             }
                             value = txt_list.join(",")
                         }
-                        else if(typeof item[c.dataIndex] === "object"){
+                        else if (typeof item[c.dataIndex] === "object") {
                             value = item[c.dataIndex].ty_options_display_txt
                         }
                         result[c.dataIndex] = value;
@@ -853,7 +853,7 @@ export const  exportExcelCurrent = (selectedRows, columns, excel_name) => {
     toExcel.saveExcel();
 }
 
-export const orderForm = (order_queue, columns_cp) =>{
+export const orderForm = (order_queue, columns_cp) => {
     let ordered_form = [];
     for (let index in order_queue) {
         let value = order_queue[index];

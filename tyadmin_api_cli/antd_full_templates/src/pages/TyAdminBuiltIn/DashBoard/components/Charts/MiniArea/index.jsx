@@ -96,12 +96,12 @@ const MiniArea = props => {
                 tooltip={false}
               />
             ) : (
-              <span
-                style={{
-                  display: 'none',
-                }}
-              />
-            )}
+                <span
+                  style={{
+                    display: 'none',
+                  }}
+                />
+              )}
           </Chart>
         )}
       </div>

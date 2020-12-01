@@ -28,8 +28,8 @@ const NumberInfo = ({ theme, title, subTitle, total, subTotal, status, suffix, g
       style={
         gap
           ? {
-              marginTop: gap,
-            }
+            marginTop: gap,
+          }
           : {}
       }
     >

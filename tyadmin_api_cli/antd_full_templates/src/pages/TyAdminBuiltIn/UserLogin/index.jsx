@@ -1,21 +1,21 @@
-import {createFromIconfontCN, LockTwoTone, MailTwoTone, UserOutlined} from '@ant-design/icons';
-import {Button, Col, Form, Input, message, Row, Spin, Tabs} from 'antd';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {connect} from 'umi';
+import { createFromIconfontCN, LockTwoTone, MailTwoTone, UserOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, message, Row, Spin, Tabs } from 'antd';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { connect } from 'umi';
 import styles from './style.less';
-import {getCode, getEmailCaptcha} from '@/services/login';
-import {fieldErrorHandle} from '@/utils/utils';
+import { getCode, getEmailCaptcha } from '@/services/login';
+import { fieldErrorHandle } from '@/utils/utils';
 
-const {TabPane} = Tabs;
+const { TabPane } = Tabs;
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1873282_onfaq4da0nb.js',
 });
 
 
 const Login = props => {
-  const {userLogin = {}, submitting} = props;
+  const { userLogin = {}, submitting } = props;
   const [timing, setTiming] = useState(false);
-  const {status, type: loginType, errors} = userLogin;
+  const { status, type: loginType, errors } = userLogin;
   const [autoLogin, setAutoLogin] = useState(true);
   const [challengeKey, setChallengeKey] = useState('key');
   const [codeImg, setCodeImg] = useState(null);
@@ -23,7 +23,7 @@ const Login = props => {
   const loginAccountFormRef = useRef();
   const loginEmailFormRef = useRef();
   const onGetCaptcha = useCallback(async email => {
-    const {onGetEmail} = props;
+    const { onGetEmail } = props;
     const ret = onGetEmail(email);
     console.log('ret');
     console.log(ret);
@@ -49,10 +49,10 @@ const Login = props => {
     });
   };
   const handleAccountSubmit = values => {
-    const {dispatch} = props;
+    const { dispatch } = props;
     const res = dispatch({
       type: 'login/login',
-      payload: {...values, type: "account", key: challengeKey},
+      payload: { ...values, type: "account", key: challengeKey },
     });
     res.then(err => {
       if (err.data && err.data instanceof Object && 'fields_errors' in err.data) {
@@ -62,10 +62,10 @@ const Login = props => {
   };
 
   const handleEmailSubmit = values => {
-    const {dispatch} = props;
+    const { dispatch } = props;
     const res = dispatch({
       type: 'login/login',
-      payload: {...values, type: "email", key: challengeKey},
+      payload: { ...values, type: "email", key: challengeKey },
     });
     res.then(err => {
       if (err.data && err.data instanceof Object && 'fields_errors' in err.data) {
@@ -81,7 +81,7 @@ const Login = props => {
         <TabPane key="account" tab="账户密码登录">
           <Form ref={loginAccountFormRef} onFinish={handleAccountSubmit}>
             <Form.Item
-              style={{marginBottom: 24}}
+              style={{ marginBottom: 24 }}
               name="userName"
               placeholder="用户名"
               rules={[
@@ -99,7 +99,7 @@ const Login = props => {
               />} />
             </Form.Item>
             <Form.Item
-              style={{marginBottom: 24}}
+              style={{ marginBottom: 24 }}
               name="password"
               placeholder="密码"
               rules={[
@@ -111,28 +111,28 @@ const Login = props => {
             >
 
               <Input.Password size="large" placeholder='请输入密码'
-                              prefix={<LockTwoTone className={styles.prefixIcon} />} />
+                prefix={<LockTwoTone className={styles.prefixIcon} />} />
             </Form.Item>
             <Row gutter={8}>
               <Col span={16}>
                 <Form.Item name="pic_captcha"
-                           placeholder="验证码"
-                           rules={[
-                             {
-                               required: true,
-                               message: '请输入验证码！',
-                             },
-                           ]}>
+                  placeholder="验证码"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入验证码！',
+                    },
+                  ]}>
                   <Input size="large" placeholder='请输入验证码'
-                         prefix={<IconFont type="iconyanzhengma" className={styles.prefixIcon} />} />
+                    prefix={<IconFont type="iconyanzhengma" className={styles.prefixIcon} />} />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Spin spinning={codeLoading}>
                   <img alt="Captcha"
-                       style={{width: '100%', height: 35, marginTop: 2.5, marginLeft: 10}}
-                       src={codeImg}
-                       onClick={onGetChallenge}
+                    style={{ width: '100%', height: 35, marginTop: 2.5, marginLeft: 10 }}
+                    src={codeImg}
+                    onClick={onGetChallenge}
                   />
                 </Spin>
               </Col>
@@ -163,18 +163,18 @@ const Login = props => {
             <Row gutter={8}>
               <Col span={16}>
                 <Form.Item name="captcha"
-                           placeholder="验证码"
-                           countDown={120}
-                           getCaptchaButtonText=""
-                           getCaptchaSecondText="秒"
-                           rules={[
-                             {
-                               required: true,
-                               message: '请输入邮箱验证码！',
-                             },
-                           ]}>
+                  placeholder="验证码"
+                  countDown={120}
+                  getCaptchaButtonText=""
+                  getCaptchaSecondText="秒"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入邮箱验证码！',
+                    },
+                  ]}>
                   <Input size="large" placeholder='请输入邮箱验证码'
-                         prefix={<IconFont type="iconyanzhengma" className={styles.prefixIcon} />} />
+                    prefix={<IconFont type="iconyanzhengma" className={styles.prefixIcon} />} />
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -213,7 +213,7 @@ const Login = props => {
   );
 };
 
-export default connect(({login, loading}) => ({
+export default connect(({ login, loading }) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
   codeLoading: loading.effects['login/getcode'],

@@ -1,6 +1,6 @@
 import request from 'umi-request';
 
-import {buildFileFormData} from '@/utils/utils'
+import { buildFileFormData } from '@/utils/utils'
 export async function query$占位模型名$(params) {
   return request('/api/xadmin/v1/$占位path$', {
     params,
