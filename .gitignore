@@ -57,3 +57,4 @@ Temporary Items
 /tyadmin_api_cli.egg-info/
 **/node_modules
 **/.umi/
+**/.idea/
