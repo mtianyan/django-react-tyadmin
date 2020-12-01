@@ -119,9 +119,6 @@ class XadminViewSet(MtyModelViewSet):
                 print(pure_value)
                 del_dict[key] = pure_value
                 del data[key]
-            elif getattr(instance, key).__class__.__name__ == "ManyRelatedManager" and isinstance(value, str):
-                del_dict[key] = eval(value)
-                del data[key]
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         for key, value in del_dict.items():

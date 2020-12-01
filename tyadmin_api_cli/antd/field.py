@@ -9,7 +9,16 @@ CUSTOM_RENDER_FORM_ITEM_LIST = ["ForeignKey"]
 
 def render_factory(field, many=None, manyStyle=None):
     # 自定义字段表单渲染
-    if many and manyStyle == "shuttle_box":
+    if many and manyStyle == "tags":
+        render_text = f"""
+                           renderFormItem: (item, {{value, onChange, type, defaultRender}}) => {{
+                                 return dealManyToManyFieldTags(item, value,onChange,type, {field.name}ManyToManyList)
+                           }},
+                          render: (text, record) => {{
+                               return renderManyToMany(text)
+                       }}, 
+            """
+    elif many:
         render_text = f"""
                 renderFormItem: (item, {{value, onChange, type, defaultRender}}) => {{
                       return dealManyToManyField(item, value,onChange,type, {field.name}ManyToManyList)
@@ -17,15 +26,6 @@ def render_factory(field, many=None, manyStyle=None):
                render: (text, record) => {{
                     return renderManyToMany(text)
             }}, 
-        """
-    elif many and not manyStyle:
-        render_text = f"""
-                       renderFormItem: (item, {{value, onChange, type, defaultRender}}) => {{
-                             return dealManyToManyFieldTags(item, value,onChange,type, {field.name}ManyToManyList)
-                       }},
-                      render: (text, record) => {{
-                           return renderManyToMany(text)
-                   }}, 
         """
     elif isinstance(field, ForeignKey):
         associated_model = field.related_model._meta.object_name
@@ -44,20 +44,20 @@ renderFormItem: (_, {{type, defaultRender, ...rest}}, form) => {{
                                   return richForm(form, rest.id);
                                 }},"""
     elif isinstance(field, ImageField) or isinstance(field, SImageField):
-        render_text = """
-renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
-                              return <UploadAvatar img={imageUrl}/>
-                            },
+        render_text = f"""
+renderFormItem: (_, {{type, defaultRender, ...rest}}, form) => {{
+                              const imageUrl = form.getFieldValue('{field.name}');
+                              return <UploadAvatar img={{imageUrl}}/>
+                            }},
     """
     elif isinstance(field, FileField):
         render_text = """
                         render: (text, record) => {
                           return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
                         },    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                          const downloadUrl = form.getFieldValue('download');
+                          const downloadUrl = form.getFieldValue('%s');
                           return fileUpload(downloadUrl);
-                        },"""
+                        },""" % field.name
     elif isinstance(field, BooleanField):
         render_text = """
                                      render: (text, record) => {
@@ -96,6 +96,8 @@ def default_factory(field):
                     default_value = f'initialValue: false,'
             elif isinstance(field, IntegerField):
                 default_value = f'initialValue: {field.default},'
+            elif isinstance(field, DateField) or isinstance(field, DateTimeField):
+                default_value = ''
             else:
                 default_value = f'initialValue: "{field.default}",'
     return default_value

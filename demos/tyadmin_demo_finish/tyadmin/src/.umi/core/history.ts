@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { createBrowserHistory } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/runtime';
+import { createBrowserHistory } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/runtime';
 
 let options = {
   "basename": "/"

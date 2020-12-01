@@ -107,11 +107,11 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
                 elif isinstance(field, DateTimeField):
                     current_field = Field_Template_Factory(field)
                     date_field_list.append('"' + field_name + '"')
-                    date_row_list.append(f'record.{field_name} = moment(record.{field_name});')
+                    date_row_list.append(f'record.{field_name} = record.{field_name} === null ? record.{field_name} : moment(record.{field_name});')
                 elif isinstance(field, DateField):
                     current_field = Field_Template_Factory(field)
                     date_field_list.append('"' + field_name + '"')
-                    date_row_list.append(f'record.{field_name} = moment(record.{field_name});')
+                    date_row_list.append(f'record.{field_name} = record.{field_name} === null ? record.{field_name} : moment(record.{field_name});')
                 elif isinstance(field, BooleanField):
                     current_field = Field_Template_Factory(field)
                 elif isinstance(field, IntegerField):

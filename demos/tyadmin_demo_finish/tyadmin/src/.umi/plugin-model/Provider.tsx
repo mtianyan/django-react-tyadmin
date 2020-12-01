@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React from 'react';
-import initialState from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/.umi/plugin-initial-state/models/initialState';
+import initialState from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/.umi/plugin-initial-state/models/initialState';
 
 // @ts-ignore
-import Dispatcher from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/dispatcher';
+import Dispatcher from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/dispatcher';
 // @ts-ignore
-import Executor from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/executor';
+import Executor from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/executor';
 // @ts-ignore
-import { UmiContext } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/constant';
+import { UmiContext } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/plugin-model/lib/helpers/constant';
 
 export const models = { '@@initialState': initialState,  };
 

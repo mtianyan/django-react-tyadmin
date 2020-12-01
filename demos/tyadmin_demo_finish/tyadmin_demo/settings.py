@@ -125,5 +125,16 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TY_ADMIN_CONFIG = {
-    'GEN_APPS': ['demo']
+    'GEN_APPS': ['demo'],
+
+    # 替换 tags样式穿梭框为tags样式 哪个app->哪个Model->哪个字段->哪个样式(目前只支持修改多对多)
+    'REWRITE': {
+        'demo': {
+            'RichTextDemo': {
+                'tags': {
+                    'many_to_many': 'tags'
+                }
+            }
+        }
+    }
 }

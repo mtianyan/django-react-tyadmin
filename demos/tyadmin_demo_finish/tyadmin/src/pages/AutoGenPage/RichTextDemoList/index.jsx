@@ -174,13 +174,13 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                      },
                              ],
                              
-                       renderFormItem: (item, {value, onChange, type, defaultRender}) => {
-                             return dealManyToManyFieldTags(item, value,onChange,type, tagsManyToManyList)
-                       },
-                      render: (text, record) => {
-                           return renderManyToMany(text)
-                   }, 
-        
+                           renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+                                 return dealManyToManyFieldTags(item, value,onChange,type, tagsManyToManyList)
+                           },
+                          render: (text, record) => {
+                               return renderManyToMany(text)
+                       }, 
+            
                              
                         },
                           {

@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { ApplyPluginsType } from 'umi';
 import dva from 'dva';
 // @ts-ignore
-import createLoading from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/dva-loading/dist/index.esm.js';
+import createLoading from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/dva-loading/dist/index.esm.js';
 import { plugin, history } from '../core/umiExports';
 
 let app:any = null;
@@ -28,10 +28,10 @@ export function _onCreate(options = {}) {
   (runtimeDva.plugins || []).forEach((plugin:any) => {
     app.use(plugin);
   });
-  app.model({ namespace: 'global', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/models/global.js').default) });
-app.model({ namespace: 'login', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/models/login.js').default) });
-app.model({ namespace: 'setting', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/models/setting.js').default) });
-app.model({ namespace: 'user', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/models/user.js').default) });
+  app.model({ namespace: 'global', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/models/global.js').default) });
+app.model({ namespace: 'login', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/models/login.js').default) });
+app.model({ namespace: 'setting', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/models/setting.js').default) });
+app.model({ namespace: 'user', ...(require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/models/user.js').default) });
   return app;
 }
 

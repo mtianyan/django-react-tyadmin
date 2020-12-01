@@ -152,7 +152,7 @@ const TableList = () => {
                       {
                              title: 'Date默认值',
                              
-                             initialValue: "<built-in method today of type object at 0x105c437e0>",
+                             
                              dataIndex: 'date_field',
                              valueType: 'date',
                              rules: [
@@ -166,7 +166,7 @@ const TableList = () => {
                              
             hideInForm: true,
             
-                             initialValue: "<built-in method now of type object at 0x105c43978>",
+                             
                              dataIndex: 'date_time_field',
                              valueType: 'dateTime',
                              rules: [
@@ -185,7 +185,7 @@ const TableList = () => {
                                 <>
 
                                   <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                    record.date_field = moment(record.date_field);record.date_time_field = moment(record.date_time_field);
+                                    record.date_field = record.date_field === null ? record.date_field : moment(record.date_field);record.date_time_field = record.date_time_field === null ? record.date_time_field : moment(record.date_time_field);
                                     handleUpdateModalVisible(true);
                                     setUpdateFormValues(record);
                                   }} />

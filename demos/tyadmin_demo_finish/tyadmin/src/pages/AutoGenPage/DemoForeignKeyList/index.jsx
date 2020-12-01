@@ -131,7 +131,7 @@ const TableList = () => {
                              ],
                              
 renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
+                              const imageUrl = form.getFieldValue('image');
                               return <UploadAvatar img={imageUrl}/>
                             },
     
@@ -152,7 +152,7 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                         render: (text, record) => {
                           return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
                         },    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                          const downloadUrl = form.getFieldValue('download');
+                          const downloadUrl = form.getFieldValue('file');
                           return fileUpload(downloadUrl);
                         },
                              

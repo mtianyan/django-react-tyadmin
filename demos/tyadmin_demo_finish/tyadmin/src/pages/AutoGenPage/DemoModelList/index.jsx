@@ -143,7 +143,7 @@ const TableList = () => {
                              ],
                              
 renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
+                              const imageUrl = form.getFieldValue('image_field');
                               return <UploadAvatar img={imageUrl}/>
                             },
     
@@ -167,7 +167,7 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                         render: (text, record) => {
                           return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
                         },    renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                          const downloadUrl = form.getFieldValue('download');
+                          const downloadUrl = form.getFieldValue('file_field');
                           return fileUpload(downloadUrl);
                         },
                              
@@ -270,7 +270,7 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                                 <>
 
                                   <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                    record.date_field = moment(record.date_field);record.date_time_field = moment(record.date_time_field);
+                                    record.date_field = record.date_field === null ? record.date_field : moment(record.date_field);record.date_time_field = record.date_time_field === null ? record.date_time_field : moment(record.date_time_field);
                                     handleUpdateModalVisible(true);
                                     setUpdateFormValues(record);
                                   }} />

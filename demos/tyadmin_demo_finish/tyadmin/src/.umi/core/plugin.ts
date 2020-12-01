@@ -1,24 +1,24 @@
 // @ts-nocheck
-import { Plugin } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/runtime';
+import { Plugin } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/runtime';
 
 const plugin = new Plugin({
   validKeys: ['modifyClientRenderOpts','patchRoutes','rootContainer','render','onRouteChange','dva','getInitialState','locale','locale','request',],
 });
 plugin.register({
-  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/umi-plugin-antd-icon-config/lib/app.js'),
-  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/umi-plugin-antd-icon-config/lib/app.js',
+  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/umi-plugin-antd-icon-config/lib/app.js'),
+  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/umi-plugin-antd-icon-config/lib/app.js',
 });
 plugin.register({
-  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/.umi/plugin-dva/runtime.tsx'),
-  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/.umi/plugin-dva/runtime.tsx',
+  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/.umi/plugin-dva/runtime.tsx'),
+  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/.umi/plugin-dva/runtime.tsx',
 });
 plugin.register({
   apply: require('../plugin-initial-state/runtime'),
   path: '../plugin-initial-state/runtime',
 });
 plugin.register({
-  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/.umi/plugin-locale/runtime.tsx'),
-  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/src/.umi/plugin-locale/runtime.tsx',
+  apply: require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/.umi/plugin-locale/runtime.tsx'),
+  path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/src/.umi/plugin-locale/runtime.tsx',
 });
 plugin.register({
   apply: require('../plugin-model/runtime'),

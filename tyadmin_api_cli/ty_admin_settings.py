@@ -3,7 +3,7 @@ TY_ADMIN_CONFIG = {
         'auth': {
             'Group': {
                 'permissions': {
-                    'many_to_many': 'shuttle_box'
+                    'many_to_many': 'transfer'
                 }
             }
         }

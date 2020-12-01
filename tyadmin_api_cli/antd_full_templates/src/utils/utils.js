@@ -604,6 +604,7 @@ export const dealPureSelectField = (item, value, onChange, ChoiceDict) => {
     children.push(one);
   }
   return <Select
+    allowClear
     showSearch
     placeholder={'请选择' + item.title}
     value={value}
@@ -627,6 +628,7 @@ export const dealForeignKeyField = (item, value, onChange, ForeignKeyList) => {
     return <Option key={item.id.toString()} value={item.id.toString()}>{item.ty_options_display_txt}</Option>;
   });
   return <Select
+    allowClear
     showSearch
     placeholder={'请选择' + item.title}
     value={value}
@@ -695,13 +697,6 @@ export const dealManyToManyField = (item, value, onChange, type, ManyToManyList)
 };
 
 export const dealManyToManyFieldTags = (item, value, onChange, type, ManyToManyList) => {
-  const children = ManyToManyList.map(item => {
-    return (
-      <Option key={item.id} value={item.id}>
-        {item.ty_options_display_txt}
-      </Option>
-    );
-  });
   console.log(value);
   if (typeof value === 'object') {
     if (value.length > 0 && value[0].hasOwnProperty('id')) {
@@ -716,17 +711,22 @@ export const dealManyToManyFieldTags = (item, value, onChange, type, ManyToManyL
       onChange(value);
     }
   }
-  return (
-    <Select
-      showSearch
-      allowClear
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-      mode="multiple" placeholder={'请选择' + item.title} onChange={onChange}>
-      {children}
-    </Select>
-  );
+  const children = ManyToManyList.map((item) => {
+    return <Option key={item.id.toString()} value={item.id.toString()}>{item.ty_options_display_txt}</Option>;
+  });
+  return <Select
+    showSearch
+    allowClear
+    mode="multiple"
+    placeholder={'请选择' + item.title}
+    value={value}
+    onChange={onChange}
+    filterOption={(input, option) =>
+      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    }
+  >
+    {children}
+  </Select>;
 };
 
 

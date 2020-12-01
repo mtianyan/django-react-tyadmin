@@ -4,15 +4,15 @@ import '@@/core/devScripts';
 import '../global.jsx';
 import { plugin } from './core/plugin';
 import { createHistory } from './core/history';
-import { ApplyPluginsType } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/runtime';
-import { renderClient } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/renderer-react/dist/index.js';
+import { ApplyPluginsType } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/runtime';
+import { renderClient } from '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/renderer-react/dist/index.js';
 
 
 require('../global.less');
 require('./plugin-locale/locale')._onCreate();
 (() => {
   // Runtime block add component
-  window.GUmiUIFlag = require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
+  window.GUmiUIFlag = require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
 
   // Enable/Disable block add edit mode
   window.addEventListener(
@@ -83,9 +83,9 @@ export default clientRender();
         if (isIE) return;
 
         // Umi UI Bubble
-        require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin/node_modules/@umijs/preset-ui/lib/bubble').default({
+        require('/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin/node_modules/@umijs/preset-ui/lib/bubble').default({
           port: 3000,
-          path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_init/tyadmin',
+          path: '/Users/mtianyan/tyRepos/tyadmin_api_cli/demos/tyadmin_demo_finish/tyadmin',
           currentProject: '',
           isBigfish: undefined,
         });

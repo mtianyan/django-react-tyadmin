@@ -247,7 +247,7 @@ const [updatePasswordForm] = Form.useForm();
                              
             hideInForm: true,
             
-                             initialValue: "<function now at 0x106986550>",
+                             
                              dataIndex: 'date_joined',
                              valueType: 'dateTime',
                              rules: [
@@ -284,7 +284,7 @@ const [updatePasswordForm] = Form.useForm();
                              ],
                              
 renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-                              const imageUrl = form.getFieldValue('%s');
+                              const imageUrl = form.getFieldValue('image');
                               return <UploadAvatar img={imageUrl}/>
                             },
     
@@ -300,12 +300,12 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                                      
                              ],
                              
-                       renderFormItem: (item, {value, onChange, type, defaultRender}) => {
-                             return dealManyToManyFieldTags(item, value,onChange,type, groupsManyToManyList)
-                       },
-                      render: (text, record) => {
-                           return renderManyToMany(text)
-                   }, 
+                renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+                      return dealManyToManyField(item, value,onChange,type, groupsManyToManyList)
+                },
+               render: (text, record) => {
+                    return renderManyToMany(text)
+            }, 
         
                              
                         },
@@ -319,12 +319,12 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                                      
                              ],
                              
-                       renderFormItem: (item, {value, onChange, type, defaultRender}) => {
-                             return dealManyToManyFieldTags(item, value,onChange,type, user_permissionsManyToManyList)
-                       },
-                      render: (text, record) => {
-                           return renderManyToMany(text)
-                   }, 
+                renderFormItem: (item, {value, onChange, type, defaultRender}) => {
+                      return dealManyToManyField(item, value,onChange,type, user_permissionsManyToManyList)
+                },
+               render: (text, record) => {
+                    return renderManyToMany(text)
+            }, 
         
                              
                         },
@@ -338,7 +338,7 @@ renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
                                                 <>
 
                                                   <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                                    record.last_login = moment(record.last_login);record.date_joined = moment(record.date_joined);
+                                                    record.last_login = record.last_login === null ? record.last_login : moment(record.last_login);record.date_joined = record.date_joined === null ? record.date_joined : moment(record.date_joined);
                                                     handleUpdateModalVisible(true);
                                                     setUpdateFormValues(record);
                                                   }} />
