@@ -3,6 +3,8 @@
 ![](https://img.shields.io/pypi/v/tyadmin-api-cli)
 ![](https://img.shields.io/pypi/wheel/tyadmin-api-cli)
 
+线上demo地址: https://tyadmin.funpython.cn/xadmin 账号: tyadmin 密码: tyadmin
+
 TyAdmin: 只需要花五分钟按着README中快速上手配置，无额外文档，无框架学习成本，零代码，全自动！更强大！更现代化！功能更多！
 
 0. 自动生成前后端管理后台，页面接口神奇全自动对接。登录验证，修改密码，Dashboard数据统计。
@@ -46,10 +48,6 @@ TyAdmin: 只需要花五分钟按着README中快速上手配置，无额外文�
 >前端生成一个完整的Antd design pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
 
 前端页面，后端接口，路由，菜单全部自动对接。
-
-## 在线demo地址(待上线):
-
->http://demo.funpython.cn
 
 # 快速上手 (已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表)
 
