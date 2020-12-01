@@ -1,8 +1,8 @@
-import {DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined, ExportOutlined} from '@ant-design/icons';
-import {notification, Button, Col, Descriptions, Divider, Dropdown, Form, Input, Menu, message, Popconfirm, Popover, Row, Select, Tag, Transfer,Switch} from 'antd';
-import React, {useEffect,useRef, useState} from 'react';
+import { DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined, ExportOutlined } from '@ant-design/icons';
+import { notification, Button, Col, Descriptions, Divider, Dropdown, Form, Input, Menu, message, Popconfirm, Popover, Row, Select, Tag, Transfer, Switch } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
-import {PageHeaderWrapper} from '@ant-design/pro-layout';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
 import {add>>MODEL_NAME<<, query>>MODEL_NAME<<, remove>>MODEL_NAME<<, update>>MODEL_NAME<<,query>>MODEL_NAME<<VerboseName, query>>MODEL_NAME<<ListDisplay, query>>MODEL_NAME<<DisplayOrder} from './service';
@@ -47,8 +47,8 @@ const TableList = () => {
     return true;
   } catch (error) {
       return dealError(error, updateFormRef, hide, "修改");
-  }
-};
+    }
+  };
 
   const handleRemove = async selectedRows => {
   const hide = message.loading('正在删除');
@@ -100,23 +100,24 @@ const TableList = () => {
 
   >>FOREIGNKEY_PLACE<<
 
+$外键占位$
 
     >>MANY_TO_MANY_PLACE<<
   return (
     <PageHeaderWrapper>
       <ProTable
-           beforeSearchSubmit={(params => {
-                         dealTime(params, dateFieldList);
+        beforeSearchSubmit={(params => {
+          dealTime(params, dateFieldList);
           return params;
         })}
         params={paramState}
-           scroll={{x: 'max-content'}}
+        scroll={{ x: 'max-content' }}
         columnsStateMap={columnsStateMap}
         onColumnsStateChange={(map) => setColumnsStateMap(map)}
         headerTitle=">>MODEL_VERBOSE_NAME<<表格"
         actionRef={actionRef}
         rowKey="id"
-        toolBarRender={(action, {selectedRows}) => [
+        toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
@@ -145,7 +146,7 @@ const TableList = () => {
                   selectedKeys={[]}
                 >
                   <Menu.Item key="remove">批量删除</Menu.Item>
-                                      <Menu.Item key="export_current">导出已选</Menu.Item>
+                  <Menu.Item key="export_current">导出已选</Menu.Item>
                 </Menu>
               }
             >
@@ -155,7 +156,7 @@ const TableList = () => {
             </Dropdown>
           ),
         ]}
-        tableAlertRender={({selectedRowKeys, selectedRows}) => (
+        tableAlertRender={({ selectedRowKeys, selectedRows }) => (
           selectedRowKeys.length > 0 ? <div>
             已选择{' '}
             <a
@@ -175,9 +176,9 @@ const TableList = () => {
       />
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
         <ProTable
-                     formRef={addFormRef}
+          formRef={addFormRef}
           onSubmit={async value => {
-                          richTrans(value);
+            richTrans(value);
             const success = await handleAdd(value);
 
             if (success) {
@@ -193,7 +194,7 @@ const TableList = () => {
           search={>>TWO_COLUMNS_COL<<}
           form={
             {
-              labelCol: {span: 6},
+              labelCol: { span: 6 },
               labelAlign: 'left',
             }}
           columns={create_columns}
@@ -204,7 +205,7 @@ const TableList = () => {
         <ProTable
           formRef={updateFormRef}
           onSubmit={async value => {
-                          richTrans(value);
+            richTrans(value);
             const success = await handleUpdate(value, updateFormValues.id);
 
             if (success) {
@@ -219,7 +220,7 @@ const TableList = () => {
           search={>>TWO_COLUMNS_COL<<}
           type="form"
           form={{
-            initialValues: updateFormValues, labelCol: {span: 6},
+            initialValues: updateFormValues, labelCol: { span: 6 },
             labelAlign: 'left',
           }}
           columns={update_columns}

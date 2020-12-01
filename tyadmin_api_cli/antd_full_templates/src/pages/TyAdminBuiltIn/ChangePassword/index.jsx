@@ -1,14 +1,14 @@
-import {PageHeaderWrapper} from '@ant-design/pro-layout';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React from 'react';
-import {Button, Card, Form, Input, message} from 'antd';
-import {changePassword} from '@/pages/TyAdminBuiltIn/ChangePassword/service';
-import {history} from 'umi';
-import {stringify} from "querystring";
-import {getPageQuery} from '@/utils/utils';
+import { Button, Card, Form, Input, message } from 'antd';
+import { changePassword } from '@/pages/TyAdminBuiltIn/ChangePassword/service';
+import { history } from 'umi';
+import { stringify } from "querystring";
+import { getPageQuery } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const tailLayout = {
-  wrapperCol: {offset: 5, span: 19},
+  wrapperCol: { offset: 5, span: 19 },
 };
 
 const ChangePassPage = () => {
@@ -96,7 +96,7 @@ const ChangePassPage = () => {
                 required: true,
                 message: '请再次输入新密码',
               },
-              ({getFieldValue}) => ({
+              ({ getFieldValue }) => ({
                 validator(rule, value) {
                   if (!value || getFieldValue('new_password') === value) {
                     return Promise.resolve();

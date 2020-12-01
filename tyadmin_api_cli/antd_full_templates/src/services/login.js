@@ -14,14 +14,14 @@ export async function getEmailCaptcha(email) {
 export async function getCode() {
   return request(
     '/api/xadmin/v1/captcha-generate', {
-      method: 'GET',
-    },
+    method: 'GET',
+  },
   );
 }
 export async function Logout() {
   return request(
     '/api/xadmin/v1/logout', {
-      method: 'GET'
-    }
+    method: 'GET'
+  }
   );
 }

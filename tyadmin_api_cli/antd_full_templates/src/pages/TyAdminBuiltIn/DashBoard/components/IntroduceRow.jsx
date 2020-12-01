@@ -1,14 +1,14 @@
-import {InfoCircleOutlined} from '@ant-design/icons';
-import {Col, Row, Tooltip} from 'antd';
-import {FormattedMessage} from 'umi';
-import React, {useEffect, useState} from 'react';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Col, Row, Tooltip } from 'antd';
+import { FormattedMessage } from 'umi';
+import React, { useEffect, useState } from 'react';
 import numeral from 'numeral';
-import {ChartCard, MiniArea, MiniBar, MiniProgress, Field} from './Charts';
+import { ChartCard, MiniArea, MiniBar, MiniProgress, Field } from './Charts';
 import Trend from './Trend';
 import Yuan from '../utils/Yuan';
 import styles from '../style.less';
-import {queryCount} from "@/services/user";
-import {getRandomInt} from '@/utils/utils';
+import { queryCount } from "@/services/user";
+import { getRandomInt } from '@/utils/utils';
 
 const topColResponsiveProps = {
     xs: 24,
@@ -21,7 +21,7 @@ const topColResponsiveProps = {
     },
 };
 
-const IntroduceRow = ({loading}) => {
+const IntroduceRow = ({ loading }) => {
     const [data, setData] = useState({})
     useEffect(() => {
         queryCount().then(r => setData(r.data))
@@ -108,13 +108,13 @@ const IntroduceRow = ({loading}) => {
                     <Tooltip
                         title={dataKey}
                     >
-                        <InfoCircleOutlined/>
+                        <InfoCircleOutlined />
                     </Tooltip>
                 }
                 total={numeral(data[dataKey]).format('0,0')}
                 contentHeight={46}
             >
-                <MiniArea color={color_map[getRandomInt(0, 11)]} data={visitData}/>
+                <MiniArea color={color_map[getRandomInt(0, 11)]} data={visitData} />
             </ChartCard>
         </Col>)
     }
