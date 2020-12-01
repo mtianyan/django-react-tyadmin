@@ -6,11 +6,7 @@ import proxy from './proxy';
 var fs = require("fs");
 const path = require('path');
 const { REACT_APP_ENV } = process.env;
-<<<<<<< HEAD
-const auto_route = eval(fs.readFileSync(path.join(__dirname, 'route.js')).toString());
-=======
 const auto_route = eval(fs.readFileSync(path.join(__dirname, 'routes.js')).toString());
->>>>>>> b80b8f7... rebase & merge
 export default defineConfig({
     hash: true,
     antd: {},
