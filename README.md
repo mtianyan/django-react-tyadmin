@@ -1,4 +1,4 @@
-# TyAdmin: Django 基于Models 的 **No Code** 零代码零学习成本管理后台前后端生成工具, 由Django Restful Framework 和 Antd Design Pro V4 驱动
+# TyAdmin: Django 基于Models 的 **No Code** 零代码零学习成本管理后台前后端生成工具, 由Django Restful Framework 和 Ant Design Pro V4 驱动
 
 ![](https://img.shields.io/pypi/v/tyadmin-api-cli)
 ![](https://img.shields.io/pypi/wheel/tyadmin-api-cli)
@@ -25,12 +25,12 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 
 只需要设计好Model，在settings中配置需要生成哪些model，运行一条命令`python manage.py init_admin && python manage.py gen_all`
 
->后端代码生成一个django app到项目目录, 只需注册一下， 无需再写一行代码！ 代码归你掌控，无阻二次开发！
->前端生成一个完整的Antd design pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
+>后端生成一个django app到项目目录, 只需注册一下， 无需再写一行代码！ 代码归你掌控，无阻二次开发！
+>前端生成一个Ant Design Pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
 
 前端页面，后端接口，路由，菜单全部自动对接,你只需要拷贝文档，修改配置，不需要写一行代码！！
 
-🎁 内置
+# 🎁 内置
 
 ## 1. 多种登录方式
 
@@ -60,12 +60,12 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
 
-# 快速上手 
+# 📦 快速上手 
 
 >已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
 >如有问题，可对比demos下tyadmin_demo_finish项目找自己的不同,以及查看[QA环节](#QA环节)
 
-### 1. 下载demo项目安装依赖
+## 1. 下载demo项目安装依赖
 
 ```
 git clone https://github.com/mtianyan/tyadmin_api_cli.git
@@ -74,7 +74,7 @@ cd tyadmin_api_cli/demos/tyadmin_demo_init
 pip install -r requirement.txt
 ```
 
-### 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
+## 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
 
 ```diff
 pip install tyadmin-api-cli
@@ -100,7 +100,7 @@ TY_ADMIN_CONFIG = {
 
 GEN_APPS: 填写你想要生成的app列表。 
 
-### 3. 初始化 后端app(tyadmin_api) + 前端项目(tyadmin)  && 生成后端自动化的视图，过滤器，路由，序列器 + 前端页面及路由菜单
+## 3. 初始化 后端app(tyadmin_api) + 前端项目(tyadmin)  && 生成后端自动化的视图，过滤器，路由，序列器 + 前端页面及路由菜单
 
 生成后端页面依赖，需安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
 
@@ -112,7 +112,7 @@ python manage.py init_admin && python manage.py gen_all && cd tyadmin && npm ins
 
 >耐心等待一会，build 会输出 前端页面到templates文件夹，生成前端js,css 等到static文件夹
 
-### 5. 注册生成出的django app
+## 4. 注册生成出的django app
 
 ```diff
 INSTALLED_APPS = [
@@ -126,7 +126,7 @@ INSTALLED_APPS = [
 'tyadmin_api'
 ```
 
-### 6. 注册首页路由，api路由
+## 5. 注册首页路由，api路由
 
 ./tyadmin_demo/urls.py
 
@@ -145,7 +145,7 @@ re_path('^xadmin/.*', AdminIndexView.as_view()),
 path('api/xadmin/v1/', include('tyadmin_api.urls')),
 ```
 
-### 7. 运行项目
+## 6. 运行项目
 
 ```
 python manage.py makemigrations
@@ -219,7 +219,7 @@ npm install
 npm run start:dev # 默认会运行在8001端口
 ```
 
-请确认django运行在8000端口，访问http://127.0.0.1:8001/xadmin/
+请确认django运行在8000端口，访问 http://127.0.0.1:8001/xadmin/
 
 # 🤝 贡献者名单:
 
@@ -238,6 +238,7 @@ npm run start:dev # 默认会运行在8001端口
 [MIT](https://github.com/go-admin-team/go-admin/blob/master/LICENSE.md)
 
 Copyright (c) 2020 mtianyan
+
 
 # 附录
 
