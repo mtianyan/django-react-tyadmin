@@ -1,10 +1,9 @@
-from datetime import datetime
-
 from django.db import models
+from django.utils import timezone
 
 
 class TyAdminSysLog(models.Model):
-    action_time = models.DateTimeField(verbose_name="动作时间", default=datetime.now)
+    action_time = models.DateTimeField(verbose_name="动作时间", default=timezone.now)
     ip_addr = models.CharField(max_length=39, blank=True, null=True, verbose_name="操作ip")
     action_flag = models.CharField(blank=True, null=True, max_length=32, verbose_name="操作flag")
     message = models.TextField(verbose_name="日志记录")
@@ -34,7 +33,7 @@ class TyAdminEmailVerifyRecord(models.Model):
         verbose_name=u"验证码类型")
     # 这里的now得去掉(),不去掉会根据编译时间。而不是根据实例化时间。
     send_time = models.DateTimeField(
-        default=datetime.now, verbose_name=u"发送时间")
+        default=timezone.now, verbose_name=u"发送时间")
 
     class Meta:
         verbose_name = "TyAdmin邮箱验证码"

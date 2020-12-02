@@ -9,37 +9,37 @@ const MiniProgress = ({
   strokeWidth,
   percent,
 }) => (
-  <div className={styles.miniProgress}>
-    <Tooltip title={targetLabel}>
-      <div
-        className={styles.target}
-        style={{
-          left: target ? `${target}%` : undefined,
-        }}
-      >
-        <span
+    <div className={styles.miniProgress}>
+      <Tooltip title={targetLabel}>
+        <div
+          className={styles.target}
           style={{
-            backgroundColor: color || undefined,
+            left: target ? `${target}%` : undefined,
           }}
-        />
-        <span
+        >
+          <span
+            style={{
+              backgroundColor: color || undefined,
+            }}
+          />
+          <span
+            style={{
+              backgroundColor: color || undefined,
+            }}
+          />
+        </div>
+      </Tooltip>
+      <div className={styles.progressWrap}>
+        <div
+          className={styles.progress}
           style={{
             backgroundColor: color || undefined,
+            width: percent ? `${percent}%` : undefined,
+            height: strokeWidth || undefined,
           }}
         />
       </div>
-    </Tooltip>
-    <div className={styles.progressWrap}>
-      <div
-        className={styles.progress}
-        style={{
-          backgroundColor: color || undefined,
-          width: percent ? `${percent}%` : undefined,
-          height: strokeWidth || undefined,
-        }}
-      />
     </div>
-  </div>
-);
+  );
 
 export default MiniProgress;

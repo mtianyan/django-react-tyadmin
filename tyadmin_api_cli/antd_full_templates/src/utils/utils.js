@@ -1,4 +1,4 @@
-import {parse} from 'querystring';
+import { parse } from 'querystring';
 import pathRegexp from 'path-to-regexp';
 import React from 'react';
 import UploadFileList from '@/components/UploadFileList';
@@ -17,14 +17,14 @@ import {
   Transfer,
   Upload,
 } from 'antd';
-import {richEditUpload} from '@/services/editor';
-import {ContentUtils} from 'braft-utils';
+import { richEditUpload } from '@/services/editor';
+import { ContentUtils } from 'braft-utils';
 import BraftEditor from 'braft-editor';
 import DynamicIcon from '@/components/DynamicIcon';
 import Ellipsis from '@/components/Ellipsis';
-import {InfoCircleTwoTone} from '@ant-design/icons';
+import { InfoCircleTwoTone } from '@ant-design/icons';
 
-const {Option} = Select;
+const { Option } = Select;
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;

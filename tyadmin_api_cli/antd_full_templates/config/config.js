@@ -1,12 +1,12 @@
 // https://umijs.org/config/
-import {defineConfig} from 'umi';
+import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
 var fs = require("fs");
 const path = require('path');
-const {REACT_APP_ENV} = process.env;
-const auto_route = eval(fs.readFileSync(path.join(__dirname, 'auto_menu.json')).toString());
+const { REACT_APP_ENV } = process.env;
+const auto_route = eval(fs.readFileSync(path.join(__dirname, 'routes.js')).toString());
 export default defineConfig({
     hash: true,
     antd: {},
@@ -29,61 +29,28 @@ export default defineConfig({
         ie: 11,
     },
     // umi routes: https://umijs.org/docs/routing
-    routes: [{
-        path: '/xadmin/login',
-        component: '../layouts/UserLayout',
-        routes: [{
-            name: 'login',
+    routes: [
+        {
             path: '/xadmin/login',
-            component: './TyAdminBuiltIn/UserLogin',
-        },],
-    },
+            component: '../layouts/UserLayout',
+            routes: [
+                {
+                    name: 'login',
+                    path: '/xadmin/login',
+                    component: './TyAdminBuiltIn/UserLogin',
+                },
+            ],
+        },
         {
             path: '/xadmin/',
             component: '../layouts/SecurityLayout',
-            routes: [{
-                path: '/xadmin/',
-                component: '../layouts/BasicLayout',
-                authority: ['admin', 'user'],
-                routes: [{
-                    name: '首页',
-                    path: '/xadmin/index',
-                    icon: 'dashboard',
-                    component: './TyAdminBuiltIn/DashBoard',
+            routes: [
+                {
+                    path: '/xadmin/',
+                    component: '../layouts/BasicLayout',
+                    authority: ['admin', 'user'],
+                    routes: auto_route,
                 },
-                    {
-                        path: '/xadmin/',
-                        redirect: '/xadmin/index',
-                    },
-                    ...auto_route,
-                    {
-                        path: '/xadmin/account/change_password',
-                        name: '修改密码',
-                        hideInMenu: true,
-                        icon: 'dashboard',
-                        component: './TyAdminBuiltIn/ChangePassword',
-                    },
-                    {
-                        name: 'Tyadmin内置',
-                        icon: 'VideoCamera',
-                        path: '/xadmin/sys',
-                        routes: [{
-                            name: 'TyAdmin日志',
-                            icon: 'smile',
-                            path: '/xadmin/sys/ty_admin_sys_log',
-                            component: './TyAdminBuiltIn/TyAdminSysLogList',
-                        }, {
-                            name: 'TyAdmin验证',
-                            icon: 'smile',
-                            path: '/xadmin/sys/ty_admin_email_verify_record',
-                            component: './TyAdminBuiltIn/TyAdminEmailVerifyRecordList',
-                        }],
-                    },
-                    {
-                        component: './404',
-                    },
-                ],
-            },
                 {
                     component: './404',
                 },

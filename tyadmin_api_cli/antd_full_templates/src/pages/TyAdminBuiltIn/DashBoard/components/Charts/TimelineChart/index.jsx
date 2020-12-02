@@ -20,12 +20,12 @@ const TimelineChart = props => {
   const data = Array.isArray(sourceData)
     ? sourceData
     : [
-        {
-          x: 0,
-          y1: 0,
-          y2: 0,
-        },
-      ];
+      {
+        x: 0,
+        y1: 0,
+        y2: 0,
+      },
+    ];
   data.sort((a, b) => a.x - b.x);
   let max;
 

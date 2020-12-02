@@ -218,7 +218,7 @@ UserOptionColumn = """    {
                                                 <>
 
                                                   <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                                    >>TIME_DEAL_PLACEHOLDER<<
+                                                   >>TIME_DEAL_PLACEHOLDER<<
                                                     handleUpdateModalVisible(true);
                                                     setUpdateFormValues(record);
                                                   }} />
@@ -254,7 +254,7 @@ GeneralOptionColumn = """    {
                                 <>
 
                                   <EditOutlined title="编辑" className="icon" onClick={async () => {
-                                    >>TIME_DEAL_PLACEHOLDER<<
+                                   >>TIME_DEAL_PLACEHOLDER<<
                                     handleUpdateModalVisible(true);
                                     setUpdateFormValues(record);
                                   }} />

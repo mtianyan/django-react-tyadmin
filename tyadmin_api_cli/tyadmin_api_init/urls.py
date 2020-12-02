@@ -7,9 +7,9 @@ from tyadmin_api.views import LoginView, CurrentUserView, CaptchaView, UserSendC
 from tyadmin_api.views import TyAdminSysLogViewSet, TyAdminEmailVerifyRecordViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register('ty_admin_sys_log/?', TyAdminSysLogViewSet)
+router.register('ty_admin_sys_log', TyAdminSysLogViewSet)
+router.register('ty_admin_email_verify_record', TyAdminEmailVerifyRecordViewSet)
 
-router.register('ty_admin_email_verify_record/?', TyAdminEmailVerifyRecordViewSet)
 urlpatterns = [
     re_path('^', include(router.urls)),
     path('login/account', LoginView.as_view(), name='user_login'),

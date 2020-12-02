@@ -53,7 +53,7 @@ Temporary Items
 /db/
 /dist/
 /build/
-**/__pycache__/
+__pycache__/
 /tyadmin_api_cli.egg-info/
 **/node_modules
 **/.umi/

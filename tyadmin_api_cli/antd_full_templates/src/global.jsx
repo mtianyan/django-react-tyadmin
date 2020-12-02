@@ -73,7 +73,7 @@ if (pwa) {
       }),
       btn,
       key,
-      onClose: async () => {},
+      onClose: async () => { },
     });
   });
 } else if ('serviceWorker' in navigator) {

@@ -232,15 +232,19 @@ export async function updateUserPassword(params) {
             cur_path = f'{target_path}/{model_name}List'
             if not os.path.exists(cur_path):
                 os.makedirs(cur_path)
+
             cur_path_co = f'{target_path}/{model_name}List/components'
             if not os.path.exists(cur_path_co):
                 os.makedirs(cur_path_co)
             with open(f'{target_path}/{model_name}List/index.jsx', 'w', encoding='utf-8') as fw:
                 fw.write(new_content)
+
             with open(f'{target_path}/{model_name}List/service.js', 'w', encoding='utf-8') as fw:
                 fw.write(new_services)
+
             with open(f'{target_path}/{model_name}List/components/CreateForm.jsx', 'w', encoding='utf-8') as fw:
                 fw.write(create_form)
+
             with open(f'{target_path}/{model_name}List/components/UpdateForm.jsx', 'w', encoding='utf-8') as fw:
                 fw.write(update_form)
             if app_name == user._meta.app_label:

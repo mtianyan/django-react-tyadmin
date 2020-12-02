@@ -2,8 +2,8 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import {extend} from 'umi-request';
-import {notification} from 'antd';
+import { extend } from 'umi-request';
+import { notification } from 'antd';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -27,7 +27,7 @@ const codeMessage = {
  */
 
 const errorHandler = error => {
-  const {response, data} = error;
+  const { response, data } = error;
   if (response.status === 500) {
     notification.error({
       message: '温馨提示',
@@ -48,7 +48,7 @@ const errorHandler = error => {
 
   else if (response) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const {status, url} = response;
+    const { status, url } = response;
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
