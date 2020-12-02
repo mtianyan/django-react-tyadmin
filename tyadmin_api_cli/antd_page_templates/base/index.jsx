@@ -100,6 +100,7 @@ const TableList = () => {
 
    >>FOREIGNKEY_PLACE<<
 
+    >>FOREIGNKEY_PLACE<<
 
    >>MANY_TO_MANY_PLACE<<
   return (
