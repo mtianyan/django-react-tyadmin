@@ -124,13 +124,13 @@ def gen_route(project_name_settings, user_label_list):
     
     # Used for menu items loading from server side
     path =  f'{settings.BASE_DIR}/tyadmin_api/menu.json'
-    logging.info(f'gen: {path}')
+    print(f'gen: {path}')
     with open(path, 'w', encoding='utf-8') as fw:
         fw.write(menu_string)
 
     # Used for frontend url route in config.js
     path = f'{settings.BASE_DIR}/tyadmin/config/routes.js'
-    logging.info(f'gen: {path}')
+    print(f'gen: {path}')
     with open(path, 'w', encoding='utf-8') as fw:
         fw.write(route_string)
 

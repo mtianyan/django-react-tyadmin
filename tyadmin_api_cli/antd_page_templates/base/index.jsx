@@ -5,67 +5,67 @@ import KeyOutlined from '@ant-design/icons/lib/icons/KeyOutlined';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from 'mtianyan-pro-table';
 import CreateForm from './components/CreateForm';
-import {add>>MODEL_NAME<<, query>>MODEL_NAME<<, remove>>MODEL_NAME<<, update>>MODEL_NAME<<,query>>MODEL_NAME<<VerboseName, query>>MODEL_NAME<<ListDisplay, query>>MODEL_NAME<<DisplayOrder} from './service';
+import { add>>MODEL_NAME<<, query>>MODEL_NAME<<, remove>>MODEL_NAME<<, update>>MODEL_NAME<<, query>>MODEL_NAME<<VerboseName, query>>MODEL_NAME<<ListDisplay, query>>MODEL_NAME<<DisplayOrder} from './service';
 import UpdateForm from './components/UpdateForm';
 import UploadAvatar from '@/components/UploadAvatar';
 >>IMPORT_PLACE<<
 >>PASSWORD_FORM<<
 import moment from 'moment';
-const {Option} = Select;
-import { BooleanFormItem, dealManyToManyFieldTags, fileUpload,twoColumns, richForm, richCol, dealPureSelectField, orderForm, exportExcelCurrent, exportExcelAll, getUpdateColumns, dealRemoveError, dealError, BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans,dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle} from '@/utils/utils';
+const { Option } = Select;
+import { BooleanFormItem, dealManyToManyFieldTags, fileUpload, twoColumns, richForm, richCol, dealPureSelectField, orderForm, exportExcelCurrent, exportExcelAll, getUpdateColumns, dealRemoveError, dealError, BooleanDisplay, dealDateTimeDisplay, dealManyToManyField, dealTime, deepCopy, fieldErrorHandle, getTableColumns, renderManyToMany, richTrans, dealForeignKeyField, renderForeignKey, fieldsLevelErrorHandle } from '@/utils/utils';
 import 'braft-editor/dist/index.css'
 const FormItem = Form.Item;
 const TableList = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  >>PASSWORD_PLACE<<
+ >>PASSWORD_PLACE<<
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef();
   const addFormRef = useRef();
   const updateFormRef = useRef();
 
   const handleAdd = async fields => {
-  const hide = message.loading('正在添加');
+    const hide = message.loading('正在添加');
 
-  try {
-    await add>>MODEL_NAME<<({...fields});
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-            return dealError(error, addFormRef, hide, "添加");
-  }
-};
+    try {
+      await add>>MODEL_NAME<<({ ...fields });
+      hide();
+      message.success('添加成功');
+      return true;
+    } catch (error) {
+      return dealError(error, addFormRef, hide, "添加");
+    }
+  };
 
   const handleUpdate = async (value, current_id) => {
-  const hide = message.loading('正在修改');
+    const hide = message.loading('正在修改');
 
-  try {
-    await update>>MODEL_NAME<<(value, current_id);
-    hide();
-    message.success('修改成功');
-    return true;
-  } catch (error) {
+    try {
+      await update>>MODEL_NAME<<(value, current_id);
+      hide();
+      message.success('修改成功');
+      return true;
+    } catch (error) {
       return dealError(error, updateFormRef, hide, "修改");
     }
   };
 
   const handleRemove = async selectedRows => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
 
-  try {
-    const ids = selectedRows.map(row => row.id).join(',');
-    await remove>>MODEL_NAME<<(ids);
-    hide();
-    message.success('删除成功');
-    return true;
-  } catch (error) {
+    try {
+      const ids = selectedRows.map(row => row.id).join(',');
+      await remove>>MODEL_NAME<<(ids);
+      hide();
+      message.success('删除成功');
+      return true;
+    } catch (error) {
       hide()
       return dealRemoveError(error, "删除");
-  }
-};
-  >>UPDATE_PASSWORD_METHOD<<
+    }
+  };
+ >>UPDATE_PASSWORD_METHOD<<
   const dateFieldList = [>>TIME_PLACE<<]
   const base_columns = [>>COLUMNS_LIST<<];
 
@@ -73,7 +73,7 @@ const TableList = () => {
 
   const [formOrder, setFormOrder] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     query>>MODEL_NAME<<DisplayOrder().then(r => {
       setFormOrder(r.form_order)
     })
@@ -91,18 +91,17 @@ const TableList = () => {
 
   const [paramState, setParamState] = useState({});
 
-  useEffect(()=>{
+  useEffect(() => {
     query>>MODEL_NAME<<ListDisplay().then(value => {
       setColumnsStateMap(value)
     })
-  },[])
+  }, [])
 
 
-  >>FOREIGNKEY_PLACE<<
+   >>FOREIGNKEY_PLACE<<
 
-$外键占位$
 
-    >>MANY_TO_MANY_PLACE<<
+   >>MANY_TO_MANY_PLACE<<
   return (
     <PageHeaderWrapper>
       <ProTable
@@ -121,10 +120,10 @@ $外键占位$
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-            <Button type="primary" onClick={() => exportExcelAll(paramState, query>>MODEL_NAME<<, table_columns, '>>MODEL_VERBOSE_NAME<<-All')}>
+          <Button type="primary" onClick={() => exportExcelAll(paramState, query>>MODEL_NAME<<, table_columns, '>>MODEL_VERBOSE_NAME<<-All')}>
             <ExportOutlined /> 导出全部
           </Button>,
-          <Input.Search style={{marginRight: 20}} placeholder="搜索>>MODEL_VERBOSE_NAME<< " onSearch={value => {
+          <Input.Search style={{ marginRight: 20 }} placeholder="搜索>>MODEL_VERBOSE_NAME<<" onSearch={value => {
             setParamState({
               search: value,
             });
@@ -139,8 +138,8 @@ $外键占位$
                       await handleRemove(selectedRows);
                       actionRef.current.reloadAndRest();
                     }
-                                        else if(e.key === 'export_current'){
-                      exportExcelCurrent(selectedRows,table_columns, '>>MODEL_VERBOSE_NAME<<-select')
+                    else if (e.key === 'export_current') {
+                      exportExcelCurrent(selectedRows, table_columns, '>>MODEL_VERBOSE_NAME<<-select')
                     }
                   }}
                   selectedKeys={[]}
@@ -170,7 +169,7 @@ $外键占位$
           </div> : false
 
         )}
-        request={(params, sorter, filter) => query>>MODEL_NAME<<({...params, sorter, filter})}
+        request={(params, sorter, filter) => query>>MODEL_NAME<<({ ...params, sorter, filter })}
         columns={table_columns}
         rowSelection={{}}
       />
@@ -227,7 +226,7 @@ $外键占位$
           rowSelection={{}}
         />
       </UpdateForm>
-        >>PASSWORD_UPDATE_FORM<<
+       >>PASSWORD_UPDATE_FORM<<
     </PageHeaderWrapper>
   );
 };

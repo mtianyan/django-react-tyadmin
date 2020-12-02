@@ -97,9 +97,9 @@ def gen_serializer(project_name_settings, user_label_list):
             model_fk_dict[model_name] = fk_field_list
             model_list.append(model_name)
             many_2_many_list = []
-            for filed in one.objects.model._meta.many_to_many:
-                name = filed.name
-                rela_model = filed.related_model._meta.object_name
+            for field in one.objects.model._meta.many_to_many:
+                name = field.name
+                rela_model = field.related_model._meta.object_name
                 # print("&&&" * 30)
                 # print(one._meta.app_label, one._meta.model.__name__, rela_model)
                 many_2_many_list.append(name + "$分割$" + rela_model)

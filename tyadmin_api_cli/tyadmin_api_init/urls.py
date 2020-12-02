@@ -2,8 +2,7 @@ from django.urls import re_path, include, path
 from rest_framework.routers import DefaultRouter
 
 from tyadmin_api_cli.adapters.django_celery_beat_ty_admin import PeriodicTask_task
-from tyadmin_api.views import LoginView, CurrentUserView, CaptchaView, \
-    UserSendCaptchaView, DashBoardView, UploadView, MenuView, \
+from tyadmin_api.views import LoginView, CurrentUserView, CaptchaView, UserSendCaptchaView, DashBoardView, UploadView, MenuView, \
     UserChangePasswordView, UserListChangePasswordView, UserLogoutView
 from tyadmin_api.views import TyAdminSysLogViewSet, TyAdminEmailVerifyRecordViewSet
 

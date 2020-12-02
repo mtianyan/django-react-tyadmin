@@ -20,7 +20,7 @@ def gen_one_all(name):
     """
 
     url_txt = f"""
-    router.register('{get_lower_case_name(model_name)}/?', views.{model_name}ViewSet)
+    router.register('{get_lower_case_name(model_name)}', views.{model_name}ViewSet)
     """
 
     filter_txt = f"""

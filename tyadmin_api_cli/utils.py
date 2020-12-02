@@ -71,7 +71,7 @@ def format_json_string(raw_s, indent = 4):
         if line[0] in ['}', ']']:
             indention -= 1
  
-        formatted_s += ' ' *(4 * indention) + line + '\n'
+        formatted_s += ' ' *(indent * indention) + line + '\n'
 
         # apply for next line
         if line[0] in ['{', '[']:
