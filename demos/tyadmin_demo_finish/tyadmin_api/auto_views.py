@@ -8,7 +8,7 @@ from demo.models import DemoForeignKey, Tags, Category, RichTextDemo, DemoModelR
 from tyadmin_api.auto_serializers import PermissionListSerializer, GroupListSerializer, ContentTypeListSerializer, DemoForeignKeyListSerializer, TagsListSerializer, CategoryListSerializer, RichTextDemoListSerializer, DemoModelRequireListSerializer, DemoModelListSerializer, DemoDefaultModelListSerializer, UserProfileListSerializer
 from tyadmin_api.auto_serializers import PermissionCreateUpdateSerializer, GroupCreateUpdateSerializer, ContentTypeCreateUpdateSerializer, DemoForeignKeyCreateUpdateSerializer, TagsCreateUpdateSerializer, CategoryCreateUpdateSerializer, RichTextDemoCreateUpdateSerializer, DemoModelRequireCreateUpdateSerializer, DemoModelCreateUpdateSerializer, DemoDefaultModelCreateUpdateSerializer, UserProfileCreateUpdateSerializer
 from tyadmin_api.auto_filters import PermissionFilter, GroupFilter, ContentTypeFilter, DemoForeignKeyFilter, TagsFilter, CategoryFilter, RichTextDemoFilter, DemoModelRequireFilter, DemoModelFilter, DemoDefaultModelFilter, UserProfileFilter
-    
+
     
 class PermissionViewSet(XadminViewSet):
     serializer_class = PermissionListSerializer

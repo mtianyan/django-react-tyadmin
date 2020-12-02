@@ -7,10 +7,25 @@ from tyadmin_api_cli.utils import trans, contain_zh
 CUSTOM_RENDER_FORM_ITEM_LIST = ["ForeignKey"]
 
 
-def render_factory(field, many=None, manyStyle=None):
+def judge_is_avatar(field):
+    if "头像" in field.verbose_name or field.name == "avatar":
+        return True
+    else:
+        return False
+
+
+def render_factory(field, many=None, manyStyle=None, app_label=None):
+    if many:
+        if field.name == "permissions" and field.model._meta.app_label == "auth" and field.model._meta.object_name == "Group":
+            width_help = "width: '80%',"
+        else:
+            width_help = ""
+    else:
+        width_help = ""
     # 自定义字段表单渲染
     if many and manyStyle == "tags":
         render_text = f"""
+                           {width_help}
                            renderFormItem: (item, {{value, onChange, type, defaultRender}}) => {{
                                  return dealManyToManyFieldTags(item, value,onChange,type, {field.name}ManyToManyList)
                            }},
@@ -20,6 +35,7 @@ def render_factory(field, many=None, manyStyle=None):
             """
     elif many:
         render_text = f"""
+                {width_help}
                 renderFormItem: (item, {{value, onChange, type, defaultRender}}) => {{
                       return dealManyToManyField(item, value,onChange,type, {field.name}ManyToManyList)
                 }},
@@ -43,14 +59,24 @@ def render_factory(field, many=None, manyStyle=None):
 renderFormItem: (_, {{type, defaultRender, ...rest}}, form) => {{
                                   return richForm(form, rest.id);
                                 }},"""
-    elif isinstance(field, ImageField) or isinstance(field, SImageField):
+    elif not judge_is_avatar(field) and (isinstance(field, ImageField) or isinstance(field, SImageField)):
         render_text = f"""
+                                          render: (text, record) => {{
+                      return <img src={{text}} width="80px" alt=""/>
+                    }},
 renderFormItem: (_, {{type, defaultRender, ...rest}}, form) => {{
                               const imageUrl = form.getFieldValue('{field.name}');
                               return <UploadAvatar img={{imageUrl}}/>
                             }},
     """
-    elif isinstance(field, FileField):
+    elif judge_is_avatar(field) and (isinstance(field, ImageField) or isinstance(field, SImageField)):
+        render_text = f"""
+        renderFormItem: (_, {{type, defaultRender, ...rest}}, form) => {{
+                                      const imageUrl = form.getFieldValue('{field.name}');
+                                      return <UploadAvatar img={{imageUrl}}/>
+                                    }},
+            """
+    elif not judge_is_avatar(field) and isinstance(field, FileField):
         render_text = """
                         render: (text, record) => {
                           return <a download={text.split('/').slice(-1)} href={text}>{text.split('/').slice(-1)}</a>;
@@ -171,7 +197,7 @@ def value_type_factory(field):
     elif isinstance(field, IntegerField) and not field.choices:
         return f"valueType: 'digit',"
     elif isinstance(field, ImageField) or isinstance(field, SImageField):
-        if "头像" in field.verbose_name or field.name == "avatar":
+        if judge_is_avatar(field):
             return f"valueType: 'avatar',"
         else:
             return ""

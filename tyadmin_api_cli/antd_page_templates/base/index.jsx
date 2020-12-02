@@ -100,8 +100,6 @@ const TableList = () => {
 
    >>FOREIGNKEY_PLACE<<
 
-    >>FOREIGNKEY_PLACE<<
-
    >>MANY_TO_MANY_PLACE<<
   return (
     <PageHeaderWrapper>
@@ -111,7 +109,7 @@ const TableList = () => {
           return params;
         })}
         params={paramState}
-        scroll={{ x: 'max-content' }}
+        scroll={{ x: '100%' }}
         columnsStateMap={columnsStateMap}
         onColumnsStateChange={(map) => setColumnsStateMap(map)}
         headerTitle=">>MODEL_VERBOSE_NAME<<表格"

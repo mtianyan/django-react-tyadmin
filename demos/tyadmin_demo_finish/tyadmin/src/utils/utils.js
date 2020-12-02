@@ -1,4 +1,4 @@
-import {parse} from 'querystring';
+import { parse } from 'querystring';
 import pathRegexp from 'path-to-regexp';
 import React from 'react';
 import UploadFileList from '@/components/UploadFileList';
@@ -17,14 +17,14 @@ import {
   Transfer,
   Upload,
 } from 'antd';
-import {richEditUpload} from '@/services/editor';
-import {ContentUtils} from 'braft-utils';
+import { richEditUpload } from '@/services/editor';
+import { ContentUtils } from 'braft-utils';
 import BraftEditor from 'braft-editor';
 import DynamicIcon from '@/components/DynamicIcon';
 import Ellipsis from '@/components/Ellipsis';
-import {InfoCircleTwoTone} from '@ant-design/icons';
+import { InfoCircleTwoTone } from '@ant-design/icons';
 
-const {Option} = Select;
+const { Option } = Select;
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -755,15 +755,15 @@ export const renderManyToMany = (text) => {
     items.push(one);
   }
   text.forEach((value, index, arr) => {
-    if (index <= 3) {
-      child.push(<Col xs={24} sm={8} md={8} lg={8} xl={6} style={{paddingRight: 4, paddingTop: 4}}>
+    if (index < 15) {
+      child.push(<Col xs={24} sm={12} md={12} lg={8} xl={6} style={{paddingRight: 4, paddingTop: 4}}>
         <Tag
           color={color_arr[index % 10]}>
           <Ellipsis style={{overflow: 'visible'}} tooltip
-                    length={30}>{value.ty_options_display_txt}</Ellipsis>
+                    length={25}>{value.ty_options_display_txt}</Ellipsis>
         </Tag>
       </Col>);
-    } else if (index === 4) {
+    } else if (index === 15) {
       child.push(<Popover trigger="click" content={<Descriptions>
         {items}
       </Descriptions>} title="多对多数据">

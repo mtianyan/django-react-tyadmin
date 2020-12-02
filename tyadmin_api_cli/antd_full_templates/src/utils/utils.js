@@ -755,15 +755,15 @@ export const renderManyToMany = (text) => {
     items.push(one);
   }
   text.forEach((value, index, arr) => {
-    if (index <= 3) {
-      child.push(<Col xs={24} sm={8} md={8} lg={8} xl={6} style={{paddingRight: 4, paddingTop: 4}}>
+    if (index < 15) {
+      child.push(<Col xs={24} sm={12} md={12} lg={8} xl={6} style={{paddingRight: 4, paddingTop: 4}}>
         <Tag
           color={color_arr[index % 10]}>
           <Ellipsis style={{overflow: 'visible'}} tooltip
-                    length={30}>{value.ty_options_display_txt}</Ellipsis>
+                    length={25}>{value.ty_options_display_txt}</Ellipsis>
         </Tag>
       </Col>);
-    } else if (index === 4) {
+    } else if (index === 15) {
       child.push(<Popover trigger="click" content={<Descriptions>
         {items}
       </Descriptions>} title="多对多数据">

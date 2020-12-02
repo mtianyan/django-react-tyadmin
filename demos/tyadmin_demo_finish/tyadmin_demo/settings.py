@@ -58,7 +58,7 @@ ROOT_URLCONF = 'tyadmin_demo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,17 +124,13 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-TY_ADMIN_CONFIG = {
-    'GEN_APPS': ['demo'],
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-    # 替换 tags样式穿梭框为tags样式 哪个app->哪个Model->哪个字段->哪个样式(目前只支持修改多对多)
-    'REWRITE': {
-        'demo': {
-            'RichTextDemo': {
-                'tags': {
-                    'many_to_many': 'tags'
-                }
-            }
-        }
-    }
+TY_ADMIN_CONFIG = {
+    'GEN_APPS': ['demo']
 }

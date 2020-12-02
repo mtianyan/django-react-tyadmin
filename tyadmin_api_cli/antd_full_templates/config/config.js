@@ -10,8 +10,11 @@ const auto_route = eval(fs.readFileSync(path.join(__dirname, 'routes.js')).toStr
 export default defineConfig({
     hash: true,
     antd: {},
-    outputPath: `../templates/TyAdmin/`,
-    publicPath: REACT_APP_ENV === 'dev' ? '/' : '/static/TyAdmin/',
+    extraBabelPlugins: [
+        REACT_APP_ENV === 'dev' ? "" : 'transform-remove-console'
+    ],
+    outputPath: `../static/tyadmin/`,
+    publicPath: REACT_APP_ENV === 'dev' ? '/' : '/static/tyadmin/',
     dva: {
         hmr: true,
     },

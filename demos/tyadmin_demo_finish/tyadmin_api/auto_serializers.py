@@ -22,9 +22,11 @@ class ContentTypeListSerializer(serializers.ModelSerializer):
 class ContentTypeCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = ContentType
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -48,9 +50,11 @@ class DemoForeignKeyListSerializer(serializers.ModelSerializer):
 class DemoForeignKeyCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = DemoForeignKey
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -74,9 +78,11 @@ class TagsListSerializer(serializers.ModelSerializer):
 class TagsCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = Tags
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -100,9 +106,11 @@ class CategoryListSerializer(serializers.ModelSerializer):
 class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = Category
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -126,9 +134,11 @@ class DemoModelRequireListSerializer(serializers.ModelSerializer):
 class DemoModelRequireCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = DemoModelRequire
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -152,9 +162,11 @@ class DemoDefaultModelListSerializer(serializers.ModelSerializer):
 class DemoDefaultModelCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = DemoDefaultModel
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -187,9 +199,11 @@ class PermissionListSerializer(serializers.ModelSerializer):
 class PermissionCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = Permission
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -222,9 +236,11 @@ class GroupListSerializer(serializers.ModelSerializer):
 class GroupCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = Group
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -275,9 +291,11 @@ class RichTextDemoListSerializer(serializers.ModelSerializer):
 class RichTextDemoCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = RichTextDemo
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -310,9 +328,11 @@ class DemoModelListSerializer(serializers.ModelSerializer):
 class DemoModelCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = DemoModel
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
@@ -354,9 +374,11 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 class UserProfileCreateUpdateSerializer(serializers.ModelSerializer):
     
     ty_options_display_txt = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
         fields = "__all__"
+
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)

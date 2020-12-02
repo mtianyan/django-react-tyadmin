@@ -1,10 +1,10 @@
 import React from 'react';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 
 
 const UpdatePasswordForm = props => {
 
-  const {updateModalVisible, onCancel, handleUpdate, userName} = props;
+  const { updateModalVisible, onCancel, handleUpdate, userName } = props;
 
   return (
     <Modal

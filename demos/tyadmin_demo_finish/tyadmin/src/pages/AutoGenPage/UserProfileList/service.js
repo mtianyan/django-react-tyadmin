@@ -1,6 +1,6 @@
 import request from 'umi-request';
 
-import {buildFileFormData} from '@/utils/utils'
+import { buildFileFormData } from '@/utils/utils'
 export async function queryUserProfile(params) {
   return request('/api/xadmin/v1/user_profile', {
     params,

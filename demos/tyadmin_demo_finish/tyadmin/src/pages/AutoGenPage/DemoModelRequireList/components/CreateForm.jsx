@@ -1,8 +1,8 @@
 import React from 'react';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 
 const CreateForm = props => {
-  const {modalVisible, onCancel} = props;
+  const { modalVisible, onCancel } = props;
   return (
     <Modal
       destroyOnClose
