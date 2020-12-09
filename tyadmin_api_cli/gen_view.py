@@ -4,6 +4,7 @@ from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerFie
 from tyadmin_api_cli.utils import init_django_env, get_model_import_path
 from tyadmin_api_cli.contants import SYS_LABELS
 
+
 def gen_view(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django
@@ -72,14 +73,10 @@ class {model_name}ViewSet(XadminViewSet):
         else:
             return {model_name}CreateUpdateSerializer
 """
-    # if os.path.exists(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py'):
-    #     print("已存在views跳过")
-    # else:
     with open(f'{settings.BASE_DIR}/tyadmin_api/auto_views.py', 'w', encoding='utf-8') as fw:
         fw.write(viewset_txt)
 
 
 if __name__ == '__main__':
-    # name = input("请输入项目settings位置:")
     name = "skyoms.settings"
-    gen_view(name,None)
+    gen_view(name, None)

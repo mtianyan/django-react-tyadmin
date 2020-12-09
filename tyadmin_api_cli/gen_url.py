@@ -3,6 +3,7 @@ import os
 from tyadmin_api_cli.utils import init_django_env, get_lower_case_name
 from tyadmin_api_cli.contants import SYS_LABELS
 
+
 def gen_url(project_name_settings, user_label_list):
     init_django_env(project_name_settings)
     import django

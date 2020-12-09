@@ -38,6 +38,10 @@ def gen_antd_pages(project_name_settings, user_label_list, focus_model=None, tem
     from django.conf import settings
     if not user_label_list:
         user_label_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
+    try:
+        force_cover = settings.TY_ADMIN_CONFIG['FORCED_COVER']
+    except KeyError:
+        force_cover = False
     gen_labels = SYS_LABELS + user_label_list
     model_pic_dict = {}
     model_date_dict = {}
@@ -236,20 +240,37 @@ export async function updateUserPassword(params) {
             cur_path_co = f'{target_path}/{model_name}List/components'
             if not os.path.exists(cur_path_co):
                 os.makedirs(cur_path_co)
-            with open(f'{target_path}/{model_name}List/index.jsx', 'w', encoding='utf-8') as fw:
-                fw.write(new_content)
-
-            with open(f'{target_path}/{model_name}List/service.js', 'w', encoding='utf-8') as fw:
-                fw.write(new_services)
-
-            with open(f'{target_path}/{model_name}List/components/CreateForm.jsx', 'w', encoding='utf-8') as fw:
-                fw.write(create_form)
-
-            with open(f'{target_path}/{model_name}List/components/UpdateForm.jsx', 'w', encoding='utf-8') as fw:
-                fw.write(update_form)
+            index_jsx_path = f'{target_path}/{model_name}List/index.jsx'
+            if not force_cover and os.path.exists(index_jsx_path):
+                pass
+            else:
+                with open(index_jsx_path, 'w', encoding='utf-8') as fw:
+                    fw.write(new_content)
+            service_jsx_path = f'{target_path}/{model_name}List/service.js'
+            if not force_cover and os.path.exists(service_jsx_path):
+                pass
+            else:
+                with open(service_jsx_path, 'w', encoding='utf-8') as fw:
+                    fw.write(new_services)
+            create_form_path = f'{target_path}/{model_name}List/components/CreateForm.jsx'
+            if not force_cover and os.path.exists(create_form_path):
+                pass
+            else:
+                with open(create_form_path, 'w', encoding='utf-8') as fw:
+                    fw.write(create_form)
+            update_form_path = f'{target_path}/{model_name}List/components/UpdateForm.jsx'
+            if not force_cover and os.path.exists(update_form_path):
+                pass
+            else:
+                with open(update_form_path, 'w', encoding='utf-8') as fw:
+                    fw.write(update_form)
             if app_name == user._meta.app_label:
-                with open(f'{target_path}/{model_name}List/components/UpdatePasswordForm.jsx', 'w', encoding='utf-8') as fw:
-                    fw.write(change_password_form)
+                update_password_form_path = f'{target_path}/{model_name}List/components/UpdatePasswordForm.jsx'
+                if not force_cover and os.path.exists(update_password_form_path):
+                    pass
+                else:
+                    with open(update_password_form_path, 'w', encoding='utf-8') as fw:
+                        fw.write(change_password_form)
 
 
 if __name__ == '__main__':

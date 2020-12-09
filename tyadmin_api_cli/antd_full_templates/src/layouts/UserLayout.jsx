@@ -54,7 +54,7 @@ const UserLayout = props => {
             {
               key: 'TyAdmin',
               title: 'TyAdmin',
-              href: 'https://pro.ant.design',
+              href: 'https://github.com/mtianyan/tyadmin_api_cli',
               blankTarget: true,
             },
             {

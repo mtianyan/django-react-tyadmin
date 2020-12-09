@@ -30,36 +30,6 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 
 前端页面，后端接口，路由，菜单全部自动对接,你只需要拷贝文档，修改配置，不需要写一行代码！！
 
-🎁 内置
-
-## 1. 多种登录方式
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234228.png)
-
-## 2. 内嵌自动dashboard，自动注册现有model count 数据。
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234054.png)
-
-## 3. 全自动的列表展示，增删改查， 筛选，搜索，导出Excel
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234448.png)
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234525.png)
-
-## 4. django自带权限组支持，外键蓝点小标记pop支持
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234705.png)
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234753.png)
-
-## 5. 基于Model定义的表单字段级别自动验证
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
-
-## 6. 内嵌富文本支持,仅需把字段定义为`richTextField`,无需任何额外集成。
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
-
 # 快速上手 
 
 >已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
@@ -160,6 +130,38 @@ python manage.py runserver # 默认运行在8000端口
 
 >如果没有成功看到页面，请查看QA部分
 
+
+🎁 内置
+
+## 1. 多种登录方式
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234228.png)
+
+## 2. 内嵌自动dashboard，自动注册现有model count 数据。
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234054.png)
+
+## 3. 全自动的列表展示，增删改查， 筛选，搜索，导出Excel
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234448.png)
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234525.png)
+
+## 4. django自带权限组支持，外键蓝点小标记pop支持
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234705.png)
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234753.png)
+
+## 5. 基于Model定义的表单字段级别自动验证
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
+
+## 6. 内嵌富文本支持,仅需把字段定义为`richTextField`,无需任何额外集成。
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
+
+
 # QA环节
 
 ## 0. `TemplateDoesNotExist at /xadmin/ TyAdmin/index.html`
@@ -200,7 +202,7 @@ re_path('media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
 
 ## 3. 当项目新增了model，我该如何为新model生成前端页面+后端接口
 
-```
+```diff
 +TY_ADMIN_CONFIG = {
 +    'GEN_APPS': ['demo','new_app']
 +}
@@ -220,6 +222,14 @@ npm run start:dev # 默认会运行在8001端口
 ```
 
 请确认django运行在8000端口，访问http://127.0.0.1:8001/xadmin/
+
+## 5. 如何更新tyadmin版本，强制覆盖上次生成
+
+```
+TY_ADMIN_CONFIG = {
+    'FORCED_COVER': True,
+}
+```
 
 # 🤝 贡献者名单:
 
