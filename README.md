@@ -13,125 +13,26 @@
 
 TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档，无框架学习成本，不用自己写一行代码，全自动的后台，你值得拥有！
 
+# 🤟  快速上手
+
 📨 互动交流反馈QQ群: 304094780
 
 [直接上手](#快速上手) 
 
 # ✨ 特性
 
-0. 自动生成前后端管理后台，页面接口神奇全自动对接。登录验证，修改密码，Dashboard数据统计。
-1. 一次拥有 **增删改查，筛选，搜索，数据全量导出，选择导出** 
-2. 外键字段，多对多字段，富文本，文件，图片，django自带权限系统
+- 自动生成前后端管理后台，页面接口神奇全自动对接。登录验证，修改密码，Dashboard数据统计。
+- 一次拥有 **增删改查，筛选，搜索，数据全量导出，选择导出** 
+- **外键字段，多对多字段，富文本，文件，图片，django自带权限系统**
 
-只需要设计好Model，在settings中配置需要生成哪些model，运行一条命令`python manage.py init_admin && python manage.py gen_all`
+只需要设计好Model，在settings中配置需要生成哪些model，运行命令: [快速上手](#快速上手) 
 
->后端代码生成一个django app到项目目录, 只需注册一下， 无需再写一行代码！ 代码归你掌控，无阻二次开发！
->前端生成一个完整的Antd design pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
+>后端生成一个django app到项目目录, 只需注册一下， 无需再写一行代码！ 代码归你掌控，无阻二次开发！
+>前端生成一个Ant Design Pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
 
 前端页面，后端接口，路由，菜单全部自动对接,你只需要拷贝文档，修改配置，不需要写一行代码！！
 
-# 快速上手 
-
->已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
->如有问题，可对比demos下tyadmin_demo_finish项目找自己的不同,以及查看[QA环节](#QA环节)
-
-### 1. 下载demo项目安装依赖
-
-```
-git clone https://github.com/mtianyan/tyadmin_api_cli.git
-cd tyadmin_api_cli/demos/tyadmin_demo_init
-# 安装项目 原本就需要的依赖
-pip install -r requirement.txt
-```
-
-### 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
-
-```diff
-pip install tyadmin-api-cli
-
-INSTALLED_APPS = [
-+    'captcha',
-+    'tyadmin_api_cli',
-]
-
-+TY_ADMIN_CONFIG = {
-+    'GEN_APPS': ['demo']
-+}
-
-# 方便拷贝
-
-    'captcha',
-    'tyadmin_api_cli',
-
-TY_ADMIN_CONFIG = {
-    'GEN_APPS': ['demo']
-}
-```
-
-GEN_APPS: 填写你想要生成的app列表。 
-
-### 3. 初始化 后端app(tyadmin_api) + 前端项目(tyadmin)  && 生成后端自动化的视图，过滤器，路由，序列器 + 前端页面及路由菜单
-
-生成后端页面依赖，需安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
-
->安装Node.js 10以上，推荐安装版本Latest LTS Version: 12.19.0
-
-```
-python manage.py init_admin && python manage.py gen_all && cd tyadmin && npm install && npm run build
-```
-
->耐心等待一会，build 会输出 前端页面到templates文件夹，生成前端js,css 等到static文件夹
-
-### 5. 注册生成出的django app
-
-```diff
-INSTALLED_APPS = [
-    'captcha',
-    'tyadmin_api_cli',
-+   'tyadmin_api'
-]
-
-# 方便拷贝
-
-'tyadmin_api'
-```
-
-### 6. 注册首页路由，api路由
-
-./tyadmin_demo/urls.py
-
-```diff
-+ from tyadmin_api.views import AdminIndexView
-
-urlpatterns = [
-+    re_path('^xadmin/.*', AdminIndexView.as_view()),
-+    path('api/xadmin/v1/', include('tyadmin_api.urls')),
-]
-
-# 方便拷贝
-from tyadmin_api.views import AdminIndexView
-
-re_path('^xadmin/.*', AdminIndexView.as_view()),
-path('api/xadmin/v1/', include('tyadmin_api.urls')),
-```
-
-### 7. 运行项目
-
-```
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser # 创建一个可以登入后台的用户
-python manage.py runserver # 默认运行在8000端口
-```
-
-访问http://127.0.0.1:8000/xadmin/ 输入刚才创建的用户名密码登录
-
-至此大功告成！
-
->如果没有成功看到页面，请查看QA部分
-
-
-🎁 内置
+# 🎁 内置
 
 ## 1. 多种登录方式
 
@@ -161,6 +62,105 @@ python manage.py runserver # 默认运行在8000端口
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
 
+# 快速上手 
+
+>已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
+>如有问题，可对比demos下tyadmin_demo_finish项目找自己的不同,以及查看[QA环节](#QA环节)
+
+## 1. 下载demo项目安装依赖
+
+```
+git clone https://github.com/mtianyan/tyadmin_api_cli.git
+cd tyadmin_api_cli/demos/tyadmin_demo_init
+# 安装项目 原本就需要的依赖
+pip install -r requirement.txt
+```
+
+## 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
+
+```diff
+pip install tyadmin-api-cli
+
+INSTALLED_APPS = [
++    'captcha',
++    'tyadmin_api_cli',
+]
+
++TY_ADMIN_CONFIG = {
++    'GEN_APPS': ['demo']
++}
+
+# 方便拷贝
+
+    'captcha',
+    'tyadmin_api_cli',
+
+TY_ADMIN_CONFIG = {
+    'GEN_APPS': ['demo']
+}
+```
+
+GEN_APPS: 填写你想要生成的app列表。 
+
+## 3. 初始化 后端app(tyadmin_api) + 前端项目(tyadmin)  && 生成后端自动化的视图，过滤器，路由，序列器 + 前端页面及路由菜单
+
+生成后端页面依赖，需安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
+
+>安装Node.js 10以上，推荐安装版本Latest LTS Version: 12.19.0
+
+```
+python manage.py init_admin && python manage.py gen_all && cd tyadmin && npm install && npm run build
+```
+
+>耐心等待一会，build 会输出 前端页面到templates文件夹，生成前端js,css 等到static文件夹
+
+## 4. 注册生成出的django app
+
+```diff
+INSTALLED_APPS = [
+    'captcha',
+    'tyadmin_api_cli',
++   'tyadmin_api'
+]
+
+# 方便拷贝
+
+'tyadmin_api'
+```
+
+## 5. 注册首页路由，api路由
+
+./tyadmin_demo/urls.py
+
+```diff
++ from tyadmin_api.views import AdminIndexView
+
+urlpatterns = [
++    re_path('^xadmin/.*', AdminIndexView.as_view()),
++    path('api/xadmin/v1/', include('tyadmin_api.urls')),
+]
+
+# 方便拷贝
+from tyadmin_api.views import AdminIndexView
+
+re_path('^xadmin/.*', AdminIndexView.as_view()),
+path('api/xadmin/v1/', include('tyadmin_api.urls')),
+```
+
+## 6. 运行项目
+
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser # 创建一个可以登入后台的用户
+python manage.py runserver # 默认运行在8000端口
+```
+
+访问http://127.0.0.1:8000/xadmin/ 输入刚才创建的用户名密码登录
+
+至此大功告成！
+
+>如果没有成功看到页面，请查看QA部分
 
 # QA环节
 
@@ -221,7 +221,7 @@ npm install
 npm run start:dev # 默认会运行在8001端口
 ```
 
-请确认django运行在8000端口，访问http://127.0.0.1:8001/xadmin/
+请确认django运行在8000端口，访问 http://127.0.0.1:8001/xadmin/
 
 ## 5. 如何更新tyadmin版本，强制覆盖上次生成
 
@@ -248,6 +248,7 @@ TY_ADMIN_CONFIG = {
 [MIT](https://github.com/go-admin-team/go-admin/blob/master/LICENSE.md)
 
 Copyright (c) 2020 mtianyan
+
 
 # 附录
 
