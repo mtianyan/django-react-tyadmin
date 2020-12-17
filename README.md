@@ -56,7 +56,7 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
 
-# 🤟  快速上手
+# 快速上手🤟 
 
 📨 互动交流反馈QQ群: 304094780
 
