@@ -1,14 +1,14 @@
 import React from 'react';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 
 const CreateForm = props => {
-  const {modalVisible, onCancel} = props;
+  const { modalVisible, onCancel } = props;
   return (
     <Modal
       destroyOnClose
-      title="新建$占位模型显示名$"
+      title="新建>>MODEL_VERBOSE_NAME<<"
       visible={modalVisible}
-      $宽度占位$
+      >>WIDTH_PLACEHOLDER<<
       onCancel={() => onCancel()}
       footer={null}
     >

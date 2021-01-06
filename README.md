@@ -1,35 +1,244 @@
-# 基于Django Restful Framework 和 Antd Design Pro V4 类似Xadmin 的基于Models 的管理后台前后端生成工具。
+# TyAdmin: Django 基于Models 的 **No Code** 零代码零学习成本管理后台前后端生成工具, 由Django Restful Framework 和 Ant Design Pro V4 驱动
 
 ![](https://img.shields.io/pypi/v/tyadmin-api-cli)
 ![](https://img.shields.io/pypi/wheel/tyadmin-api-cli)
 
-更强大，更现代化，自定义度更高的Xadmin！！！
-自动生成前后端管理后台，神奇自动对接。免去普通增删改查，筛选，搜索功能开发。
+# 🎬 在线体验Demo
 
-只需要设计好Model，运行两条命令`python manage.py init_admin`,`python manage.py gen_all`
+>账号: tyadmin 密码: tyadmin
 
->后端代码生成一个django app到项目目录, 代码归你掌控，无阻二次开发！
->前端生成一个完整的Antd design pro V4项目，代码归你掌控，无阻二次开发！
+演示地址: https://tyadmin.funpython.cn/xadmin 
 
-前端页面， 后端接口，路由，菜单全部自动对接。
+**No Code!!! 一行代码都不写，就能拥有的现代化后台管理, 动动小手，**star**一下，感谢！！**
 
-已生成示例网站: 
+TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档，无框架学习成本，不用自己写一行代码，全自动的后台，你值得拥有！
 
-1. https://imooc.funpython.cn/xadmin/index
+# ✨ 特性
 
-2. https://mooc.funpython.cn/xadmin
+- 自动生成前后端管理后台，页面接口神奇全自动对接。登录验证，修改密码，Dashboard数据统计。
+- 一次拥有 **增删改查，筛选，搜索，数据全量导出，选择导出** 
+- **外键字段，多对多字段，富文本，文件，图片，django自带权限系统**
 
-## 内嵌自动dashboard，自动注册现有model count 数据。
+只需要设计好Model，在settings中配置需要生成哪些model，运行命令: [快速上手](#快速上手) 
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010184239.png)
+>后端生成一个django app到项目目录, 只需注册一下， 无需再写一行代码！ 代码归你掌控，无阻二次开发！
+>前端生成一个Ant Design Pro V4项目，只需启动一次，无需再写一行代码！ 代码归你掌控，无阻二次开发！
 
-## 全自动的列表展示，搜索，筛选功能。
+前端页面，后端接口，路由，菜单全部自动对接,你只需要拷贝文档，修改配置，不需要写一行代码！！
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010192457.png)
+# 🎁 内置
 
-## 内嵌富文本支持,仅需把字段定义为`richTextField`,无需任何额外集成。
+## 1. 多种登录方式
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234228.png)
+
+## 2. 内嵌自动dashboard，自动注册现有model count 数据。
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234054.png)
+
+## 3. 全自动的列表展示，增删改查， 筛选，搜索，导出Excel
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234448.png)
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234525.png)
+
+## 4. django自带权限组支持，外键蓝点小标记pop支持
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234705.png)
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201130234753.png)
+
+## 5. 基于Model定义的表单字段级别自动验证
+
+![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
+
+## 6. 内嵌富文本支持,仅需把字段定义为`richTextField`,无需任何额外集成。
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
+
+# 快速上手🤟 
+
+📨 互动交流反馈QQ群: 304094780
+
+>已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
+>如有问题，可对比demos下tyadmin_demo_finish项目找自己的不同,以及查看[QA环节](#QA环节)
+
+## 1. 下载demo项目安装依赖
+
+```
+git clone https://github.com/mtianyan/tyadmin_api_cli.git
+cd tyadmin_api_cli/demos/tyadmin_demo_init
+# 安装项目 原本就需要的依赖
+pip install -r requirement.txt
+```
+
+## 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
+
+```diff
+pip install tyadmin-api-cli
+
+INSTALLED_APPS = [
++    'captcha',
++    'tyadmin_api_cli',
+]
+
++TY_ADMIN_CONFIG = {
++    'GEN_APPS': ['demo']
++}
+
+# 方便拷贝
+
+    'captcha',
+    'tyadmin_api_cli',
+
+TY_ADMIN_CONFIG = {
+    'GEN_APPS': ['demo']
+}
+```
+
+GEN_APPS: 填写你想要生成的app列表。 
+
+## 3. 初始化 后端app(tyadmin_api) + 前端项目(tyadmin)  && 生成后端自动化的视图，过滤器，路由，序列器 + 前端页面及路由菜单
+
+生成后端页面依赖，需安装Node.js -> https://www.runoob.com/nodejs/nodejs-install-setup.html
+
+>安装Node.js 10以上，推荐安装版本Latest LTS Version: 12.19.0
+
+```
+python manage.py init_admin && python manage.py gen_all && cd tyadmin && npm install && npm run build
+```
+
+>耐心等待一会，build 会输出 前端页面到templates文件夹，生成前端js,css 等到static文件夹
+
+## 4. 注册生成出的django app
+
+```diff
+INSTALLED_APPS = [
+    'captcha',
+    'tyadmin_api_cli',
++   'tyadmin_api'
+]
+
+# 方便拷贝
+
+'tyadmin_api'
+```
+
+## 5. 注册首页路由，api路由
+
+./tyadmin_demo/urls.py
+
+```diff
++ from tyadmin_api.views import AdminIndexView
+
+urlpatterns = [
++    re_path('^xadmin/.*', AdminIndexView.as_view()),
++    path('api/xadmin/v1/', include('tyadmin_api.urls')),
+]
+
+# 方便拷贝
+from tyadmin_api.views import AdminIndexView
+
+re_path('^xadmin/.*', AdminIndexView.as_view()),
+path('api/xadmin/v1/', include('tyadmin_api.urls')),
+```
+
+## 6. 运行项目
+
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser # 创建一个可以登入后台的用户
+python manage.py runserver # 默认运行在8000端口
+```
+
+访问http://127.0.0.1:8000/xadmin/ 输入刚才创建的用户名密码登录
+
+至此大功告成！
+
+>如果没有成功看到页面，请查看QA部分
+
+# QA环节
+
+## 0. `TemplateDoesNotExist at /xadmin/ TyAdmin/index.html`
+
+settings.py 中配置templates 路径
+
+```diff
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+-        'DIRS': [],
++        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+```
+## 1. 卡在loading页面，一直无法登陆
+
+settings.py 中配置static 路径
+
+```
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+```
+
+## 2. 图片没有正常显示
+
+urls.py 
+
+```
+from django.views.static import serve
+
+urlpatterns = [
+re_path('media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
+]
+```
+
+## 3. 当项目新增了model，我该如何为新model生成前端页面+后端接口
+
+```diff
++TY_ADMIN_CONFIG = {
++    'GEN_APPS': ['demo','new_app']
++}
+```
+如上GEN_APPS 中添加新app的name，然后运行下面命令
+
+```
+python manage.py gen_all && cd tyadmin && npm run build
+```
+
+## 4. 如何运行生成的前端独立项目
+
+```
+cd tyadmin
+npm install
+npm run start:dev # 默认会运行在8001端口
+```
+
+请确认django运行在8000端口，访问 http://127.0.0.1:8001/xadmin/
+
+# 🤝 贡献者名单:
+
+[longyn](https://github.com/longyn)
+
+# 🤟 打赏
+
+很高兴我的项目代码或许对你有帮助，请我吃包辣条或喝瓶可乐吧!
+
+微信打赏:
+
+![mark](http://myphoto.mtianyan.cn/blog/180302/i52eHgilfD.png?imageslim)
+
+# 🔑 License
+
+[MIT](https://github.com/go-admin-team/go-admin/blob/master/LICENSE.md)
+
+Copyright (c) 2020 mtianyan
+
+
+# 附录
 
 ## model->前端对应关系
 
@@ -48,27 +257,13 @@
 | DateField| Date选择器|
 | DateTimeField| DateTime选择器|
 
+### ForeignKey自动生成下拉单选菜单, ManyToManyField自动生成下拉多选菜单或穿梭框
 
+![](http://cdn.pic.mtianyan.cn/blog_img/20201202214922.png)
 
-### ForeignKey自动生成下拉单选菜单, ManyToManyField自动生成下拉多选菜单
+![](http://cdn.pic.mtianyan.cn/blog_img/20201202214936.png)
 
->指定`f'{MAIN_DISPLAY}__name'` 关联另一张表哪个字段用于table显示
-
-```python
-course_org = ForeignKey(CourseOrg, verbose_name="所属机构",
-                        help_text=f'{MAIN_DISPLAY}__name')
-```
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010192310.png)
-
-```
-labels = ManyToManyField("Label", verbose_name="课程拥有的label", 
-                help_text=f'{MAIN_DISPLAY}__title')
-```
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010194349.png)
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010194222.png)
+![](http://cdn.pic.mtianyan.cn/blog_img/20201202214957.png)
 
 ### richTextField 自动生成富文本
 
@@ -93,24 +288,20 @@ gender = CharField(verbose_name="性别",choices=GENDER_CHOICES)
 ### ImageField 自动生成带预览的表单上传功能，列表页可选两种展示方式。
 
 ```python
-avatar = ImageField(verbose_name="头像", help_text=MAIN_AVATAR)
-image = ImageField(verbose_name="封面图", help_text=MAIN_PIC)    
+avatar = ImageField(verbose_name="头像") # 变量名为avatar或logo的会自动为头像样式
+image = ImageField(verbose_name="封面图")    
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010191641.png)
 
-头像样式 `MAIN_AVATAR`:
-
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010191917.png)
-
-图片样式 `MAIN_PIC`:
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010191843.png)
 
 ### FileField 字段生成文件上传功能。
 
 ```
-download = FileField(verbose_name="资源文件", max_length=100)
+download = FileField(verbose_name="资源文件")
 ```
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193041.png)
@@ -144,7 +335,7 @@ birthday = DateField(verbose_name="生日")
 ```
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010193614.png)
 
-### DateTimeField 自动表单 DateTime 选择框。时间范围筛选器。
+### DateTimeField 自动表单 DateTime 选择框，时间范围筛选器。
 
 ```
 last_login = DateTimeField(verbose_name="上次登录")
@@ -156,84 +347,3 @@ last_login = DateTimeField(verbose_name="上次登录")
 
 ![](http://cdn.pic.mtianyan.cn/blog_img/20201010195116.png)
 
-## 基于Model定义的表单字段级别自动验证
-
-```
-    title = CharField(max_length=255, verbose_name="课程标题", unique=True)
-```
-
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
-
-## 轻松的后端自定义验证
-
-```
-if xxx:
-    raise ValidationError({"filed_name": ["错误提示"]})
-```
-
-## demo项目快速上手
-
-
-### 1. 初始化项目(推荐使用cookiecutter)
-
-```
-cookiecutter https://github.com/mtianyan/cookiecutter-tyadmin-demo.git
-```
-
-### 2. 安装tyadmin-api-cli
-
-```
-pip install tyadmin-api-cli
-```
-
-### 3. 注册tyadmin-api-cli
-
-```
-INSTALLED_APPS = [
-    'tyadmin_api_cli',
-]
-```
-
-### 4. 初始化 后端app 及 前端项目
-
-```
-python manage.py init_admin
-```
-
-### 5. 生成后端自动化的视图，过滤器，路由，序列器。 前端页面及路由菜单。
-
-```
-python manage.py gen_all
-```
-
-### 6. 注册生成出的app
-
-```
-INSTALLED_APPS = [
-    'tyadmin_api_cli',
-    'captcha',
-    'tyadmin_api'
-]
-```
-
-### 7. 注册路由
-
-```
-    path('api/xadmin/v1/', include('tyadmin_api.urls')),
-```
-
-### 8. 运行后端项目，运行前端项目
-
-```
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
-```
-
-```
-cd tyadmin
-yarn
-yarn start
-```
-
-访问http://127.0.0.1:8001/xadmin/index

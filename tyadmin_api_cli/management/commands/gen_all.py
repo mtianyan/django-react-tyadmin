@@ -14,12 +14,25 @@ class Command(BaseCommand):
 
     # 接收参数
     def add_arguments(self, parser):
-        pass
+        parser.add_argument(
+            'args', metavar='app_label', nargs='*',
+            help='Specify the app label(s) to create migrations for.',
+        )
 
     def handle(self, *args, **options):
         try:
             setting_value = options['settings']
         except KeyError:
             raise ValueError("请设置settings")
-        gen_all(setting_value)
-
+        try:
+            all_apps_list = settings.TY_ADMIN_CONFIG["GEN_APPS"]
+        except AttributeError:
+            raise ValueError("请按照文档设置TY_ADMIN_CONFIG-GEN_APPS")
+        if len(args) > 0:
+            apps_list = list(args)
+            for one in all_apps_list:
+                if one not in all_apps_list:
+                    raise ValueError("输入的app，不在GEN_APPS列表中")
+        else:
+            apps_list = all_apps_list
+        gen_all(setting_value, apps_list)
