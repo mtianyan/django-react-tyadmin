@@ -63,7 +63,7 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 >已有项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表
 >如有问题，可对比demos下tyadmin_demo_finish项目找自己的不同,以及查看[QA环节](#QA环节)
 
-## 1. 下载demo项目安装依赖
+## 1. 下载demo项目安装依赖(注意！！已有项目不需要下载demo项目可从第二步开始，注意修改GEN_APPS 变量为自己需要生成的app列表)
 
 ```
 git clone https://github.com/mtianyan/tyadmin_api_cli.git
