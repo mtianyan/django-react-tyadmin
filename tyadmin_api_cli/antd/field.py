@@ -133,7 +133,8 @@ def valueEnum_factory(field):
     # 字段下拉选择渲染
     if field.__class__.__name__ == "TimeZoneField":
         field_choices_list = []
-        for field_one in field.CHOICES:
+        choices = 'CHOICES' if hasattr(field, 'CHOICES') else 'choices'
+        for field_one in getattr(field, choices):
             one_line = f'"{field_one[0]}":"{field_one[1]}"'
             field_choices_list.append(one_line)
             return f'valueEnum:{{{",".join(field_choices_list)}}}'
