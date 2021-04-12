@@ -104,8 +104,8 @@ class LoginView(MtyCustomExecView):
             except CaptchaStore.DoesNotExist:
                 raise ValidationError({"pic_captcha": ["验证码不正确"]})
             user = authenticate(request, username=request.data["userName"], password=request.data["password"])
-            log_save(user=request.user.username, request=self.request, flag="登录",
-                     message=f'{request.user.username}登录成功',
+            log_save(user=request.user.get_username(), request=self.request, flag="登录",
+                     message=f'{request.user.get_username()}登录成功',
                      log_type="login")
             if user is not None:
                 login(request, user)
@@ -148,7 +148,7 @@ class CurrentUserView(MtyCustomExecView):
     def get(self, request, *args, **kwargs):
         if request.user:
             try:
-                return JsonResponse({"id": request.user.id, "name": request.user.username, "email": request.user.email,
+                return JsonResponse({"id": request.user.id, "name": request.user.get_username(), "email": request.user.email,
                                      "avatar": "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"})
             except AttributeError:
                 return JsonResponse({
@@ -224,7 +224,7 @@ class UserListChangePasswordView(MtyCustomExecView):
             password = make_password(change_re_password)
             cur_user.password = password
             cur_user.save()
-            log_save(user=request.user.username, request=self.request, flag="修改", message=f'用户: {cur_user.username}密码被修改', log_type="user")
+            log_save(user=request.user.get_username(), request=self.request, flag="修改", message=f'用户: {cur_user.get_username()}密码被修改', log_type="user")
         except SysUser.DoesNotExist:
             raise ValidationError({"username": ["用户名不存在"]})
         ret_info = {
