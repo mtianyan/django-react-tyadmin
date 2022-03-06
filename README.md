@@ -2,6 +2,9 @@
 
 ![](https://img.shields.io/pypi/v/tyadmin-api-cli)
 ![](https://img.shields.io/pypi/wheel/tyadmin-api-cli)
+# 安装环境Bug 暂时修复:
+
+https://github.com/mtianyan/django-antd-tyadmin/issues/35
 
 # 🎬 在线体验Demo
 
