@@ -135,5 +135,6 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 TY_ADMIN_CONFIG = {
+    'FORCED_COVER': True,
     'GEN_APPS': ['demo']
 }

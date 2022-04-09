@@ -213,12 +213,13 @@ python manage.py gen_all && cd tyadmin && npm run build
 
 ## 4. 项目修改了model，重新生成页面为何不生效
 
-> 为防止你对已生成前端进行的二次开发被覆盖，默认是不强制覆盖已生成的前端。如果需要重新生成，请添加如下配置
+> 为防止你对已生成前端进行的二次开发被覆盖，默认是不强制覆盖已生成的前端。如果需要重新生成，请添加如下配置 FORCED_COVER
 
 ```diff
-+TY_ADMIN_CONFIG = {
-+     'FORCED_COVER': True
-+}
+TY_ADMIN_CONFIG = {
+    'FORCED_COVER': True,
+    'GEN_APPS': ['demo']
+}
 ```
 
 ## 5. 如何运行生成的前端独立项目
