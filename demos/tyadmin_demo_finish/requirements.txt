@@ -1,3 +1,11 @@
-tyadmin-api-cli
-django-filter
-demjson
+asgiref==3.5.0
+demjson3==3.0.5
+Django==4.0.3
+django-filter==21.1
+django-ranged-response==0.2.0
+django-simple-captcha==0.5.17
+djangorestframework==3.13.1
+Pillow==9.1.0
+pytz==2022.1
+sqlparse==0.4.2
+tyadmin-api-cli==0.8.2

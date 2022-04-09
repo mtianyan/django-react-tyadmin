@@ -1,3 +1,8 @@
+## 0.8.2 (2022-04-09)
+
+- 替换demjson 为demjson3解决安装依赖问题 https://github.com/mtianyan/django-antd-tyadmin/issues/35 https://github.com/mtianyan/django-antd-tyadmin/issues/36
+- 修复添加用户密码为明文的问题 https://github.com/mtianyan/django-antd-tyadmin/issues/12
+
 ## 0.8.1 (2020-12-09)
 
 #### Bug Fixes

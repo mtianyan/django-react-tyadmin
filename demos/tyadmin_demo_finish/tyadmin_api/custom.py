@@ -92,7 +92,7 @@ class XadminViewSet(MtyModelViewSet):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             ret = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-            log_save(user=request.user.username, request=self.request, flag="新增",
+            log_save(user=request.user.get_username(), request=self.request, flag="新增",
                      message=f'{self.serializer_class.Meta.model._meta.verbose_name}: {ret.data.__str__()}被新增',
                      log_type=self.serializer_class.Meta.model._meta.model_name)
             return ret

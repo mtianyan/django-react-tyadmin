@@ -382,3 +382,10 @@ class UserProfileCreateUpdateSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_ty_options_display_txt(obj):
         return str(obj)
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        instance.set_password(self.validated_data['password'])
+        instance.save()
+        return instance        
+        

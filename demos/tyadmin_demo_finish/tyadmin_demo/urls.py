@@ -20,6 +20,6 @@ from tyadmin_api.views import AdminIndexView
 
 urlpatterns = [
     re_path('media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
-re_path('^xadmin/.*', AdminIndexView.as_view()),
-path('api/xadmin/v1/', include('tyadmin_api.urls')),
+    re_path('^xadmin/.*', AdminIndexView.as_view()),
+    path('api/xadmin/v1/', include('tyadmin_api.urls')),
 ]

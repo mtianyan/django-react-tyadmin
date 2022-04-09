@@ -7,6 +7,8 @@ from django.db.models import DateTimeField, ForeignKey, BooleanField, IntegerFie
 
 
 def gen_ser_txt(serializers_txt, model, fk_display_p):
+    from django.contrib.auth import get_user_model
+    user = get_user_model()
     if model == "CrontabSchedule":
         append_timezone_adapter = 'timezone = serializers.CharField()'
     else:
@@ -57,6 +59,14 @@ class {model}CreateUpdateSerializer(serializers.ModelSerializer):
     def get_ty_options_display_txt(obj):
         return str(obj)
 """
+    if model == user._meta.object_name:
+        serializers_txt += """
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        instance.set_password(self.validated_data['password'])
+        instance.save()
+        return instance        
+        """
     return serializers_txt
 
 

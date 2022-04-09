@@ -68,8 +68,8 @@ class MenuView(views.APIView):
         data_json = os.path.join(settings.BASE_DIR, 'tyadmin_api/menu.json')
         with open(data_json, encoding='utf-8') as fr:
             content = fr.read()
-        import demjson
-        content = demjson.decode(content)
+        import demjson3
+        content = demjson3.decode(content)
         print(json.dumps(content, ensure_ascii=False))
         return JsonResponse({
             "data": content

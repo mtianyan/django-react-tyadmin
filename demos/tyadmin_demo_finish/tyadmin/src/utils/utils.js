@@ -895,7 +895,7 @@ export const exportExcelCurrent = (selectedRows, columns, excel_name) => {
                 txt_list.push(value[i].ty_options_display_txt);
               }
               value = txt_list.join(',');
-            } else if (typeof item[c.dataIndex] === 'object') {
+            } else if (item[c.dataIndex] !== null && typeof item[c.dataIndex] === 'object') {
               value = item[c.dataIndex].ty_options_display_txt;
             }
             result[c.dataIndex] = value;
