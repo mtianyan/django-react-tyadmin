@@ -64,7 +64,7 @@ from {app_name}.auto_filters import {", ".join(filters_list)}
 class {model_name}ViewSet(XadminViewSet):
     serializer_class = {model_name}ListSerializer
     queryset = {model_name}.objects.all().order_by('-pk')
-    filter_class = {model_name}Filter
+    filterset_class = {model_name}Filter
     search_fields = [{",".join(model_search_dict[model_name])}]
 
     def get_serializer_class(self):

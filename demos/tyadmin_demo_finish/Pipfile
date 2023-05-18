@@ -1,0 +1,14 @@
+[[source]]
+url = "http://mirrors.aliyun.com/pypi/simple/"
+verify_ssl = false
+name = "pip_conf_index_global"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+tyadmin-api-cli = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

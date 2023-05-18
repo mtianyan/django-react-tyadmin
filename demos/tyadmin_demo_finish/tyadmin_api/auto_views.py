@@ -13,7 +13,7 @@ from tyadmin_api.auto_filters import PermissionFilter, GroupFilter, ContentTypeF
 class PermissionViewSet(XadminViewSet):
     serializer_class = PermissionListSerializer
     queryset = Permission.objects.all().order_by('-pk')
-    filter_class = PermissionFilter
+    filterset_class = PermissionFilter
     search_fields = ["name","codename"]
 
     def get_serializer_class(self):
@@ -26,7 +26,7 @@ class PermissionViewSet(XadminViewSet):
 class GroupViewSet(XadminViewSet):
     serializer_class = GroupListSerializer
     queryset = Group.objects.all().order_by('-pk')
-    filter_class = GroupFilter
+    filterset_class = GroupFilter
     search_fields = ["name"]
 
     def get_serializer_class(self):
@@ -39,7 +39,7 @@ class GroupViewSet(XadminViewSet):
 class ContentTypeViewSet(XadminViewSet):
     serializer_class = ContentTypeListSerializer
     queryset = ContentType.objects.all().order_by('-pk')
-    filter_class = ContentTypeFilter
+    filterset_class = ContentTypeFilter
     search_fields = ["app_label","model"]
 
     def get_serializer_class(self):
@@ -52,7 +52,7 @@ class ContentTypeViewSet(XadminViewSet):
 class DemoForeignKeyViewSet(XadminViewSet):
     serializer_class = DemoForeignKeyListSerializer
     queryset = DemoForeignKey.objects.all().order_by('-pk')
-    filter_class = DemoForeignKeyFilter
+    filterset_class = DemoForeignKeyFilter
     search_fields = ["name"]
 
     def get_serializer_class(self):
@@ -65,7 +65,7 @@ class DemoForeignKeyViewSet(XadminViewSet):
 class TagsViewSet(XadminViewSet):
     serializer_class = TagsListSerializer
     queryset = Tags.objects.all().order_by('-pk')
-    filter_class = TagsFilter
+    filterset_class = TagsFilter
     search_fields = ["code","name"]
 
     def get_serializer_class(self):
@@ -78,7 +78,7 @@ class TagsViewSet(XadminViewSet):
 class CategoryViewSet(XadminViewSet):
     serializer_class = CategoryListSerializer
     queryset = Category.objects.all().order_by('-pk')
-    filter_class = CategoryFilter
+    filterset_class = CategoryFilter
     search_fields = ["code","name"]
 
     def get_serializer_class(self):
@@ -91,7 +91,7 @@ class CategoryViewSet(XadminViewSet):
 class RichTextDemoViewSet(XadminViewSet):
     serializer_class = RichTextDemoListSerializer
     queryset = RichTextDemo.objects.all().order_by('-pk')
-    filter_class = RichTextDemoFilter
+    filterset_class = RichTextDemoFilter
     search_fields = ["name"]
 
     def get_serializer_class(self):
@@ -104,7 +104,7 @@ class RichTextDemoViewSet(XadminViewSet):
 class DemoModelRequireViewSet(XadminViewSet):
     serializer_class = DemoModelRequireListSerializer
     queryset = DemoModelRequire.objects.all().order_by('-pk')
-    filter_class = DemoModelRequireFilter
+    filterset_class = DemoModelRequireFilter
     search_fields = ["name"]
 
     def get_serializer_class(self):
@@ -117,7 +117,7 @@ class DemoModelRequireViewSet(XadminViewSet):
 class DemoModelViewSet(XadminViewSet):
     serializer_class = DemoModelListSerializer
     queryset = DemoModel.objects.all().order_by('-pk')
-    filter_class = DemoModelFilter
+    filterset_class = DemoModelFilter
     search_fields = ["char_field"]
 
     def get_serializer_class(self):
@@ -130,7 +130,7 @@ class DemoModelViewSet(XadminViewSet):
 class DemoDefaultModelViewSet(XadminViewSet):
     serializer_class = DemoDefaultModelListSerializer
     queryset = DemoDefaultModel.objects.all().order_by('-pk')
-    filter_class = DemoDefaultModelFilter
+    filterset_class = DemoDefaultModelFilter
     search_fields = ["default_char_field"]
 
     def get_serializer_class(self):
@@ -143,7 +143,7 @@ class DemoDefaultModelViewSet(XadminViewSet):
 class UserProfileViewSet(XadminViewSet):
     serializer_class = UserProfileListSerializer
     queryset = UserProfile.objects.all().order_by('-pk')
-    filter_class = UserProfileFilter
+    filterset_class = UserProfileFilter
     search_fields = ["password","username","first_name","last_name","email","gender"]
 
     def get_serializer_class(self):
