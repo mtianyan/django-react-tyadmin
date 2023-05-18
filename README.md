@@ -9,7 +9,7 @@
 
 >账号: tyadmin 密码: tyadmin
 
-演示地址: https://tyadmin.funpython.cn/xadmin 
+~~演示地址: https://tyadmin.funpython.cn/xadmin~~
 
 **No Code!!! 一行代码都不写，就能拥有的现代化后台管理, 动动小手，**star**一下，感谢！！**
 
@@ -32,31 +32,31 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 
 ## 1. 多种登录方式
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234228.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234228.png)
 
 ## 2. 内嵌自动dashboard，自动注册现有model count 数据。
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234054.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234054.png)
 
 ## 3. 全自动的列表展示，增删改查， 筛选，搜索，导出Excel
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234448.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234448.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234525.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234525.png)
 
 ## 4. django自带权限组支持，外键蓝点小标记pop支持
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234705.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234705.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201130234753.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201130234753.png)
 
 ## 5. 基于Model定义的表单字段级别自动验证
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010194705.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010194705.png)
 
 ## 6. 内嵌富文本支持,仅需把字段定义为`richTextField`,无需任何额外集成。
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010192630.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010192630.png)
 
 # 快速上手🤟 
 
@@ -242,7 +242,7 @@ npm run start:dev # 默认会运行在8001端口
 
 微信打赏:
 
-![mark](http://myphoto.mtianyan.cn/blog/180302/i52eHgilfD.png?imageslim)
+![mark](http://myphoto.funpython.cn/blog/180302/i52eHgilfD.png?imageslim)
 
 # 🔑 License
 
@@ -272,11 +272,11 @@ Copyright (c) 2020 mtianyan
 
 ### ForeignKey自动生成下拉单选菜单, ManyToManyField自动生成下拉多选菜单或穿梭框
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201202214922.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201202214922.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201202214936.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201202214936.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201202214957.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201202214957.png)
 
 ### richTextField 自动生成富文本
 
@@ -284,7 +284,7 @@ Copyright (c) 2020 mtianyan
 detail = richTextField(verbose_name="课程详情")
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193352.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193352.png)
 
 ### CharField和IntegerField choices 自动生成表单前端下拉选择框。
 
@@ -296,7 +296,7 @@ GENDER_CHOICES = (
 gender = CharField(verbose_name="性别",choices=GENDER_CHOICES)
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010190635.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010190635.png)
 
 ### ImageField 自动生成带预览的表单上传功能，列表页可选两种展示方式。
 
@@ -305,11 +305,11 @@ avatar = ImageField(verbose_name="头像") # 变量名为avatar或logo的会自�
 image = ImageField(verbose_name="封面图")    
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010191641.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010191641.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010191917.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010191917.png)
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010191843.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010191843.png)
 
 ### FileField 字段生成文件上传功能。
 
@@ -317,7 +317,7 @@ image = ImageField(verbose_name="封面图")
 download = FileField(verbose_name="资源文件")
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193041.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193041.png)
 
 ### TextField 自动生成前端TextArea 框
 
@@ -325,7 +325,7 @@ download = FileField(verbose_name="资源文件")
 desc = TextField(verbose_name="课程描述")
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010192813.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010192813.png)
 
 ### BooleanField 自动前端 Boolean 单选
 
@@ -333,20 +333,20 @@ desc = TextField(verbose_name="课程描述")
 is_banner = BooleanField(verbose_name="是否轮播")
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193001.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193001.png)
 
 ### IntegerField 自动前端 Int 输入框
 ```
 learn_times = IntegerField(verbose_name="学习时长(分钟数)")
 ```
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193445.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193445.png)
 
 ### DateField 自动前端 Date选择框
 
 ```
 birthday = DateField(verbose_name="生日")
 ```
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193614.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193614.png)
 
 ### DateTimeField 自动表单 DateTime 选择框，时间范围筛选器。
 
@@ -354,9 +354,9 @@ birthday = DateField(verbose_name="生日")
 last_login = DateTimeField(verbose_name="上次登录")
 ```
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010193852.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010193852.png)
 
 >注意设置了default，auto_now的不会出现在表单
 
-![](http://cdn.pic.mtianyan.cn/blog_img/20201010195116.png)
+![](http://cdn.pic.funpython.cn/blog_img/20201010195116.png)
 
