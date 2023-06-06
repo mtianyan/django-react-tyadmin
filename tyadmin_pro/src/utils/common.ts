@@ -1,4 +1,4 @@
-export const handleFieldError = (err, formRef) => {
+export const handleFieldError = (err: any, formRef: any) => {
   console.log("HandleFieldError", err);
   console.log("HandleFieldError", formRef);
   let errList = err.fields_errors;
@@ -15,7 +15,7 @@ export const handleFieldError = (err, formRef) => {
   }
 };
 
-export const fieldErrorResponse = (errRes, formRef)=>{
+export const fieldErrorResponse = (errRes: any, formRef: any)=>{
   console.log("errRes", errRes)
   if (errRes.response.data && errRes.response.data instanceof Object && 'fields_errors' in errRes.response.data) {
     handleFieldError(errRes.response.data, formRef)

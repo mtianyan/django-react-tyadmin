@@ -245,10 +245,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
-                })}
+                placeholder="用户名"
                 rules={[
                   {
                     required: true,
@@ -267,10 +264,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
+                placeholder="密码"
                 rules={[
                   {
                     required: true,
@@ -293,7 +287,7 @@ const Login: React.FC = () => {
                                     message: '请输入验证码！',
                                   },
                                 ]}>
-                    <Input size="large" placeholder='请输入验证码'
+                    <Input size="large" placeholder='验证码'
                            prefix={<IconFont type="iconyanzhengma"/>}/>
                   </ProForm.Item>
                 </Col>
