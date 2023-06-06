@@ -1,57 +1,64 @@
-# Ant Design Pro
+# Ty-admin Pro
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+## 初始化
+### 1. 增加多标签配置
 
-## Environment Prepare
-
-Install `node_modules`:
-
-```bash
-npm install
+```
+  keepalive: [/./],
+  tabsLayout: {
+  hasDropdown: true,
+},
 ```
 
-or
+### 2. 修改proxy到后端项目
 
-```bash
-yarn
+```
+export default {
+  dev: {
+    '/api/': {
+      target: 'http://127.0.0.1:8002',
+      changeOrigin: true,
+      pathRewrite: {
+      },
+    },
+  },
+};
 ```
 
-## Provided Scripts
+### 3. 增加图形验证码
 
-Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
+```
+ <Row gutter={8}>
+                <Col span={16}>
+                  <ProForm.Item name="pic_captcha"
+                    // placeholder="验证码"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: '请输入验证码！',
+                                  },
+                                ]}>
+                    <Input size="large" placeholder='请输入验证码'
+                           prefix={<IconFont type="iconyanzhengma"/>}/>
+                  </ProForm.Item>
+                </Col>
+                <Col span={8}>
+                  <Spin spinning={imgLoading}>
+                    <img alt="Captcha"
+                         style={{width: '100%', height: 35, marginTop: 2.5, marginLeft: 10}}
+                         src={captchaImg}
+                         onClick={onGetCaptcha}
+                    />
+                  </Spin>
+                </Col>
+              </Row>
 
-Scripts provided in `package.json`. It's safe to modify or add additional script:
-
-### Start project
-
-```bash
-npm start
+            </>
+          )}
 ```
 
-### Build project
+处理验证码刷新，提交，错误统一处理
 
-```bash
-npm run build
-```
 
-### Check code style
 
-```bash
-npm run lint
-```
 
-You can also use script to auto fix some lint error:
-
-```bash
-npm run lint:fix
-```
-
-### Test code
-
-```bash
-npm test
-```
-
-## More
-
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).

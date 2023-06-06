@@ -2,6 +2,14 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+export async function getCaptcha() {
+  return request(
+    '/api/captcha-generate', {
+      method: 'GET',
+    },
+  );
+}
+
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
