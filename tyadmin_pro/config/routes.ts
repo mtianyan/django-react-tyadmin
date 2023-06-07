@@ -12,28 +12,34 @@
  */
 export default [
   {
-    path: '/user',
+    path: '/admin',
     layout: false,
     routes: [
       {
         name: 'login',
-        path: '/user/login',
+        path: '/admin/login',
         component: './User/Login',
       },
     ],
   },
   {
-    path: '/welcome',
-    name: 'welcome',
+    path: '/admin/password',
+    name: '修改密码',
     icon: 'smile',
-    component: './Welcome',
+    component: './ChangePassword',
   },
   {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
-    access: 'canAdmin',
+    // access: 'canAdmin',
     routes: [
+      {
+        path: '/admin/welcome',
+        name: 'welcome',
+        icon: 'smile',
+        component: './Welcome',
+      },
       {
         path: '/admin',
         redirect: '/admin/sub-page',
@@ -48,12 +54,12 @@ export default [
   {
     name: 'list.table-list',
     icon: 'table',
-    path: '/list',
+    path: '/admin/list',
     component: './TableList',
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/admin/welcome',
   },
   {
     path: '*',

@@ -17,11 +17,11 @@ const Footer: React.FC = () => {
       style={{
         background: 'none',
       }}
-      copyright={`${currentYear} ${defaultMessage}`}
+      copyright={`${currentYear} mtianyan`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
+          key: 'Tyadmin',
+          title: 'Tyadmin',
           href: 'https://pro.ant.design',
           blankTarget: true,
         },

@@ -2,6 +2,13 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+export async function changePassword(params: any) {
+  return request('/api/change_password', {
+    method: 'POST',
+    data: { ...params },
+  });
+}
+
 export async function getCaptcha() {
   return request(
     '/api/captcha-generate', {

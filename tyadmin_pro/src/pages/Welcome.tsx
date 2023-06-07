@@ -87,11 +87,11 @@ const Welcome: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
   return (
-    <PageContainer>
+    <PageContainer         style={{
+      height: '800px',
+      borderRadius: 8,
+    }}>
       <Card
-        style={{
-          borderRadius: 8,
-        }}
         bodyStyle={{
           backgroundImage:
             initialState?.settings?.navTheme === 'realDark'

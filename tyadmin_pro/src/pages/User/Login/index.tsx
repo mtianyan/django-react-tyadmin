@@ -294,7 +294,7 @@ const Login: React.FC = () => {
                 <Col span={8}>
                   <Spin spinning={imgLoading}>
                     <img alt="Captcha"
-                         style={{width: '100%', height: 35, marginTop: 2.5, marginLeft: 10}}
+                         style={{width: '100%', height: 35, marginTop: 2.5, marginLeft: 0}}
                          src={captchaImg}
                          onClick={onGetCaptcha}
                     />
