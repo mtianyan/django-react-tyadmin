@@ -14,7 +14,7 @@ urlpatterns = [
     re_path('^', include(router.urls)),
     path('login/account', LoginView.as_view(), name='user_login'),
     path('currentUser', CurrentUserView.as_view(), name='user_current_user'),
-    path('logout', UserLogoutView.as_view(), name='logout'),
+    path('login/outLogin', UserLogoutView.as_view(), name='logout'),
     path('captcha-generate', CaptchaView.as_view(), name='captcha'),
     path('sendEmailCaptcha', UserSendCaptchaView.as_view(), name='user_send_captcha'),
     path('captcha', include('captcha.urls')),
