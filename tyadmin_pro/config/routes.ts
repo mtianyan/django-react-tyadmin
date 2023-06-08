@@ -52,10 +52,10 @@ export default [
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/admin/list',
-    component: './TableList',
+    name: '用户列表',
+    icon: 'UserOutlined',
+    path: '/admin/user',
+    component: './UserList',
   },
   {
     path: '/',

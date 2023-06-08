@@ -1,6 +1,7 @@
 import {Footer} from '@/components';
-import {getCaptcha, login} from '@/services/ant-design-pro/api';
-import {getFakeCaptcha} from '@/services/ant-design-pro/login';
+import {captchaGenerateList as getCaptcha} from '@/services/admin/captchaGenerate';
+import {loginAccountCreate as login} from '@/services/admin/login';
+// import {getFakeCaptcha} from '@/services/ant-design-pro/login';
 import {fieldErrorResponse} from '@/utils/common';
 import {
   AlipayCircleOutlined,
@@ -85,7 +86,7 @@ const LoginMessage: React.FC<{
 };
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
+  const [userLoginState, setUserLoginState] = useState<any>({});
   const [type, setType] = useState<string>('account');
   const {initialState, setInitialState} = useModel('@@initialState');
   const [captchaImg, setCaptchaImg] = useState(undefined);
@@ -132,7 +133,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmit = async (values: any) => {
     try {
       // 登录
       const msg = await login({...values, type, key: challengeKey});
@@ -204,7 +205,7 @@ const Login: React.FC = () => {
             <ActionIcons key="icons"/>,
           ]}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values as any);
           }}
         >
           <Tabs
@@ -376,12 +377,13 @@ const Login: React.FC = () => {
                   },
                 ]}
                 onGetCaptcha={async (phone) => {
-                  const result = await getFakeCaptcha({
-                    phone,
-                  });
-                  if (!result) {
-                    return;
-                  }
+                  console.log(phone)
+                  // const result = await getFakeCaptcha({
+                  //   phone,
+                  // });
+                  // if (!result) {
+                  //   return;
+                  // }
                   message.success('获取验证码成功！验证码为：1234');
                 }}
               />

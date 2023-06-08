@@ -1,3 +1,4 @@
 Django
 djangorestframework
 tyadmin-api-cli
+drf_yasg

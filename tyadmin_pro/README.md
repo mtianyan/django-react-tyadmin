@@ -59,6 +59,37 @@ export default {
 
 处理验证码刷新，提交，错误统一处理
 
-### 4. 
+### 4. 修改密码功能， footer 底部固定
+
+```
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '80vh',
+          overflow: 'auto',
+        }}
+```
+### 4.1 openapi
+
+```
+  openAPI: [
+    {
+      requestLibPath: "import { request } from '@umijs/max'",
+      // 或者使用在线的版本
+      // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
+      schemaPath: "http://127.0.0.1:8002/swagger/?format=openapi",
+      projectName: 'admin',
+      mock: false,
+    },
+  ],
+```
+
+### 5. 用户列表 以及 异步filter
+
+
+
+### 6. modal版本 + 新页面版本
+
+### 
 
 

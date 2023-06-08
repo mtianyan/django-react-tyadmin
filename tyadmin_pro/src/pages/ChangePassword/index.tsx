@@ -2,7 +2,7 @@ import {PageContainer, ProForm, ProFormText,} from '@ant-design/pro-components';
 import React, {useRef} from 'react';
 import {LockOutlined} from "@ant-design/icons";
 import {Card, message} from "antd";
-import {changePassword} from "@/services/ant-design-pro/api";
+import { changePasswordCreate as changePassword } from "@/services/admin/changePassword";
 import { history } from 'umi';
 import {fieldErrorResponse} from "@/utils/common";
 const ChangePassWord: React.FC = () => {

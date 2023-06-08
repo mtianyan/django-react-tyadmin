@@ -6,9 +6,8 @@ import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
-import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import { currentUserList as queryCurrentUser } from '@/services/admin/currentUser';
 import React from 'react';
-import ms from "@umijs/utils/compiled/debug/ms";
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/admin/login';
 
@@ -17,9 +16,9 @@ const loginPath = '/admin/login';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
+  currentUser?: any;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<any | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {

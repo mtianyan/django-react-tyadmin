@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
-from demo.models import DemoForeignKey, Tags, Category, RichTextDemo, DemoModelRequire, DemoModel, DemoDefaultModel, UserProfile
+from demo.models import DemoForeignKey, Tags, Category, RichTextDemo, DemoModelRequire, DemoModel, DemoDefaultModel, \
+    UserProfile
 
 
 class ContentTypeListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -20,7 +19,6 @@ class ContentTypeListSerializer(serializers.ModelSerializer):
 
 
 class ContentTypeCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -33,8 +31,6 @@ class ContentTypeCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class DemoForeignKeyListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -48,7 +44,6 @@ class DemoForeignKeyListSerializer(serializers.ModelSerializer):
 
 
 class DemoForeignKeyCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -61,8 +56,6 @@ class DemoForeignKeyCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class TagsListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -76,7 +69,6 @@ class TagsListSerializer(serializers.ModelSerializer):
 
 
 class TagsCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -89,8 +81,6 @@ class TagsCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -104,7 +94,6 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 
 class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -117,8 +106,6 @@ class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class DemoModelRequireListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -132,7 +119,6 @@ class DemoModelRequireListSerializer(serializers.ModelSerializer):
 
 
 class DemoModelRequireCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -145,8 +131,6 @@ class DemoModelRequireCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class DemoDefaultModelListSerializer(serializers.ModelSerializer):
-    
-
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
 
@@ -160,7 +144,6 @@ class DemoDefaultModelListSerializer(serializers.ModelSerializer):
 
 
 class DemoDefaultModelCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -173,16 +156,17 @@ class DemoDefaultModelCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class PermissionListSerializer(serializers.ModelSerializer):
-    
-
     class ContentTypeSerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = ContentType
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     content_type = ContentTypeSerializer()
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -197,7 +181,6 @@ class PermissionListSerializer(serializers.ModelSerializer):
 
 
 class PermissionCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -210,16 +193,17 @@ class PermissionCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class GroupListSerializer(serializers.ModelSerializer):
-    
-
     class PermissionSerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = Permission
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     permissions = PermissionSerializer(many=True)
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -234,7 +218,6 @@ class GroupListSerializer(serializers.ModelSerializer):
 
 
 class GroupCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -247,34 +230,43 @@ class GroupCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class RichTextDemoListSerializer(serializers.ModelSerializer):
-    
-
     class UserProfileSerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = UserProfile
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     user = UserProfileSerializer()
+
     class CategorySerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = Category
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     category = CategorySerializer()
+
     class TagsSerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = Tags
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     tags = TagsSerializer(many=True)
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -289,7 +281,6 @@ class RichTextDemoListSerializer(serializers.ModelSerializer):
 
 
 class RichTextDemoCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -302,16 +293,17 @@ class RichTextDemoCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class DemoModelListSerializer(serializers.ModelSerializer):
-    
-
     class DemoForeignKeySerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = DemoForeignKey
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     foreign_key_field = DemoForeignKeySerializer()
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -326,7 +318,6 @@ class DemoModelListSerializer(serializers.ModelSerializer):
 
 
 class DemoModelCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -339,25 +330,32 @@ class DemoModelCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserProfileListSerializer(serializers.ModelSerializer):
-    
-
     class GroupSerializer(serializers.ModelSerializer):
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
             model = Group
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     groups = GroupSerializer(many=True)
+
     class PermissionSerializer(serializers.ModelSerializer):
+
         ty_options_display_txt = serializers.SerializerMethodField()
+
         class Meta:
+            ref_name = "user_permission"
             model = Permission
             fields = "__all__"
+
         @staticmethod
         def get_ty_options_display_txt(obj):
             return str(obj)
+
     user_permissions = PermissionSerializer(many=True)
     key = serializers.CharField(source="pk")
     ty_options_display_txt = serializers.SerializerMethodField()
@@ -372,7 +370,6 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 
 
 class UserProfileCreateUpdateSerializer(serializers.ModelSerializer):
-    
     ty_options_display_txt = serializers.SerializerMethodField()
 
     class Meta:
@@ -387,5 +384,4 @@ class UserProfileCreateUpdateSerializer(serializers.ModelSerializer):
         instance = super().create(validated_data)
         instance.set_password(self.validated_data['password'])
         instance.save()
-        return instance        
-        
+        return instance
