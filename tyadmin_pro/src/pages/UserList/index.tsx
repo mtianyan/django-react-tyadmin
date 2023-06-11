@@ -332,7 +332,7 @@ const TableList: React.FC = () => {
         }}
         rowSelection={{}}
         search={{
-          span: 12,
+          // span: 12,
           labelWidth: 150,
         }
         }

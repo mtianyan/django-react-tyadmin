@@ -1,8 +1,12 @@
-from django_filters import rest_framework as filters
+import django_filters
+from django.db.models import ImageField
+from django_filters import rest_framework as filters, DateTimeFromToRangeFilter
 from tyadmin_api.custom import DateFromToRangeFilter
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
-from demo.models import DemoForeignKey, Tags, Category, RichTextDemo, DemoModelRequire, DemoModel, DemoDefaultModel, UserProfile
+from demo.models import DemoForeignKey, Tags, Category, RichTextDemo, DemoModelRequire, DemoModel, DemoDefaultModel, \
+    UserProfile
+
 
 class PermissionFilter(filters.FilterSet):
     content_type_text = filters.CharFilter(field_name="content_type")
@@ -11,35 +15,36 @@ class PermissionFilter(filters.FilterSet):
         model = Permission
         exclude = []
 
-class GroupFilter(filters.FilterSet):
 
+class GroupFilter(filters.FilterSet):
     class Meta:
         model = Group
         exclude = []
 
-class ContentTypeFilter(filters.FilterSet):
 
+class ContentTypeFilter(filters.FilterSet):
     class Meta:
         model = ContentType
         exclude = []
 
-class DemoForeignKeyFilter(filters.FilterSet):
 
+class DemoForeignKeyFilter(filters.FilterSet):
     class Meta:
         model = DemoForeignKey
-        exclude = ["image","image","file"]
+        exclude = ["image", "image", "file"]
+
 
 class TagsFilter(filters.FilterSet):
-
     class Meta:
         model = Tags
         exclude = []
 
-class CategoryFilter(filters.FilterSet):
 
+class CategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
         exclude = []
+
 
 class RichTextDemoFilter(filters.FilterSet):
     user_text = filters.CharFilter(field_name="user")
@@ -49,11 +54,12 @@ class RichTextDemoFilter(filters.FilterSet):
         model = RichTextDemo
         exclude = []
 
-class DemoModelRequireFilter(filters.FilterSet):
 
+class DemoModelRequireFilter(filters.FilterSet):
     class Meta:
         model = DemoModelRequire
         exclude = []
+
 
 class DemoModelFilter(filters.FilterSet):
     foreign_key_field_text = filters.CharFilter(field_name="foreign_key_field")
@@ -61,7 +67,8 @@ class DemoModelFilter(filters.FilterSet):
 
     class Meta:
         model = DemoModel
-        exclude = ["image_field","image_field","file_field"]
+        exclude = ["image_field", "image_field", "file_field"]
+
 
 class DemoDefaultModelFilter(filters.FilterSet):
     date_time_field = DateFromToRangeFilter(field_name="date_time_field")
@@ -70,10 +77,11 @@ class DemoDefaultModelFilter(filters.FilterSet):
         model = DemoDefaultModel
         exclude = []
 
+
 class UserProfileFilter(filters.FilterSet):
-    last_login = DateFromToRangeFilter(field_name="last_login")
-    date_joined = DateFromToRangeFilter(field_name="date_joined")
+    last_login = DateTimeFromToRangeFilter(field_name="last_login")
+    date_joined = DateTimeFromToRangeFilter(field_name="date_joined")
 
     class Meta:
         model = UserProfile
-        exclude = ["image","image"]
+        exclude = ['image']

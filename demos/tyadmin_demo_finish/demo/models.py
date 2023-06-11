@@ -127,7 +127,7 @@ class UserProfile(AbstractUser):
     )
 
     gender = models.CharField(max_length=6, verbose_name="性别", choices=GENDER_CHOICES, default="female")
-    image = models.ImageField(max_length=100, verbose_name="头像")
+    image = models.ImageField(max_length=100, verbose_name="头像", default="")
 
     class Meta:
         verbose_name = "用户管理"

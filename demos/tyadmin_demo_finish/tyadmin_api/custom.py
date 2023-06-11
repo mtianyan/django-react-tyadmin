@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
@@ -69,7 +69,7 @@ class MtyCustomExecView(APIView):
 class XadminViewSet(MtyModelViewSet):
     pagination_class = CustomPageNumberPagination
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
-    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
 
     def get_exception_handler(self):
         return custom_exception_handler

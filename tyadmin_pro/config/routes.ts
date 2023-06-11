@@ -58,6 +58,33 @@ export default [
     component: './UserList',
   },
   {
+    name: '套餐列表',
+    icon: 'table',
+    path: '/admin/user/list',
+    component: './UserListNew/index',
+  },
+  {
+    name: '新增套餐',
+    icon: 'table',
+    path: '/admin/user/add',
+    hideInMenu: true,
+    component: './UserListNew/add',
+  },
+  {
+    name: '编辑套餐',
+    icon: 'table',
+    path: '/admin/user/edit',
+    hideInMenu: true,
+    component: './UserListNew/edit',
+  },
+  {
+    name: '查看套餐',
+    icon: 'table',
+    path: '/admin/user/detail',
+    hideInMenu: true,
+    component: './UserListNew/detail',
+  },
+  {
     path: '/',
     redirect: '/admin/welcome',
   },
