@@ -71,7 +71,7 @@ TyAdmin: 只需要花五分钟阅读README即可快速上手，无额外文档�
 git clone https://github.com/mtianyan/tyadmin_api_cli.git
 cd tyadmin_api_cli/demos/tyadmin_demo_init
 # 安装项目 原本就需要的依赖
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ## 2. 安装tyadmin-api-cli并注册tyadmin-api-cli
